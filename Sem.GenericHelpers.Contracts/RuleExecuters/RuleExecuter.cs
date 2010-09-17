@@ -12,6 +12,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
@@ -19,6 +20,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System.Reflection;
 
     using Sem.GenericHelpers.Contracts.Attributes;
+    using Sem.GenericHelpers.Contracts.Configuration;
     using Sem.GenericHelpers.Contracts.Properties;
     using Sem.GenericHelpers.Contracts.Rules;
 
@@ -86,11 +88,18 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         private static readonly Dictionary<MethodBase, List<MethodRuleAttribute>> RuleAttributeCache = new Dictionary<MethodBase, List<MethodRuleAttribute>>();
         private static readonly object RuleAttributeCacheSync = new object();
 
+        private static readonly bool SuppressAll = ConfigReader.GetConfig<BouncerConfiguration>().SuppressAll;
+
         #endregion
 
         #region ctors
         protected RuleExecuter(string valueName, TData value, IEnumerable<MethodRuleAttribute> methodRuleAttributes)
         {
+            if (SuppressAll)
+            {
+                return;
+            }
+
             var currentMethodInfo = GetCurrentMethodInfo(2);
 
             this.MethodRuleAttributes = methodRuleAttributes ?? GetRuleAttributesFromCurrentMethod(currentMethodInfo);
@@ -190,6 +199,11 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <returns>The class instance this method belongs to. This way you can invoke multiple methods of this class in one line of code.</returns>
         public TResultClass Assert()
         {
+            if (SuppressAll)
+            {
+                return (TResultClass)this;
+            }
+
             this.AssertForType();
             this.AssertForProperties();
             this.AssertForMethodAttributes();
@@ -299,7 +313,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         public bool ExecuteRuleExpression<TParameter>(RuleBase<TData, TParameter> rule, TParameter ruleParameter, string valueName)
         {
             // if there is no rule, we cannot say that the rule is validated
-            if (rule == null)
+            if (rule == null || SuppressAll)
             {
                 return true;
             }
