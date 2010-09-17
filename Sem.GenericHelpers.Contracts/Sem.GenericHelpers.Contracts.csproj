@@ -55,6 +55,8 @@
     <Compile Include="Bouncer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\BouncerConfiguration.cs" />
+    <Compile Include="Configuration\ConfigReader.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
