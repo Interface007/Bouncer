@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{288EE41A-94F9-460C-90AD-D9CBBD6E95A4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sem.Test.GenericHelpers.Contracts</RootNamespace>
+    <AssemblyName>Sem.Test.GenericHelpers.Contracts</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Shared\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="Entities\CustomerId.cs" />
+    <Compile Include="Entities\MyBusinessComponentSave.cs" />
+    <Compile Include="Entities\MyCustomer.cs" />
+    <Compile Include="Rules\CanNotEnterRule.cs" />
+    <Compile Include="Rules\CustomRuleSet.cs" />
+    <Compile Include="Executors\ExceptionHandlerExecutor.cs" />
+    <Compile Include="Rules\MaxAmountRule.cs" />
+    <Compile Include="Rules\SampleRuleSet.cs" />
+    <Compile Include="Tests\BouncerAfterInvokeActionTest.cs" />
+    <Compile Include="Tests\BouncerTestMessages.cs" />
+    <Compile Include="Entities\AttributedSampleClass.cs" />
+    <Compile Include="Tests\BouncerAttributedRuleTestNoNamespace.cs" />
+    <Compile Include="Tests\BouncerAttributedRuleTest.cs" />
+    <Compile Include="Tests\BouncerAttributedRuleTestAlternateNamespace.cs" />
+    <Compile Include="Tests\BouncerBackEndNumberBoundariesTest.cs" />
+    <Compile Include="Tests\BouncerImplementsInterfaceTest.cs" />
+    <Compile Include="Tests\IsNotNullRuleTest.cs" />
+    <Compile Include="Tests\BouncerIsNotOneOfTest.cs" />
+    <Compile Include="Tests\BouncerIsOneOfTest.cs" />
+    <Compile Include="Tests\BouncerRegisterRuleTest.cs" />
+    <Compile Include="Tests\BouncerTest.cs" />
+    <Compile Include="Tests\BouncerTestLambda.cs" />
+    <Compile Include="Entities\MessageOne.cs" />
+    <Compile Include="Entities\MessageTwo.cs" />
+    <Compile Include="Entities\Subscriber.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\BouncerTestRuleExecutionErrors.cs" />
+    <Compile Include="Tests\BouncerTestExecution.cs" />
+    <Compile Include="Tests\BouncerObjectNotNullTest.cs" />
+    <Compile Include="Tests\IsNullRuleTest.cs" />
+    <Compile Include="Tests\MethodAttributeTest.cs" />
+    <Compile Include="Tests\ObjectNotNullRuleTest.cs" />
+    <Compile Include="Tests\IntegerLowerThanRuleTest.cs" />
+    <Compile Include="Tests\IntegerGreaterThanRuleTest.cs" />
+    <Compile Include="Tests\RuleValidationExceptionTest.cs" />
+    <Compile Include="Tests\StringNotNullOrEmptyRuleTest.cs" />
+    <Compile Include="Executors\VetoExecutor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sem.GenericHelpers.Contracts\Sem.GenericHelpers.Contracts.csproj">
+      <Project>{634063B0-5E2A-41EC-BF35-3414D9024882}</Project>
+      <Name>Sem.GenericHelpers.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\Shared\CustomDictionary.xml">
+      <Link>Properties\CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
