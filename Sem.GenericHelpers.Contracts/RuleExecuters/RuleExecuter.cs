@@ -89,6 +89,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
         private static readonly bool SuppressAll = ConfigReader.GetConfig<BouncerConfiguration>().SuppressAll;
 
+        private readonly Type targetType;
+
         #endregion
 
         #region ctors
@@ -105,6 +107,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             this.Context = GetContext(currentMethodInfo);
             this.Value = value;
             this.ValueName = valueName;
+            targetType = typeof(TData);
         }
 
         protected RuleExecuter(Expression<Func<TData>> data, IEnumerable<MethodRuleAttribute> methodRuleAttributes)
@@ -249,8 +252,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
             var parameter = ruleAttribute.Parameter;
 
-            assertMethod =
-                assertMethod.MakeGenericMethod(
+            assertMethod = assertMethod.MakeGenericMethod(
                     parameter != null
                         ? parameter.GetType()
                         : typeof(object));
@@ -289,7 +291,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
         public Type GetValueType()
         {
-            return typeof(TData);
+            return this.targetType;
         }
 
         /// <summary>
@@ -413,10 +415,10 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 if (!RuleAttributeCache.ContainsKey(methodInfo))
                 {
                     var customAttributes = methodInfo.GetCustomAttributes(typeof(MethodRuleAttribute), true);
-                    var methodRuleAttributes1 = (from x in customAttributes select (MethodRuleAttribute)x).ToList();
+                    var methodRuleAttributes = (from x in customAttributes select (MethodRuleAttribute)x).ToList();
 
                     var newRules = new List<MethodRuleAttribute>();
-                    foreach (var methodRuleAttribute in methodRuleAttributes1)
+                    foreach (var methodRuleAttribute in methodRuleAttributes)
                     {
                         if (!methodRuleAttribute.RuleType.Implements(typeof(IEnumerable)))
                         {
@@ -424,20 +426,20 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                         }
 
                         var ruleCollection = (IEnumerable)methodRuleAttribute.RuleType.GetConstructor(new Type[] { }).Invoke(null);
-                        foreach (var rule in ruleCollection)
-                        {
-                            newRules.Add(new MethodRuleAttribute(rule.GetType(), methodRuleAttribute.MethodArgumentName)
+                        var attribute = methodRuleAttribute;
+                        newRules.AddRange(
+                            from object rule in ruleCollection 
+                            select new MethodRuleAttribute(rule.GetType(), attribute.MethodArgumentName)
                                 {
-                                    Namespace = methodRuleAttribute.Namespace,
-                                    IncludeInContext = methodRuleAttribute.IncludeInContext,
-                                    Message = methodRuleAttribute.Message,
-                                    Parameter = methodRuleAttribute.Parameter
+                                    Namespace = attribute.Namespace, 
+                                    IncludeInContext = attribute.IncludeInContext, 
+                                    Message = attribute.Message, 
+                                    Parameter = attribute.Parameter
                                 });
-                        }
                     }
 
-                    methodRuleAttributes1.AddRange(newRules);
-                    RuleAttributeCache.Add(methodInfo, methodRuleAttributes1);
+                    methodRuleAttributes.AddRange(newRules);
+                    RuleAttributeCache.Add(methodInfo, methodRuleAttributes);
                 }
 
                 return RuleAttributeCache[methodInfo];
@@ -471,7 +473,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         private static MethodBase GetCurrentMethodInfo(int skipFrames)
         {
             var stack = new StackTrace(skipFrames, false);
-
             var methodInfo = stack.GetFrame(0).GetMethod();
 
             for (var i = 0; i < stack.FrameCount; i++)
@@ -579,19 +580,10 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 where methodAttribute.MethodArgumentName == this.ValueName
                 select methodAttribute;
 
-            foreach (var ruleAttribute in ruleAttributes)
-            {
-                var ruleExecuter = this.CreateRuleExecuter(
-                    typeof(TData),
-                    this.ValueName,
-                    this.Value);
-
-                var result = this.InvokeRuleExecutionForAttribute(ruleExecuter, ruleAttribute, this.ValueName);
-                if (result != null)
-                {
-                    this.AfterInvoke(result);
-                }
-            }
+            // first we need to construct a new rule executer type, unfortunately this is a generic type, 
+            // so we need to do it via reflection (we don't have the type of the property at design time)
+            var ruleExecuter = this.CreateRuleExecuter(this.targetType, this.ValueName, this.Value);
+            InvokeForAllAttributes(ruleExecuter, ruleAttributes, this.ValueName);
         }
 
         /// <summary>
@@ -599,77 +591,75 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// </summary>
         private void AssertForProperties()
         {
-            foreach (var propertyInfo in typeof(TData).GetProperties())
+            foreach (var propertyInfo in this.targetType.GetProperties())
             {
-                IEnumerable<ContractRuleAttribute> ruleAttributes;
-
-                var info = propertyInfo;
-                lock (PropertyAttributeCacheSync)
+                var ruleAttributes = GetPropertyRuleAttributes(this.targetType, propertyInfo);
+                if (ruleAttributes.Count() == 0)
                 {
-                    if (!PropertyAttributeCache.ContainsKey(info))
-                    {
-                        var customAttributes = from x in info.GetCustomAttributes(typeof(ContractRuleAttribute), true) select x as ContractRuleAttribute;
-                        var configuredRules = from ruleEntry in Configuration.ConfigReader.GetConfig<BouncerConfiguration>().Rules
-                                              where ruleEntry.TargetType == typeof(TData) && ruleEntry.TargetProperty == info.Name
-                                              select 
-                                                  new ContractRuleAttribute(ruleEntry.Rule.GetType())
-                                                  {
-                                                      IncludeInContext = ruleEntry.Context,
-                                                      Namespace = ruleEntry.Namespace,
-                                                      Parameter = ruleEntry.Parameter,
-                                                  };
+                    continue;
+                }
 
+                var propertyName = this.ValueName + "." + propertyInfo.Name;
+                var propertyValue = !this.targetType.IsValueType && Equals(this.Value, null) ? null : propertyInfo.GetValue(this.Value, null);
+                
+                // first we need to construct a new rule executer type, unfortunately this is a generic type, 
+                // so we need to do it via reflection (we don't have the type of the property at design time)
+                var ruleExecuter = this.CreateRuleExecuter(propertyInfo.PropertyType, propertyName, propertyValue);
+                InvokeForAllAttributes(ruleExecuter, ruleAttributes, propertyName);
+            }
+        }
 
-                        PropertyAttributeCache.Add(info, customAttributes.Concat(configuredRules));
-                    }
+        private static IEnumerable<ContractRuleAttribute> GetPropertyRuleAttributes(Type targetType, PropertyInfo info)
+        {
+            IEnumerable<ContractRuleAttribute> ruleAttributes;
+            lock (PropertyAttributeCacheSync)
+            {
+                if (!PropertyAttributeCache.ContainsKey(info))
+                {
+                    var customAttributes = from x in info.GetCustomAttributes(typeof(ContractRuleAttribute), true) select x as ContractRuleAttribute;
+                    var configuredRules = BouncerConfiguration.GetConfiguredRules(info, targetType);
+                    PropertyAttributeCache.Add(info, customAttributes.Concat(configuredRules));
+                }
 
-                    ruleAttributes = PropertyAttributeCache[info];
-                    if (ruleAttributes.Count() == 0)
+                ruleAttributes = PropertyAttributeCache[info];
+            }
+
+            return ruleAttributes;
+        }
+
+        private void InvokeForAllAttributes(IRuleExecuter ruleExecuter, IEnumerable<ContractRuleBaseAttribute> ruleAttributes, string propertyName)
+        {
+            // now enumerate the attributes of the property (there might be more than one)
+            foreach (var ruleAttribute in ruleAttributes)
+            {
+                // here we filter by namespace
+                var namespaceFilter = ruleAttribute.Namespace;
+                if (!string.IsNullOrEmpty(namespaceFilter))
+                {
+                    var callingNamespace = this.GetCallingNamespace();
+                    if (!(callingNamespace == namespaceFilter || callingNamespace.StartsWith(namespaceFilter, StringComparison.Ordinal)))
                     {
                         continue;
                     }
                 }
 
-                // first we need to construct a new rule executer type, unfortunately this is a generic type, 
-                // so we need to do it via reflection (we don't have the type of the property at design time)
-                var propertyName = this.ValueName + "." + info.Name;
-                var ruleExecuter = this.CreateRuleExecuter(
-                    info.PropertyType,
-                    propertyName,
-                    this.Value == null ? null : info.GetValue(this.Value, null));
-
-                // now enumerate the attributes of the property (there might be more than one)
-                foreach (ContractRuleAttribute ruleAttribute in ruleAttributes)
+                // here we filter by context
+                var contextFilter = ruleAttribute.IncludeInContext;
+                if (!string.IsNullOrEmpty(contextFilter))
                 {
-                    // here we filter by namespace
-                    var namespaceFilter = ruleAttribute.Namespace;
-                    if (!string.IsNullOrEmpty(namespaceFilter))
+                    if ((from x in this.Context where x == contextFilter select x).Count() == 0)
                     {
-                        var callingNamespace = this.GetCallingNamespace();
-                        if (!(callingNamespace == namespaceFilter || callingNamespace.StartsWith(namespaceFilter, StringComparison.Ordinal)))
-                        {
-                            continue;
-                        }
+                        continue;
                     }
+                }
 
-                    // here we filter by context
-                    var contextFilter = ruleAttribute.IncludeInContext;
-                    if (!string.IsNullOrEmpty(contextFilter))
-                    {
-                        if ((from x in this.Context where x == contextFilter select x).Count() == 0)
-                        {
-                            continue;
-                        }
-                    }
+                var result = this.InvokeRuleExecutionForAttribute(ruleExecuter, ruleAttribute, propertyName);
 
-                    var result = this.InvokeRuleExecutionForAttribute(ruleExecuter, ruleAttribute, propertyName);
-
-                    // we need to explicitly call "AfterInvoke" here, because "ruleExecuter" is not euqal to this,
-                    // so the call of "AfterInvoke" while rule execution does update a different instance of RuleExecuter.
-                    if (result != null)
-                    {
-                        this.AfterInvoke(result);
-                    }
+                // we need to explicitly call "AfterInvoke" here, because "ruleExecuter" is not euqal to this,
+                // so the call of "AfterInvoke" while rule execution does update a different instance of RuleExecuter.
+                if (result != null)
+                {
+                    this.AfterInvoke(result);
                 }
             }
         }

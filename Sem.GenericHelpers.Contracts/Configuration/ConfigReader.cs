@@ -8,7 +8,7 @@
     {
         private static object current;
         private static Type currentType;
-        private static readonly object sync = new object();
+        private static readonly object Sync = new object();
         
         protected override void DeserializeSection(System.Xml.XmlReader reader)
         {
@@ -19,10 +19,14 @@
         public static TResult GetConfig<TResult>() 
             where TResult : new()
         {
-            lock (sync)
+            lock (Sync)
             {
-                currentType = typeof(TResult);
-                ConfigurationManager.GetSection(currentType.Name);
+                if (current == null)
+                {
+                    currentType = typeof(TResult);
+                    ConfigurationManager.GetSection(currentType.Name);
+                }
+
                 return (TResult)(current ?? new TResult());
             }
         }
