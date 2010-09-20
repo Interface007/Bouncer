@@ -27,6 +27,11 @@
 
         public void ReadXml(XmlReader reader)
         {
+            if (reader == null)
+            {
+                return;
+            }
+
             var element = XElement.Parse(reader.ReadOuterXml());
             
             this.TargetType = Type.GetType(GetAttribute(element, "TargetType"));
@@ -41,18 +46,25 @@
 
         public void WriteXml(XmlWriter writer)
         {
-            if (this.TargetType != null)
+            if (writer == null)
             {
-                writer.WriteAttributeString("TargetType", this.TargetType.FullName);
+                return;
+            }
+
+            var targetType = this.TargetType;
+            if (targetType != null)
+            {
+                writer.WriteAttributeString("TargetType", targetType.FullName + ", " + targetType.Assembly.GetName().Name);
             }
 
             writer.WriteAttributeString("TargetProperty", this.TargetProperty);
 
             if (this.Rule != null)
             {
-                writer.WriteAttributeString("Rule", this.Rule.GetType().FullName);
+                var ruleType = this.Rule.GetType();
+                writer.WriteAttributeString("Rule", ruleType.FullName + ", " + ruleType.Assembly.GetName().Name);
             }
-            
+
             writer.WriteAttributeString("Context", this.Context);
             writer.WriteAttributeString("Parameter", this.Parameter);
             writer.WriteAttributeString("Namespace", this.Namespace);

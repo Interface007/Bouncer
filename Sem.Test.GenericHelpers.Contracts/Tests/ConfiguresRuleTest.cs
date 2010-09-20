@@ -13,6 +13,8 @@
     [TestClass]
     public class ConfiguresRuleTest
     {
+        private const string expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ConfiguredRuleInformation TargetType=\"Sem.Test.GenericHelpers.Contracts.Tests.ConfiguresRuleTest, Sem.Test.GenericHelpers.Contracts\" TargetProperty=\"propname\" Rule=\"Sem.GenericHelpers.Contracts.Rules.StringNotNullOrEmptyRule, Sem.GenericHelpers.Contracts\" Context=\"context\" Parameter=\"param\" Namespace=\"namespace\" />";
+
         /// <summary>
         /// Gets or sets the test context which provides
         /// information about and functionality for the current test run.
@@ -44,15 +46,12 @@
             serializer.Serialize(writer, rule);
             var result = writer.GetStringBuilder().ToString();
 
-            const string expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ConfiguredRuleInformation TargetType=\"Sem.Test.GenericHelpers.Contracts.Tests.ConfiguresRuleTest\" TargetProperty=\"propname\" Rule=\"Sem.GenericHelpers.Contracts.Rules.StringNotNullOrEmptyRule\" Context=\"context\" Parameter=\"param\" />";
             Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
         public void TestIXmlSerializableReadXml()
         {
-            const string expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ConfiguredRuleInformation TargetType=\"Sem.Test.GenericHelpers.Contracts.Tests.ConfiguresRuleTest\" TargetProperty=\"propname\" Rule=\"Sem.GenericHelpers.Contracts.Rules.StringNotNullOrEmptyRule\" Context=\"context\" Parameter=\"param\" />";
-
             var serializer = new XmlSerializer(typeof(ConfiguredRuleInformation));
             var reader = new StringReader(expected);
             var rule = (ConfiguredRuleInformation)serializer.Deserialize(reader);
@@ -61,7 +60,7 @@
             Assert.AreEqual(rule.Namespace, "namespace");
             Assert.AreEqual(rule.Parameter, "param");
             Assert.AreEqual(rule.Rule.GetType(), new StringNotNullOrEmptyRule().GetType());
-            Assert.AreEqual(rule.TargetType, this.GetType());
+            Assert.AreEqual(rule.TargetType.FullName, this.GetType().FullName);
             Assert.AreEqual(rule.TargetProperty, "propname");
         }
     }

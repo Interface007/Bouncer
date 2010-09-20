@@ -32,12 +32,14 @@ namespace Sem.GenericHelpers.Contracts.Rules
 
         public static void RegisterCollection<TData, TParameter>(IEnumerable<RuleBase<TData, TParameter>> ruleCollection)
         {
-            if (ruleCollection != null)
+            if (ruleCollection == null)
             {
-                foreach (var rule in ruleCollection)
-                {
-                    Register(rule);
-                }
+                return;
+            }
+
+            foreach (var rule in ruleCollection)
+            {
+                Register(rule);
             }
         }
 

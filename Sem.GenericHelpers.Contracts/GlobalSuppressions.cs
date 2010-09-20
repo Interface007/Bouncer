@@ -33,3 +33,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Sem.GenericHelpers.Contracts.Exceptions")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Sem.GenericHelpers.Contracts.Attributes")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Scope = "member", Target = "Sem.GenericHelpers.Contracts.Rules.RegisteredRules.#RegisterCollection`2(System.Collections.Generic.IEnumerable`1<Sem.GenericHelpers.Contracts.Rules.RuleBase`2<!!0,!!1>>)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Scope = "member", Target = "Sem.GenericHelpers.Contracts.Configuration.BouncerConfiguration.#Rules")]
