@@ -14,6 +14,7 @@ namespace Sem.GenericHelpers.Contracts
     using System.Linq;
     using System.Linq.Expressions;
 
+    using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.RuleExecuters;
 
     /// <summary>

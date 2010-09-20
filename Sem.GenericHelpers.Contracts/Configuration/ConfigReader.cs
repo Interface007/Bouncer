@@ -8,7 +8,7 @@
     {
         private static object current;
         private static Type currentType;
-        private static object sync = new object();
+        private static readonly object sync = new object();
         
         protected override void DeserializeSection(System.Xml.XmlReader reader)
         {

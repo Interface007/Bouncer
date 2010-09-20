@@ -2,6 +2,11 @@
 {
     public class MessageTwo
     {
+        public MessageTwo()
+        {
+            
+        }
+
         public MessageTwo(int content)
         {
             this.Content = content;

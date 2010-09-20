@@ -12,6 +12,8 @@ namespace Sem.GenericHelpers.Contracts
     using System;
     using System.Linq;
 
+    using Sem.GenericHelpers.Contracts.Rules;
+
     /// <summary>
     /// Extension methods for System.Type
     /// </summary>
@@ -29,6 +31,28 @@ namespace Sem.GenericHelpers.Contracts
                     where (i.IsGenericType && i.GetGenericTypeDefinition() == interfaceToImplement)
                           || i == interfaceToImplement
                     select i).Count() != 0;
+        }
+
+        /// <summary>
+        /// Creates and initializes a rule using a generic parameter of <paramref name="valueType"/>.
+        /// </summary>
+        /// <param name="ruleType">The type of rule to be created.</param>
+        /// <param name="valueType">The type of the value that should be checked with the rule.</param>
+        /// <returns>A new rule instance of the specified type.</returns>
+        public static RuleBaseInformation CreateRule(this Type ruleType, Type valueType)
+        {
+            var constructorInfo = ruleType.GetConstructor(Type.EmptyTypes);
+            
+            if (constructorInfo.ContainsGenericParameters)
+            {
+                return ruleType
+                    .GetGenericTypeDefinition()
+                    .MakeGenericType(valueType)
+                    .GetConstructor(new Type[] { })
+                    .Invoke(null) as RuleBaseInformation;
+            }
+            
+            return (RuleBaseInformation)constructorInfo.Invoke(null);
         }
     }
 }

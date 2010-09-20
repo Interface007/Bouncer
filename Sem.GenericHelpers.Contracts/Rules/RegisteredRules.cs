@@ -17,7 +17,7 @@ namespace Sem.GenericHelpers.Contracts.Rules
 
     public static class RegisteredRules
     {
-        private static readonly IList<KeyValuePair<Type, RuleBaseInformation>> TypeRegisteredRules = new List<KeyValuePair<Type, RuleBaseInformation>>();
+        internal static readonly IList<KeyValuePair<Type, RuleBaseInformation>> TypeRegisteredRules = new List<KeyValuePair<Type, RuleBaseInformation>>();
 
         private static readonly object TypeRegisteredRulesSync = new object();
 

@@ -1,5 +1,6 @@
 ﻿namespace Sem.Test.GenericHelpers.Contracts.Entities
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Sem.GenericHelpers.Contracts;
@@ -41,6 +42,17 @@
 
             this.Content = result.ToList().Count.ToString();
             this.CountOfEvents++;
+        }
+
+        [ContractContext("config")]
+        public IEnumerable<RuleValidationResult> Handle4(MessageOne message)
+        {
+            var result = Bouncer.ForMessages(() => message).Assert().Results;
+
+            this.Content = result.ToList().Count.ToString();
+            this.CountOfEvents++;
+
+            return result;
         }
 
         [ContractContext("Read")]
