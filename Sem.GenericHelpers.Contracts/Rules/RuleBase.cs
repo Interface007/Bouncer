@@ -10,9 +10,12 @@
 namespace Sem.GenericHelpers.Contracts.Rules
 {
     using System;
+    using System.Xml.Serialization;
 
+    [Serializable]
     public class RuleBase<TData, TParameter> : RuleBaseInformation
     {
+        [XmlIgnore]
         public Func<TData, TParameter, bool> CheckExpression { get; set; }
     }
 }

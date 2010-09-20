@@ -45,7 +45,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 var previousExecuter = this.PreviousExecuter as IMessageCollector;
                 if (previousExecuter != null)
                 {
-                    return results.Union(previousExecuter.Results);
+                    return results.Concat(previousExecuter.Results);
                 }
 
                 return results;

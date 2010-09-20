@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Sample.Contracts", "Sem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Test.GenericHelpers.Contracts", "Sem.Test.GenericHelpers.Contracts\Sem.Test.GenericHelpers.Contracts.csproj", "{288EE41A-94F9-460C-90AD-D9CBBD6E95A4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FFDD1BC-8358-4AA0-BAA7-E9AE27FF50D3}"
+	ProjectSection(SolutionItems) = preProject
+		fullunittest.testsettings = fullunittest.testsettings
+		Sem.GenericHelpers.Contracts.vsmdi = Sem.GenericHelpers.Contracts.vsmdi
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 4
@@ -22,6 +28,9 @@ Global
 		SccProjectUniqueName3 = Sem.Test.GenericHelpers.Contracts\\Sem.Test.GenericHelpers.Contracts.csproj
 		SccProjectName3 = Sem.Test.GenericHelpers.Contracts
 		SccLocalPath3 = Sem.Test.GenericHelpers.Contracts
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Sem.GenericHelpers.Contracts.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

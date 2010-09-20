@@ -44,6 +44,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -70,6 +71,8 @@
     <Compile Include="Tests\BouncerAttributedRuleTestAlternateNamespace.cs" />
     <Compile Include="Tests\BouncerBackEndNumberBoundariesTest.cs" />
     <Compile Include="Tests\BouncerImplementsInterfaceTest.cs" />
+    <Compile Include="Tests\ConfiguresRuleTest.cs" />
+    <Compile Include="Tests\CustomExecutorInvocation.cs" />
     <Compile Include="Tests\IsNotNullRuleTest.cs" />
     <Compile Include="Tests\BouncerIsNotOneOfTest.cs" />
     <Compile Include="Tests\BouncerIsOneOfTest.cs" />
@@ -102,6 +105,9 @@
     <CodeAnalysisDictionary Include="..\Shared\CustomDictionary.xml">
       <Link>Properties\CustomDictionary.xml</Link>
     </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

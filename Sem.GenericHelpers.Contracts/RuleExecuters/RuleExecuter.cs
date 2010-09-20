@@ -12,7 +12,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
@@ -79,7 +78,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <summary>
         /// A cache for the attributes of properties.
         /// </summary>
-        private static readonly Dictionary<PropertyInfo, object[]> PropertyAttributeCache = new Dictionary<PropertyInfo, object[]>();
+        private static readonly Dictionary<PropertyInfo, IEnumerable<ContractRuleAttribute>> PropertyAttributeCache = new Dictionary<PropertyInfo, IEnumerable<ContractRuleAttribute>>();
         private static readonly object PropertyAttributeCacheSync = new object();
 
         /// <summary>
@@ -233,15 +232,15 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 return null;
             }
 
-            var typeAttributeType = ruleAttribute.RuleType;
-            if (typeAttributeType.Implements(typeof(IEnumerable)))
+            var typeAttributeRuleType = ruleAttribute.RuleType;
+            if (typeAttributeRuleType.Implements(typeof(IEnumerable)))
             {
                 return null;
             }
 
             // the following line would be more specific - but seems to be hard to be implemented
             ////if (!ruleAttribute.Type.Implements(typeof(RuleBase<,>)))
-            if (!typeAttributeType.IsSubclassOf(typeof(RuleBaseInformation)))
+            if (!typeAttributeRuleType.IsSubclassOf(typeof(RuleBaseInformation)))
             {
                 throw new ArgumentException("The attribute does not contain a valid rule.");
             }
@@ -259,16 +258,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             try
             {
                 // create an instance of the rule and invoke the Assert statement
-                var constructorInfo = typeAttributeType.GetConstructor(Type.EmptyTypes);
-                RuleBaseInformation rule;
-                if (constructorInfo.ContainsGenericParameters)
-                {
-                    rule = CreateRule(typeAttributeType, ruleExecuter.GetValueType());
-                }
-                else
-                {
-                    rule = (RuleBaseInformation)constructorInfo.Invoke(null);
-                }
+                var rule = typeAttributeRuleType.CreateRule(ruleExecuter.GetValueType());
 
                 var ruleType = rule.GetType();
                 if (!string.IsNullOrEmpty(ruleAttribute.Message))
@@ -281,7 +271,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 var result = new RuleValidationResult(
                     ruleType,
                     string.Format(
-                        CultureInfo.CurrentCulture, 
+                        CultureInfo.CurrentCulture,
                         Resources.RuleValidationResultStandardMessage,
                         ruleType.Namespace + "." + ruleType.Name,
                         propertyName,
@@ -310,7 +300,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <param name="ruleParameter">The parameter for invoking the rule.</param>
         /// <param name="valueName">The name of the data to be checked.</param>
         /// <returns>True if the rule check is ok, false if the rule is violated.</returns>
-        public bool ExecuteRuleExpression<TParameter>(RuleBase<TData, TParameter> rule, TParameter ruleParameter, string valueName)
+        public virtual bool ExecuteRuleExpression<TParameter>(RuleBase<TData, TParameter> rule, TParameter ruleParameter, string valueName)
         {
             // if there is no rule, we cannot say that the rule is validated
             if (rule == null || SuppressAll)
@@ -345,7 +335,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             var result = new RuleValidationResult(
                 ruleType,
                 string.Format(
-                    CultureInfo.CurrentCulture, 
+                    CultureInfo.CurrentCulture,
                     Resources.RuleValidationResultStandardMessage,
                     ruleType.Namespace + "." + ruleType.Name,
                     valueName,
@@ -452,21 +442,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
                 return RuleAttributeCache[methodInfo];
             }
-        }
-
-        /// <summary>
-        /// Creates and initializes a rule using a generic parameter of <paramref name="valueType"/>.
-        /// </summary>
-        /// <param name="ruleType">The type of rule to be created.</param>
-        /// <param name="valueType">The type of the value that should be checked with the rule.</param>
-        /// <returns>A new rule instance of the specified type.</returns>
-        private static RuleBaseInformation CreateRule(Type ruleType, Type valueType)
-        {
-            return ruleType
-                .GetGenericTypeDefinition()
-                .MakeGenericType(valueType)
-                .GetConstructor(new Type[] { })
-                .Invoke(null) as RuleBaseInformation;
         }
 
         private static string GetMemberName(Expression<Func<TData>> data)
@@ -591,11 +566,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// </summary>
         private void AssertForType()
         {
-            var rules = RegisteredRules.GetRulesForType<TData, object>();
-            foreach (var typeRule in rules)
-            {
-                this.Assert(typeRule, null);
-            }
+            this.Assert(RegisteredRules.GetRulesForType<TData, object>());
         }
 
         /// <summary>
@@ -630,16 +601,29 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         {
             foreach (var propertyInfo in typeof(TData).GetProperties())
             {
-                object[] ruleAttributes;
+                IEnumerable<ContractRuleAttribute> ruleAttributes;
 
+                var info = propertyInfo;
                 lock (PropertyAttributeCacheSync)
                 {
-                    if (!PropertyAttributeCache.ContainsKey(propertyInfo))
+                    if (!PropertyAttributeCache.ContainsKey(info))
                     {
-                        PropertyAttributeCache.Add(propertyInfo, propertyInfo.GetCustomAttributes(typeof(ContractRuleAttribute), true));
+                        var customAttributes = from x in info.GetCustomAttributes(typeof(ContractRuleAttribute), true) select x as ContractRuleAttribute;
+                        var configuredRules = from ruleEntry in Configuration.ConfigReader.GetConfig<BouncerConfiguration>().Rules
+                                              where ruleEntry.TargetType == typeof(TData) && ruleEntry.TargetProperty == info.Name
+                                              select 
+                                                  new ContractRuleAttribute(ruleEntry.Rule.GetType())
+                                                  {
+                                                      IncludeInContext = ruleEntry.Context,
+                                                      Namespace = ruleEntry.Namespace,
+                                                      Parameter = ruleEntry.Parameter,
+                                                  };
+
+
+                        PropertyAttributeCache.Add(info, customAttributes.Concat(configuredRules));
                     }
 
-                    ruleAttributes = PropertyAttributeCache[propertyInfo];
+                    ruleAttributes = PropertyAttributeCache[info];
                     if (ruleAttributes.Count() == 0)
                     {
                         continue;
@@ -648,11 +632,11 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
                 // first we need to construct a new rule executer type, unfortunately this is a generic type, 
                 // so we need to do it via reflection (we don't have the type of the property at design time)
-                var propertyName = this.ValueName + "." + propertyInfo.Name;
+                var propertyName = this.ValueName + "." + info.Name;
                 var ruleExecuter = this.CreateRuleExecuter(
-                    propertyInfo.PropertyType,
+                    info.PropertyType,
                     propertyName,
-                    propertyInfo.GetValue(this.Value, null));
+                    this.Value == null ? null : info.GetValue(this.Value, null));
 
                 // now enumerate the attributes of the property (there might be more than one)
                 foreach (ContractRuleAttribute ruleAttribute in ruleAttributes)
