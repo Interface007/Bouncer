@@ -82,7 +82,8 @@ namespace Sem.Sample.Contracts
                     {
                         InternalId = new CustomerId(),
                         FullName = "Sven", 
-                        EMailAddress = "dont@spam.me"
+                        EMailAddress = "dont@spam.me",
+                        PhoneNumber = "00000000000"
                     }));
         }
 
