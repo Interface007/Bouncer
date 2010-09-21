@@ -26,10 +26,12 @@ namespace Sem.Sample.Contracts.Entities
         /// <param name="customer">this customer type does have rule-attributes attached to its properties</param>
         internal new void WriteCustomerProperties(MyCustomer customer)
         {
-            Bouncer.ForCheckData(() => customer).Assert();
+            Bouncer
+                .ForCheckData(() => customer)
+                .Assert();
 
             Console.WriteLine(
-                "calling customer {0} with Id {1}",
+                Resources.CallingCustomerInfo,
                 GetTheName(customer),
                 FormatTheId(customer));
         }
@@ -41,7 +43,10 @@ namespace Sem.Sample.Contracts.Entities
         /// <param name="customer">This object is decorated with attributes.</param>
         internal void CheckCustomerProperties(MyCustomer customer)
         {
-            var results = Bouncer.ForMessages(() => customer).Assert();
+            var results = Bouncer
+                .ForMessages(() => customer)
+                .Assert();
+
             Util.PrintEntries(results);
         }
 
@@ -65,9 +70,9 @@ namespace Sem.Sample.Contracts.Entities
                     });
 
             Util.PrintEntries(results);
-            Console.WriteLine("---> ForMessages did return the validation results, but  <---");
-            Console.WriteLine("--->   did not cause any exception. So \"customer Sven\"   <---");
-            Console.WriteLine("--->   did enter the method  and did execute all code.   <---");
+            Console.WriteLine(@"---> ForMessages did return the validation results, but  <---");
+            Console.WriteLine(@"--->   did not cause any exception. So 'customer Sven'   <---");
+            Console.WriteLine(@"--->   did enter the method  and did execute all code.   <---");
         }
 
         /// <summary>
@@ -110,7 +115,10 @@ namespace Sem.Sample.Contracts.Entities
         [MethodRule(typeof(StrictCustomerCheckRuleSet), "customer")]
         internal void InsertCustomer(MyCustomer customer)
         {
-            var results = Bouncer.ForMessages(() => customer).Assert();
+            var results = Bouncer
+                .ForMessages(() => customer)
+                .Assert();
+
             Util.PrintEntries(results);
         }
 
@@ -122,10 +130,12 @@ namespace Sem.Sample.Contracts.Entities
         [ContractContext("Config")]
         internal new void WriteCustomerConfiguration(MyCustomer customer)
         {
-            Bouncer.ForCheckData(() => customer).Assert();
+            Bouncer
+                .ForCheckData(() => customer)
+                .Assert();
 
             Console.WriteLine(
-                "calling customer {0} with Id {1}",
+                Resources.CallingCustomerInfo,
                 GetTheName(customer),
                 FormatTheId(customer));
         }

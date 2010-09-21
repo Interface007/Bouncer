@@ -43,6 +43,10 @@ namespace Sem.Sample.Contracts.Entities
         [ContractRule(typeof(StringRegexMatchRule), Parameter = @"^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")]
         public string EMailAddress { get; set; }
 
+        /// <summary>
+        /// The rule for this property is configured inside the app.config. The regular expression 
+        /// configured there does accept for example +49(1234)5678912
+        /// </summary>
         public string PhoneNumber { get; set; }
     }
 }
