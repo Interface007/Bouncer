@@ -38,7 +38,7 @@ namespace Sem.Sample.Contracts.Entities
         /// This time we will not prevent executing the method code, but 
         /// just collect the violated rules and print them to the console.
         /// </summary>
-        /// <param name="customer"></param>
+        /// <param name="customer">This object is decorated with attributes.</param>
         internal void CheckCustomerProperties(MyCustomer customer)
         {
             var results = Bouncer.ForMessages(() => customer).Assert();
@@ -53,7 +53,7 @@ namespace Sem.Sample.Contracts.Entities
         /// from RuleBase and initialize the CheckExpression inside the
         /// constructor.
         /// </summary>
-        /// <param name="customer"></param>
+        /// <param name="customer">This object is decorated with attributes.</param>
         internal void CheckCustomerWithCustomRule(MyCustomer customer)
         {
             var results = Bouncer
@@ -74,12 +74,12 @@ namespace Sem.Sample.Contracts.Entities
         /// This method performs some rule checking by specifying the rules inside 
         /// method parameters. 
         /// </summary>
-        /// <param name="customerId"></param>
-        /// <param name="amount"></param>
-        /// <param name="theCustomer"></param>
+        /// <param name="customerId">the attribute for customer id declares this to be not null</param>
+        /// <param name="amount">the amounte must not be > 99</param>
+        /// <param name="theCustomer">This object is decorated with attributes.</param>
         [MethodRule(typeof(IntegerLowerThanRule), "amount", Parameter = 100)]
         [MethodRule(typeof(StringNotNullOrEmptyRule), "customerId")]
-        public void CheckCustomerWithWithMethodAttributes(string customerId, int amount, MyCustomer theCustomer)
+        internal void CheckCustomerWithWithMethodAttributes(string customerId, int amount, MyCustomer theCustomer)
         {
             Bouncer
                 .ForCheckData(() => customerId)
@@ -112,6 +112,22 @@ namespace Sem.Sample.Contracts.Entities
         {
             var results = Bouncer.ForMessages(() => customer).Assert();
             Util.PrintEntries(results);
+        }
+
+        /// <summary>
+        /// We need to use the type MySaveCustomer in order to correctly resolve type inference for  
+        /// Bouncer.ForCheckData(() => customer).Assert();
+        /// </summary>
+        /// <param name="customer">this customer type does have rule-attributes attached to its properties</param>
+        [ContractContext("Config")]
+        internal new void WriteCustomerConfiguration(MyCustomer customer)
+        {
+            Bouncer.ForCheckData(() => customer).Assert();
+
+            Console.WriteLine(
+                "calling customer {0} with Id {1}",
+                GetTheName(customer),
+                FormatTheId(customer));
         }
     }
 }

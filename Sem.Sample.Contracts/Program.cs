@@ -73,6 +73,17 @@ namespace Sem.Sample.Contracts
                 "The rules for specifying the full name and a valid email address (the string\n" +
                 "\"don't@spam.me\" does contain a '-char) are still active.",
                 () => new MyBusinessComponentSave().InsertCustomer(new MyCustomer { FullName = "Sven", EMailAddress = "don't@spam.me" }));
+        
+            Util.TryCall(
+                "Now configurable rules. The following rule validation is only inside the \n" +
+                "app.config. You can simply add/remove additional checks inside the \n" +
+                "configuration file.",
+                () => new MyBusinessComponentSave().WriteCustomerConfiguration(new MyCustomer
+                    {
+                        InternalId = new CustomerId(),
+                        FullName = "Sven", 
+                        EMailAddress = "dont@spam.me"
+                    }));
         }
 
         private static void AddLogging(string message)
