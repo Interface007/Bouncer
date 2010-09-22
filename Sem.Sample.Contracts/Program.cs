@@ -22,7 +22,7 @@ namespace Sem.Sample.Contracts
                 "customer.InternalId.ToString()\n\n" +
                 "while InternalId is not set, this will cause an exception (do\n" +
                 "you see any hint, what property causes the exception?):",
-                () => new MyBusinessComponent().WriteCustomerProperties(new MyCustomer { EMailAddress = "sven@svenerikmatzen.info" }));
+                () => new MyBusinessComponent().WriteCustomerProperties(new MyCustomer { EMailAddress = Resources.ValidEmailAddress }));
 
             Util.TryCall(
                 "This call will use a method including the statement\n\n" +
@@ -30,14 +30,14 @@ namespace Sem.Sample.Contracts
                 "The bouncer will tell you the root of the error inside the message of the \n" +
                 "exception and will throw the exception in the first method that can detect the \n" +
                 "issue. Also it will give you the property name:",
-                () => new MyBusinessComponentSave().WriteCustomerProperties(new MyCustomer { EMailAddress = "sven@svenerikmatzen.info" }));
+                () => new MyBusinessComponentSave().WriteCustomerProperties(new MyCustomer { EMailAddress = Resources.ValidEmailAddress }));
 
             Util.TryCall(
                 "In this example we will print out a list of messages from the statement\n\n" +
                 "var results = Bouncer.ForMessages(() => saveBusinessObject).Assert();\n\n" +
                 "This does not throw an exception, but executes all checks and returns \n" +
                 "a list of issues.",
-                () => new MyBusinessComponentSave().CheckCustomerProperties(new MyCustomer { EMailAddress = "sven@svenerikmatzen.info" }));
+                () => new MyBusinessComponentSave().CheckCustomerProperties(new MyCustomer { EMailAddress = Resources.ValidEmailAddress }));
 
             AddLogging(
                 "Rule executers do also support central inspection of rule evaluation results.\n" +
@@ -61,7 +61,7 @@ namespace Sem.Sample.Contracts
                 "rule for its parameter. This way we nearly completely are declarative.\n" +
                 "Unfortunately we cannot enforce the parameter name to match to the method\n" +
                 "signature at compile time.",
-                () => new MyBusinessComponentSave().CheckCustomerWithWithMethodAttributes(string.Empty, 1000, new MyCustomer { EMailAddress = "sven@svenerikmatzen.info" }));
+                () => new MyBusinessComponentSave().CheckCustomerWithWithMethodAttributes(string.Empty, 1000, new MyCustomer { EMailAddress = Resources.ValidEmailAddress }));
 
             Util.TryCall(
                 "We also can use a string as a context description for the call. E.g. we can\n" +
@@ -82,7 +82,7 @@ namespace Sem.Sample.Contracts
                     {
                         InternalId = new CustomerId(),
                         FullName = "Sven", 
-                        EMailAddress = "dont@spam.me",
+                        EMailAddress = Resources.ValidEmailAddress,
                         PhoneNumber = "00000000000"
                     }));
         }

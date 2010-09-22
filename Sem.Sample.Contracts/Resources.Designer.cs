@@ -68,5 +68,14 @@ namespace Sem.Sample.Contracts {
                 return ResourceManager.GetString("CallingCustomerInfo", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dont@spam.me.
+        /// </summary>
+        internal static string ValidEmailAddress {
+            get {
+                return ResourceManager.GetString("ValidEmailAddress", resourceCulture);
+            }
+        }
     }
 }

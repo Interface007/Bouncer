@@ -101,4 +101,7 @@
 	<data name="CallingCustomerInfo">
 		<value xml:space="preserve">calling customer {0} with Id {1}</value>
 	</data>
+	<data name="ValidEmailAddress">
+		<value xml:space="preserve">dont@spam.me</value>
+	</data>
 </root>
