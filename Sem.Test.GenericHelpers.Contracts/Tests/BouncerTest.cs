@@ -64,7 +64,7 @@
         {
             Bouncer.ForCheckData(1, "myInt").Assert(x => x == 1);
         }
-        
+
         [TestMethod]
         public void CheckIntValid0()
         {
@@ -102,6 +102,16 @@
         public void CheckIntInvalidWithParameter2()
         {
             Bouncer.ForCheckData(0, "var0").Assert((x, y) => y == 8, 7);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(RuleValidationException))]
+        public void DeferredExcutor()
+        {
+            var var0 = "var0";
+            Bouncer
+                .For(() => var0)
+                .Assert();
         }
     }
 }

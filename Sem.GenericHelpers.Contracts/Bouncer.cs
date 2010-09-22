@@ -142,5 +142,38 @@ namespace Sem.GenericHelpers.Contracts
         {
             return new ConditionalExecution<TData>(name, data);
         }
+
+        public static DeferredExecution<TData> For<TData>(Expression<Func<TData>> data)
+        {
+            return new DeferredExecution<TData>(data);
+        }
+    }
+
+    public class DeferredExecution<TData> : RuleExecuter<TData, CheckData<TData>>
+    {
+        public DeferredExecution(string valueName, TData value)
+            : base(valueName, value, null)
+        {
+        }
+
+        public DeferredExecution(Expression<Func<TData>> data)
+            : base(data, null)
+        {
+        }
+
+        public DeferredExecution(string valueName, TData value, IEnumerable<MethodRuleAttribute> methodRuleAttributes)
+            : base(valueName, value, methodRuleAttributes)
+        {
+        }
+
+        public DeferredExecution(Expression<Func<TData>> data, IEnumerable<MethodRuleAttribute> methodRuleAttributes)
+            : base(data, methodRuleAttributes)
+        {
+        }
+
+        protected override void AfterInvoke(RuleValidationResult validationResult)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
