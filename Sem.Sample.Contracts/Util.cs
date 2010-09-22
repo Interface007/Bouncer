@@ -1,4 +1,13 @@
-﻿namespace Sem.Sample.Contracts
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Util.cs" company="Sven Erik Matzen">
+//   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
+// </copyright>
+// <summary>
+//   Defines the Util type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Sem.Sample.Contracts
 {
     using System;
 

@@ -94,6 +94,7 @@
     <Compile Include="Tests\RuleValidationExceptionTest.cs" />
     <Compile Include="Tests\StringNotNullOrEmptyRuleTest.cs" />
     <Compile Include="Executors\VetoExecutor.cs" />
+    <Compile Include="Tests\UndefinedExecutorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sem.GenericHelpers.Contracts\Sem.GenericHelpers.Contracts.csproj">

@@ -1,4 +1,13 @@
-﻿namespace Sem.GenericHelpers.Contracts.Configuration
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ConfigReader.cs" company="Sven Erik Matzen">
+//   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
+// </copyright>
+// <summary>
+//   Defines the ConfigReader type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Sem.GenericHelpers.Contracts.Configuration
 {
     using System;
     using System.Configuration;

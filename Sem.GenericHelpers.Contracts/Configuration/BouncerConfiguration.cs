@@ -1,4 +1,13 @@
-﻿namespace Sem.GenericHelpers.Contracts.Configuration
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BouncerConfiguration.cs" company="Sven Erik Matzen">
+//   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
+// </copyright>
+// <summary>
+//   Configuration section object for the things you can configure via the app.config
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Sem.GenericHelpers.Contracts.Configuration
 {
     using System;
     using System.Collections.Generic;

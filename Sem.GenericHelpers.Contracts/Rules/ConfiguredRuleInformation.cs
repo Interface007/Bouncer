@@ -1,4 +1,13 @@
-﻿namespace Sem.GenericHelpers.Contracts.Rules
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ConfiguredRuleInformation.cs" company="Sven Erik Matzen">
+//   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
+// </copyright>
+// <summary>
+//   Defines the ConfiguredRuleInformation type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Sem.GenericHelpers.Contracts.Rules
 {
     using System;
     using System.Xml;
