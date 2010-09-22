@@ -213,7 +213,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             return (TResultClass)this;
         }
 
-        public IRuleExecuter AssertAll()
+        public virtual IRuleExecuter AssertAll()
         {
             return this.Assert();
         }
