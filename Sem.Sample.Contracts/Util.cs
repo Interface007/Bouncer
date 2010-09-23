@@ -22,11 +22,11 @@ namespace Sem.Sample.Contracts
             
             foreach (var result in results.Results)
             {
-                Console.WriteLine("----------");
+                Console.WriteLine(@"----------");
                 Console.WriteLine(result);
             }
 
-            Console.WriteLine("----------");
+            Console.WriteLine(@"----------");
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
@@ -44,18 +44,18 @@ namespace Sem.Sample.Contracts
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Exception caught:");
+                Console.WriteLine(@"Exception caught:");
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine(ex.Message);
                 Console.ForegroundColor = ConsoleColor.White;
 
-                Console.WriteLine("Stacktrace:");
+                Console.WriteLine(@"Stacktrace:");
                 Console.WriteLine(ex.StackTrace.Substring(0, 300));
             }
 
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine();
-            Console.WriteLine("press enter to execute next sample...");
+            Console.WriteLine(@"press enter to execute next sample...");
             Console.ReadLine();
         }
     }
