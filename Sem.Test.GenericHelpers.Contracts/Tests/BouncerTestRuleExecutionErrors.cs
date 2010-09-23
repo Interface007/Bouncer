@@ -5,6 +5,7 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.RuleExecuters;
     using Sem.GenericHelpers.Contracts.Rules;
     using Sem.Test.GenericHelpers.Contracts.Entities;
@@ -62,6 +63,17 @@
         [TestMethod]
         public void CheckRuleWithExceptionHandled()
         {
+            var executor = new ExceptionHandlerExecutor<string>(() => "just me");
+            var result = executor.ExecuteRuleExpression(new StringRegexMatchRule(), "{[(", "handle");
+            Assert.IsTrue(executor.ExceptionHandled);
+        }
+
+        [TestMethod]
+        public void CheckRuleWithExceptionHandledV2()
+        {
+            Bouncer
+                .For(() => "just me")
+                .Execute();
             var executor = new ExceptionHandlerExecutor<string>(() => "just me");
             var result = executor.ExecuteRuleExpression(new StringRegexMatchRule(), "{[(", "handle");
             Assert.IsTrue(executor.ExceptionHandled);
