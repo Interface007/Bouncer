@@ -327,7 +327,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             }
             catch (Exception ex)
             {
-                if (!this.HandleInvokeException(ex, rule, ruleParameter, valueName))
+                if (!this.HandleInvokeException(ex, rule, ruleParameter, valueName, this.Value))
                 {
                     throw;
                 }
@@ -394,7 +394,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <param name="ruleParameter">The parameter data involved in the rule validation.</param>
         /// <param name="valueName">The name of the data to be evaluated.</param>
         /// <returns>True if the exception has been handled inside this method, false if the exception should be rethrown in the base class.</returns>
-        protected virtual bool HandleInvokeException<TParameter>(Exception ex, RuleBase<TData, TParameter> rule, object ruleParameter, string valueName)
+        protected virtual bool HandleInvokeException<TParameter>(Exception ex, RuleBase<TData, TParameter> rule, object ruleParameter, string valueName, object value)
         {
             return false;
         }
