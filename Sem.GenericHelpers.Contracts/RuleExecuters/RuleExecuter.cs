@@ -39,12 +39,12 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <summary>
         /// Gets or sets the "name" of the value - normally this is the name of a method parameter.
         /// </summary>
-        internal string ValueName { get; set; }
+        public string ValueName { get; internal set; }
 
         /// <summary>
         /// Gets or sets the data to be tested.
         /// </summary>
-        internal TData Value { get; set; }
+        public TData Value { get; internal set; }
 
         /// <summary>
         /// Gets or sets a pointer to the Assert()-method of the previously built <see cref="RuleExecuter{TData,TResultClass}"/>.
@@ -57,7 +57,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// Gets or sets a list of <see cref="MethodRuleAttribute"/> for the current method (the one that did create the 
         /// instance of the <see cref="RuleExecuter{TData,TResultClass}"/>).
         /// </summary>
-        internal IEnumerable<MethodRuleAttribute> MethodRuleAttributes { get; set; }
+        public IEnumerable<MethodRuleAttribute> MethodRuleAttributes { get; internal set; }
 
         /// <summary>
         /// Gets or sets a list of <see cref="MethodRuleAttribute"/> for the current method (the one that did create the 
@@ -347,7 +347,10 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
             foreach (var action in Bouncer.GetAfterInvokeActions())
             {
-                action.Invoke(result);
+                if (!result.SkipProcessing)
+                {
+                    action.Invoke(result);
+                }
             }
 
             this.AfterInvoke(result);
@@ -657,7 +660,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
                 // we need to explicitly call "AfterInvoke" here, because "ruleExecuter" is not euqal to this,
                 // so the call of "AfterInvoke" while rule execution does update a different instance of RuleExecuter.
-                if (result != null)
+                if (result != null && !result.SkipProcessing)
                 {
                     this.AfterInvoke(result);
                 }
