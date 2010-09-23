@@ -55,6 +55,8 @@
     <Compile Include="Entities\MyBusinessComponent.cs" />
     <Compile Include="Entities\MyBusinessComponentSave.cs" />
     <Compile Include="Entities\MyCustomer.cs" />
+    <Compile Include="Executers\LogValidationExecutor.cs" />
+    <Compile Include="Executers\LogValidationExecutorUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">

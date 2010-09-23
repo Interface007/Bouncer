@@ -40,6 +40,11 @@ namespace Sem.GenericHelpers.Contracts
         public Type RuleType { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the result is should NOT be published to other result handlers.
+        /// </summary>
+        public bool SkipProcessing { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the data (the variable/argument name) the rule has been applied to.
         /// </summary>
         public string ValueName { get; protected set; }

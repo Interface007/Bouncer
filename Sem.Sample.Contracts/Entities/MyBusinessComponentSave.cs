@@ -15,6 +15,7 @@ namespace Sem.Sample.Contracts.Entities
     using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.Rules;
+    using Sem.Sample.Contracts.Executers;
     using Sem.Sample.Contracts.Rules;
 
     [ContractContext("Read")]
@@ -132,12 +133,20 @@ namespace Sem.Sample.Contracts.Entities
         internal new void WriteCustomerConfiguration(MyCustomer customer)
         {
             Bouncer
-                .ForExecution(() => customer)
-                .Assert();
-
-            Bouncer
                 .For(() => customer)
                 .Enforce();
+
+            Console.WriteLine(
+                Resources.CallingCustomerInfo,
+                GetTheName(customer),
+                FormatTheId(customer));
+        }
+
+        public void WriteCustomerCustomExecutor(MyCustomer customer)
+        {
+            Bouncer
+                .For(() => customer)
+                .LogResult();
 
             Console.WriteLine(
                 Resources.CallingCustomerInfo,
