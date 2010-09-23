@@ -206,10 +206,10 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 return (TResultClass)this;
             }
 
-            this.AssertForType();
             this.AssertForProperties();
             this.AssertForMethodAttributes();
-
+            this.AssertForType();
+            
             return (TResultClass)this;
         }
 
