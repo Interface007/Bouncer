@@ -10,6 +10,7 @@
 namespace Sem.Sample.Contracts.Entities
 {
     using System;
+    using System.Threading;
 
     using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.Attributes;
@@ -131,8 +132,12 @@ namespace Sem.Sample.Contracts.Entities
         internal new void WriteCustomerConfiguration(MyCustomer customer)
         {
             Bouncer
-                .ForCheckData(() => customer)
+                .ForExecution(() => customer)
                 .Assert();
+
+            Bouncer
+                .For(() => customer)
+                .Enforce();
 
             Console.WriteLine(
                 Resources.CallingCustomerInfo,

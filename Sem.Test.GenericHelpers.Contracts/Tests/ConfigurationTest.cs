@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UndefinedExecutorTest.cs" company="">
-//   
+// <copyright file="ConfigurationTest.cs" company="Sven Erik Matzen">
+//   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
 // </copyright>
 // <summary>
-//   Summary description for UndefinedExecutorTest
+//   Summary description for ConfigurationTest
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -11,17 +11,14 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Sem.GenericHelpers.Contracts;
-    using Sem.GenericHelpers.Contracts.Attributes;
-    using Sem.GenericHelpers.Contracts.Exceptions;
-    using Sem.GenericHelpers.Contracts.Rules;
+    using Sem.GenericHelpers.Contracts.Configuration;
     using Sem.Test.GenericHelpers.Contracts.Entities;
 
     /// <summary>
-    /// Summary description for UndefinedExecutorTest
+    /// Summary description for ConfigurationTest
     /// </summary>
     [TestClass]
-    public class UndefinedExecutorTest
+    public class ConfigurationTest
     {
         /// <summary>
         /// Gets or sets the test context which provides
@@ -30,19 +27,18 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        [ExpectedException(typeof(RuleValidationException))]
-        public void CheckRuleSet1()
+        public void ReadExistingConfig()
         {
-            var messageOne = new MessageOne("sometext");
-            TestMethod2(messageOne);
+            var result = ConfigReader.GetConfig<BouncerConfiguration>();
+            Assert.IsNotNull(result);
         }
 
-        [MethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
-        private static void TestMethod2(MessageOne messageOne)
+        [TestMethod]
+        public void ReadNonExistingConfig()
         {
-            Bouncer
-                .For(() => messageOne)
-                .Enforce();
+            var result = ConfigReader.GetConfig<MessageOne>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(new MessageOne().Content, result.Content);
         }
     }
 }

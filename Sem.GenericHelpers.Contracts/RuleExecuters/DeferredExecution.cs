@@ -42,9 +42,9 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             return new CheckData<TData>(this.ValueName, this.Value, this.MethodRuleAttributes).Assert();
         }
 
-        public MessageCollector<TData> Preview()
+        public IEnumerable<RuleValidationResult> Preview()
         {
-            return new MessageCollector<TData>(this.ValueName, this.Value, this.MethodRuleAttributes).Assert();
+            return new MessageCollector<TData>(this.ValueName, this.Value, this.MethodRuleAttributes).Assert().Results;
         }
 
         protected override bool BeforeInvoke<TParameter>(Rules.RuleBase<TData, TParameter> rule, object ruleParameter, string valueName)
