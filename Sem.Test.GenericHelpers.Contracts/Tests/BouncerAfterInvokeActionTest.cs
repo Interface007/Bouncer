@@ -14,19 +14,24 @@
     public class BouncerAfterInvokeActionTest
     {
         /// <summary>
-        /// Gets or sets the test context which provides
-        /// information about and functionality for the current test run.
+        /// You can add actions to the list of "AfterInvokeActions". The added actions
+        /// will be executed always after invoking a rule evaluation and get the
+        /// rule evaluation result as a parameter.
         /// </summary>
         public TestContext TestContext { get; set; }
 
+        /// <summary>
+        /// Test if we get the action executed if the rule is violated and an exception is thrown.
+        /// </summary>
         [TestMethod]
-        public void AfterInvokeTest01()
+        public void AfterInvokeTestRuleViolated()
         {
             var ok = true;
             var isNotNull = new IsNotNullRule<object>();
             
             // we will have one failing test, so "&= false" should set this variable to "false"
             Bouncer.AddAfterInvokeAction(x => { ok &= x.Result; });
+
             try
             {
                 new CheckData<object>(() => null).Assert(isNotNull);
@@ -38,8 +43,11 @@
             Assert.IsFalse(ok);
         }
 
+        /// <summary>
+        /// Test if the action is invoked if the rule is not violated.
+        /// </summary>
         [TestMethod]
-        public void AfterInvokeTest02()
+        public void AfterInvokeTestRuleIsValid()
         {
             var ok = false;
 
