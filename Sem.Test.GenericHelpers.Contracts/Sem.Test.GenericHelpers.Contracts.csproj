@@ -71,6 +71,7 @@
     <Compile Include="Tests\BouncerAttributedRuleTestAlternateNamespace.cs" />
     <Compile Include="Tests\BouncerBackEndNumberBoundariesTest.cs" />
     <Compile Include="Tests\BouncerImplementsInterfaceTest.cs" />
+    <Compile Include="Tests\ConfigurationTest.cs" />
     <Compile Include="Tests\ConfiguresRuleTest.cs" />
     <Compile Include="Tests\CustomExecutorInvocation.cs" />
     <Compile Include="Tests\IsNotNullRuleTest.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="Tests\RuleValidationExceptionTest.cs" />
     <Compile Include="Tests\StringNotNullOrEmptyRuleTest.cs" />
     <Compile Include="Executors\VetoExecutor.cs" />
-    <Compile Include="Tests\UndefinedExecutorTest.cs" />
+    <Compile Include="Tests\DeferredExecutorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sem.GenericHelpers.Contracts\Sem.GenericHelpers.Contracts.csproj">

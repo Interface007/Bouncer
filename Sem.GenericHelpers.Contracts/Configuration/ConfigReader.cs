@@ -10,34 +10,35 @@
 namespace Sem.GenericHelpers.Contracts.Configuration
 {
     using System;
+    using System.Collections.Generic;
     using System.Configuration;
     using System.Xml.Serialization;
 
     public class ConfigReader : ConfigurationSection
     {
-        private static object current;
-        private static Type currentType;
         private static readonly object Sync = new object();
+        private static readonly Dictionary<Type, object> current = new Dictionary<Type, object>();
+        private static Type currentType;
         
-        protected override void DeserializeSection(System.Xml.XmlReader reader)
-        {
-            var serializer = new XmlSerializer(currentType);
-            current = serializer.Deserialize(reader);
-        }
-
         public static TResult GetConfig<TResult>() 
-            where TResult : new()
+            where TResult : class, new()
         {
             lock (Sync)
             {
-                if (current == null)
+                currentType = typeof(TResult);
+                if (!current.ContainsKey(currentType))
                 {
-                    currentType = typeof(TResult);
                     ConfigurationManager.GetSection(currentType.Name);
                 }
 
-                return (TResult)(current ?? new TResult());
+                return current.ContainsKey(currentType) ? (((TResult)current[currentType]) ?? new TResult()) : new TResult();
             }
+        }
+     
+        protected override void DeserializeSection(System.Xml.XmlReader reader)
+        {
+            var serializer = new XmlSerializer(currentType);
+            current.Add(currentType, serializer.Deserialize(reader));
         }
     }
 }
