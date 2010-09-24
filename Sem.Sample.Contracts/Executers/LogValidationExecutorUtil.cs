@@ -9,13 +9,13 @@
 
 namespace Sem.Sample.Contracts.Executers
 {
-    using Sem.GenericHelpers.Contracts.RuleExecuters;
+    using Sem.GenericHelpers.Contracts;
 
     public static class LogValidationExecutorUtil
     {
-        public static void LogResult<TData>(this DeferredExecution<TData> exec)
-        {
-            new LogValidationExecutor<TData>(exec.ValueName, exec.Value, exec.MethodRuleAttributes).Assert();
-        }
+        ////public static void LogResult<TData>(this Bouncer exec)
+        ////{
+        ////    new LogValidationExecutor<TData>(exec.ValueName, exec.Value, exec.MethodRuleAttributes).Assert();
+        ////}
     }
 }
