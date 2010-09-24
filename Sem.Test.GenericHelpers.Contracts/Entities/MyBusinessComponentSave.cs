@@ -58,8 +58,8 @@ namespace Sem.Test.GenericHelpers.Contracts.Entities
         /// <param name="customerId"></param>
         /// <param name="amount"></param>
         /// <param name="theCustomer"></param>
-        [MethodRule(typeof(IntegerLowerThanRule), "amount", Parameter = 100)]
-        [MethodRule(typeof(StringNotNullOrEmptyRule), "customerId")]
+        [ContractMethodRule(typeof(IntegerLowerThanRule), "amount", Parameter = 100)]
+        [ContractMethodRule(typeof(StringNotNullOrEmptyRule), "customerId")]
         public IEnumerable<RuleValidationResult> CheckCustomerWithWithMethodAttributes(string customerId, int amount, MyCustomer theCustomer)
         {
             var results = Bouncer
@@ -82,7 +82,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Entities
         /// <param name="customer">The customer to be created (does not have an internal id)</param>
         [ContractContext("Create")]
         [ContractContext("Read", false)]    // this is important, because the class has an attribute "[ContractContext("Read")]"
-        [MethodRule(typeof(StrictCustomerCheckRuleSet), "customer")]
+        [ContractMethodRule(typeof(StrictCustomerCheckRuleSet), "customer")]
         internal IEnumerable<RuleValidationResult> InsertCustomer(MyCustomer customer)
         {
             var results = Bouncer.ForMessages(() => customer).Assert().Results;

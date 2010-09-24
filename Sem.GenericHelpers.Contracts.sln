@@ -14,9 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Settings.StyleCop = Settings.StyleCop
 	EndProjectSection
 EndProject
+Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "Sem.GenericHelpers.Contracts.Modeling", "Sem.GenericHelpers.Contracts.Modeling\Sem.GenericHelpers.Contracts.Modeling.modelproj", "{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
 		SccLocalPath0 = .
@@ -29,6 +31,9 @@ Global
 		SccProjectUniqueName3 = Sem.Test.GenericHelpers.Contracts\\Sem.Test.GenericHelpers.Contracts.csproj
 		SccProjectName3 = Sem.Test.GenericHelpers.Contracts
 		SccLocalPath3 = Sem.Test.GenericHelpers.Contracts
+		SccProjectUniqueName4 = Sem.GenericHelpers.Contracts.Modeling\\Sem.GenericHelpers.Contracts.Modeling.modelproj
+		SccProjectName4 = Sem.GenericHelpers.Contracts.Modeling
+		SccLocalPath4 = Sem.GenericHelpers.Contracts.Modeling
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Sem.GenericHelpers.Contracts.vsmdi
@@ -72,6 +77,16 @@ Global
 		{288EE41A-94F9-460C-90AD-D9CBBD6E95A4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{288EE41A-94F9-460C-90AD-D9CBBD6E95A4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{288EE41A-94F9-460C-90AD-D9CBBD6E95A4}.Release|x86.ActiveCfg = Release|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8BEFCDA3-B2BC-419A-A0A4-29AD05026EBB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

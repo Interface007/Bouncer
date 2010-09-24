@@ -4,6 +4,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Sem.GenericHelpers.Contracts;
+    using Sem.GenericHelpers.Contracts.Configuration;
     using Sem.GenericHelpers.Contracts.RuleExecuters;
     using Sem.GenericHelpers.Contracts.Rules;
 
@@ -30,7 +31,7 @@
             var isNotNull = new IsNotNullRule<object>();
             
             // we will have one failing test, so "&= false" should set this variable to "false"
-            Bouncer.AddAfterInvokeAction(x => { ok &= x.Result; });
+            BouncerConfiguration.AddAfterInvokeAction(x => { ok &= x.Result; });
 
             try
             {
@@ -52,7 +53,7 @@
             var ok = false;
 
             // we should have one successfull test, so "|= x.Result" should set the variable to true
-            Bouncer.AddAfterInvokeAction(x => { ok |= x.Result; });
+            BouncerConfiguration.AddAfterInvokeAction(x => { ok |= x.Result; });
             var isNotNull = new IsNotNullRule<object>();
             try
             {

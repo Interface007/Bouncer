@@ -12,6 +12,7 @@ namespace Sem.GenericHelpers.Contracts.Rules
     using System.Linq;
 
     using Sem.GenericHelpers.Contracts.Properties;
+    using Sem.GenericHelpers.Contracts.Rule;
 
     public class IsOneOfRule<TData> : RuleBase<TData, TData[]>
         where TData : class

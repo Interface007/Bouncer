@@ -12,6 +12,7 @@ namespace Sem.GenericHelpers.Contracts.Rules
     using System;
 
     using Sem.GenericHelpers.Contracts.Properties;
+    using Sem.GenericHelpers.Contracts.Rule;
 
     public class ImplementsInterfaceRule<TData> : RuleBase<TData, Type>
         where TData : class

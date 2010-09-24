@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.GenericHelpers.Contracts.Rules
+namespace Sem.GenericHelpers.Contracts.Rule
 {
     using System.Collections;
     using System.Collections.Generic;

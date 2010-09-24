@@ -11,6 +11,7 @@ namespace Sem.Sample.Contracts
     using System;
 
     using Sem.GenericHelpers.Contracts;
+    using Sem.GenericHelpers.Contracts.Configuration;
     using Sem.Sample.Contracts.Entities;
 
     public class Program
@@ -113,7 +114,7 @@ namespace Sem.Sample.Contracts
 
             if (input.ToUpperInvariant() == "L")
             {
-                Bouncer.AddAfterInvokeAction(x =>
+                BouncerConfiguration.AddAfterInvokeAction(x =>
                     {
                         var c = Console.ForegroundColor;
                         Console.ForegroundColor = ConsoleColor.Yellow;

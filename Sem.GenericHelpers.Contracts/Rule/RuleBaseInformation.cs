@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.GenericHelpers.Contracts.Rules
+namespace Sem.GenericHelpers.Contracts.Rule
 {
     using Sem.GenericHelpers.Contracts.Properties;
 

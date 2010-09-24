@@ -7,13 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.GenericHelpers.Contracts.Rules
+namespace Sem.GenericHelpers.Contracts.Rule
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using Sem.GenericHelpers.Contracts.Attributes;
+    using Sem.GenericHelpers.Contracts.Rules;
 
     public static class RegisteredRules
     {

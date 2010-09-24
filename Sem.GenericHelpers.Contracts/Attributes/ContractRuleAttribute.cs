@@ -13,7 +13,7 @@ namespace Sem.GenericHelpers.Contracts.Attributes
 
     /// <summary>
     /// Attribute to attach rules to classes and properties of classes. To attach rules to method parameters, 
-    /// use the <see cref="MethodRuleAttribute"/>.
+    /// use the <see cref="ContractMethodRuleAttribute"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
     public sealed class ContractRuleAttribute : ContractRuleBaseAttribute

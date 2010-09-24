@@ -14,6 +14,7 @@ namespace Sem.GenericHelpers.Contracts.Rules
     using System.Globalization;
 
     using Sem.GenericHelpers.Contracts.Properties;
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.RuleExecuters;
 
     /// <summary>

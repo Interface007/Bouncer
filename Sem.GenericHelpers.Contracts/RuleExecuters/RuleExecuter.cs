@@ -21,6 +21,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.Configuration;
     using Sem.GenericHelpers.Contracts.Properties;
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.Rules;
 
     /// <summary>
@@ -47,6 +48,12 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         public TData Value { get; internal set; }
 
         /// <summary>
+        /// Gets a list of <see cref="ContractMethodRuleAttribute"/> for the current method (the one that did create the 
+        /// instance of the <see cref="RuleExecuter{TData,TResultClass}"/>).
+        /// </summary>
+        public IEnumerable<ContractMethodRuleAttribute> MethodRuleAttributes { get; internal set; }
+
+        /// <summary>
         /// Gets or sets a pointer to the Assert()-method of the previously built <see cref="RuleExecuter{TData,TResultClass}"/>.
         /// Only the Assert()-method can be invoked, because all other Assert methods do rely on the data type, 
         /// which may differ from the current.
@@ -54,26 +61,20 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         internal IRuleExecuter PreviousExecuter { get; set; }
 
         /// <summary>
-        /// Gets or sets a list of <see cref="MethodRuleAttribute"/> for the current method (the one that did create the 
-        /// instance of the <see cref="RuleExecuter{TData,TResultClass}"/>).
-        /// </summary>
-        public IEnumerable<MethodRuleAttribute> MethodRuleAttributes { get; internal set; }
-
-        /// <summary>
-        /// Gets or sets a list of <see cref="MethodRuleAttribute"/> for the current method (the one that did create the 
+        /// Gets or sets a list of <see cref="ContractMethodRuleAttribute"/> for the current method (the one that did create the 
         /// instance of the <see cref="RuleExecuter{TData,TResultClass}"/>).
         /// </summary>
         internal IEnumerable<string> Context { get; set; }
 
         /// <summary>
-        /// The name of the namespace this INSTANCE (the inherited class) is declared in.
+        /// The name of the namespace this INSTANCE (the inherited class) is declared in - this may differ is it is a "custom" executor.
         /// </summary>
         private readonly string myNamespace = typeof(TResultClass).Namespace;
 
         /// <summary>
-        /// The namespace of the <see cref="Bouncer"/> class.
+        /// The root namespace of the classes of this assembly is equal to the name of the assembly.
         /// </summary>
-        private static readonly string BouncerNameSpace = typeof(Bouncer).Namespace;
+        private static readonly string BouncerNameSpace = Assembly.GetExecutingAssembly().GetName().Name;
 
         /// <summary>
         /// A cache for the attributes of properties.
@@ -84,7 +85,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <summary>
         /// A cache for the attributes of methods.
         /// </summary>
-        private static readonly Dictionary<MethodBase, List<MethodRuleAttribute>> RuleAttributeCache = new Dictionary<MethodBase, List<MethodRuleAttribute>>();
+        private static readonly Dictionary<MethodBase, List<ContractMethodRuleAttribute>> RuleAttributeCache = new Dictionary<MethodBase, List<ContractMethodRuleAttribute>>();
         private static readonly object RuleAttributeCacheSync = new object();
 
         private static readonly bool SuppressAll = ConfigReader.GetConfig<BouncerConfiguration>().SuppressAll;
@@ -94,7 +95,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         #endregion
 
         #region ctors
-        protected RuleExecuter(string valueName, TData value, IEnumerable<MethodRuleAttribute> methodRuleAttributes)
+        protected RuleExecuter(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
         {
             if (SuppressAll)
             {
@@ -107,10 +108,10 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             this.Context = GetContext(currentMethodInfo);
             this.Value = value;
             this.ValueName = valueName;
-            targetType = typeof(TData);
+            this.targetType = typeof(TData);
         }
 
-        protected RuleExecuter(Expression<Func<TData>> data, IEnumerable<MethodRuleAttribute> methodRuleAttributes)
+        protected RuleExecuter(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
             : this(GetMemberName(data), GetMemberValue(data), methodRuleAttributes)
         {
         }
@@ -345,7 +346,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 valueName,
                 validationResult);
 
-            foreach (var action in Bouncer.GetAfterInvokeActions())
+            foreach (var action in BouncerConfiguration.GetAfterInvokeActions())
             {
                 if (!result.SkipProcessing)
                 {
@@ -405,22 +406,22 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         #endregion
 
         /// <summary>
-        /// Gets the role attributes (a list of <see cref="MethodRuleAttribute"/>) from the current method. The
+        /// Gets the role attributes (a list of <see cref="ContractMethodRuleAttribute"/>) from the current method. The
         /// current method is the first method inside the stack trace from a class, that is not inside the 
         /// namespace of <see cref="Bouncer"/> and not inside a class implementing an interface called "IRuleExecuter".
         /// </summary>
         /// <param name="methodInfo">The reflected information about the calling method.</param>
-        /// <returns>A list of <see cref="MethodRuleAttribute"/> with all attributes of the current method.</returns>
-        private static IEnumerable<MethodRuleAttribute> GetRuleAttributesFromCurrentMethod(MethodBase methodInfo)
+        /// <returns>A list of <see cref="ContractMethodRuleAttribute"/> with all attributes of the current method.</returns>
+        private static IEnumerable<ContractMethodRuleAttribute> GetRuleAttributesFromCurrentMethod(MethodBase methodInfo)
         {
             lock (RuleAttributeCacheSync)
             {
                 if (!RuleAttributeCache.ContainsKey(methodInfo))
                 {
-                    var customAttributes = methodInfo.GetCustomAttributes(typeof(MethodRuleAttribute), true);
-                    var methodRuleAttributes = (from x in customAttributes select (MethodRuleAttribute)x).ToList();
+                    var customAttributes = methodInfo.GetCustomAttributes(typeof(ContractMethodRuleAttribute), true);
+                    var methodRuleAttributes = (from x in customAttributes select (ContractMethodRuleAttribute)x).ToList();
 
-                    var newRules = new List<MethodRuleAttribute>();
+                    var newRules = new List<ContractMethodRuleAttribute>();
                     foreach (var methodRuleAttribute in methodRuleAttributes)
                     {
                         if (!methodRuleAttribute.RuleType.Implements(typeof(IEnumerable)))
@@ -432,7 +433,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                         var attribute = methodRuleAttribute;
                         newRules.AddRange(
                             from object rule in ruleCollection 
-                            select new MethodRuleAttribute(rule.GetType(), attribute.MethodArgumentName)
+                            select new ContractMethodRuleAttribute(rule.GetType(), attribute.MethodArgumentName)
                                 {
                                     Namespace = attribute.Namespace, 
                                     IncludeInContext = attribute.IncludeInContext, 
@@ -561,7 +562,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             return this.GetType()
                 .GetGenericTypeDefinition()
                 .MakeGenericType(valueType)
-                .GetConstructor(new[] { typeof(string), valueType, typeof(IEnumerable<MethodRuleAttribute>) })
+                .GetConstructor(new[] { typeof(string), valueType, typeof(IEnumerable<ContractMethodRuleAttribute>) })
                 .Invoke(new[] { name, value, this.MethodRuleAttributes }) as IRuleExecuter;
         }
 

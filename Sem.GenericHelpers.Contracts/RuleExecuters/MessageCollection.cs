@@ -17,11 +17,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.Properties;
 
-    public interface IMessageCollector
-    {
-        IEnumerable<RuleValidationResult> Results { get; }
-    }
-
     /// <summary>
     /// Check class including the data to perform rule checking. Each rule violation
     /// adds a new entry to the <see cref="Results"/> list (this is a <see cref="List{T}"/>
@@ -62,12 +57,12 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         {
         }
 
-        public MessageCollector(string valueName, TData value, IEnumerable<MethodRuleAttribute> methodAttributes)
+        public MessageCollector(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(valueName, value, methodAttributes)
         {
         }
 
-        public MessageCollector(Expression<Func<TData>> data, IEnumerable<MethodRuleAttribute> methodAttributes)
+        public MessageCollector(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(data, methodAttributes)
         {
         }

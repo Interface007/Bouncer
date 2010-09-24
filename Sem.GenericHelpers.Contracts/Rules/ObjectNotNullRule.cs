@@ -10,6 +10,7 @@
 namespace Sem.GenericHelpers.Contracts.Rules
 {
     using Sem.GenericHelpers.Contracts.Properties;
+    using Sem.GenericHelpers.Contracts.Rule;
 
     public class ObjectNotNullRule : RuleBase<object, object>
     {

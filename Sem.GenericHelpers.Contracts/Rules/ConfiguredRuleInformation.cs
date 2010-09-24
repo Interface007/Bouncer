@@ -15,6 +15,8 @@ namespace Sem.GenericHelpers.Contracts.Rules
     using System.Xml.Schema;
     using System.Xml.Serialization;
 
+    using Sem.GenericHelpers.Contracts.Rule;
+
     public class ConfiguredRuleInformation : IXmlSerializable
     {
         public RuleBaseInformation Rule { get; set; }

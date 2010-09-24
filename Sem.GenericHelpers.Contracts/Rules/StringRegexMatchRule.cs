@@ -12,6 +12,7 @@ namespace Sem.GenericHelpers.Contracts.Rules
     using System.Text.RegularExpressions;
 
     using Sem.GenericHelpers.Contracts.Properties;
+    using Sem.GenericHelpers.Contracts.Rule;
 
     public class StringRegexMatchRule : RuleBase<string, string>
     {

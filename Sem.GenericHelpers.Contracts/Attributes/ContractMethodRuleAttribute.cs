@@ -17,9 +17,9 @@ namespace Sem.GenericHelpers.Contracts.Attributes
     /// use the <see cref="ContractRuleAttribute"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public sealed class MethodRuleAttribute : ContractRuleBaseAttribute
+    public sealed class ContractMethodRuleAttribute : ContractRuleBaseAttribute
     {
-        public MethodRuleAttribute(Type ruleType, string methodArgumentName)
+        public ContractMethodRuleAttribute(Type ruleType, string methodArgumentName)
             : base(ruleType)
         {
             this.MethodArgumentName = methodArgumentName;

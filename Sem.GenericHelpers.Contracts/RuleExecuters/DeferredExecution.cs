@@ -14,6 +14,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System.Linq.Expressions;
 
     using Sem.GenericHelpers.Contracts.Attributes;
+    using Sem.GenericHelpers.Contracts.Rule;
 
     public class DeferredExecution<TData> : RuleExecuter<TData, DeferredExecution<TData>>
     {
@@ -27,12 +28,12 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         {
         }
 
-        public DeferredExecution(string valueName, TData value, IEnumerable<MethodRuleAttribute> methodAttributes)
+        public DeferredExecution(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(valueName, value, methodAttributes)
         {
         }
 
-        public DeferredExecution(Expression<Func<TData>> data, IEnumerable<MethodRuleAttribute> methodAttributes)
+        public DeferredExecution(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(data, methodAttributes)
         {
         }
@@ -47,7 +48,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             return new MessageCollector<TData>(this.ValueName, this.Value, this.MethodRuleAttributes).Assert().Results;
         }
 
-        protected override bool BeforeInvoke<TParameter>(Rules.RuleBase<TData, TParameter> rule, object ruleParameter, string valueName)
+        protected override bool BeforeInvoke<TParameter>(RuleBase<TData, TParameter> rule, object ruleParameter, string valueName)
         {
             throw new NotImplementedException("You cannot use this rule executer directly, use the methods Enforce() and Preview() to process the rules.");
         }

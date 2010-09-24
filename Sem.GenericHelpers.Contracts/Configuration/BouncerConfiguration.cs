@@ -22,6 +22,9 @@ namespace Sem.GenericHelpers.Contracts.Configuration
     /// </summary>
     public class BouncerConfiguration
     {
+        private static readonly IList<Action<RuleValidationResult>> AfterInvokeAction = new List<Action<RuleValidationResult>>();
+        private static readonly object AfterInvokeActionSync = new object();
+
         /// <summary>
         /// Gets or sets a value whether rules are being executed or not.
         /// </summary>
@@ -51,6 +54,29 @@ namespace Sem.GenericHelpers.Contracts.Configuration
                            Namespace = ruleEntry.Namespace,
                            Parameter = ruleEntry.Parameter,
                        };
+        }
+
+        public static void AddAfterInvokeAction(Action<RuleValidationResult> action)
+        {
+            lock (AfterInvokeActionSync)
+            {
+                AfterInvokeAction.Add(action);
+            }
+        }
+
+        /// <summary>
+        /// Creates an list of currently registered <see cref="Action{RuleValidationResult}"/> to be 
+        /// invoked after a rule has veen validated.
+        /// </summary>
+        /// <returns>A copy of the current list of elements.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This does not return a reference to the internal list of actions, but makes a copy of the current representation of that list. This is definitely not what a property is appropiate for.")]
+        public static IEnumerable<Action<RuleValidationResult>> GetAfterInvokeActions()
+        {
+            lock (AfterInvokeActionSync)
+            {
+                // this does make a copy of the list
+                return AfterInvokeAction.ToList();
+            }
         }
     }
 }
