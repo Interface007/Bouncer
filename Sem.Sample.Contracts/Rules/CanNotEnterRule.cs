@@ -9,7 +9,7 @@
 
 namespace Sem.Sample.Contracts.Rules
 {
-    using Sem.GenericHelpers.Contracts.Rules;
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.Sample.Contracts.Entities;
 
     internal class CanNotEnterRule : RuleBase<MyCustomer, object>

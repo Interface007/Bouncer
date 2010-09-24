@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.Rules;
 
     public class SampleRuleSet<TData> : RuleCollection<TData, object>

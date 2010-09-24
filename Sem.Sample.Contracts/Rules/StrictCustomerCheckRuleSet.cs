@@ -11,6 +11,7 @@ namespace Sem.Sample.Contracts.Rules
 {
     using System.Collections.Generic;
 
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.Rules;
     using Sem.Sample.Contracts.Entities;
 

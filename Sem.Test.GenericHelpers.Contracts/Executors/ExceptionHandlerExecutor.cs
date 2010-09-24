@@ -13,6 +13,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Executors
     using System.Linq.Expressions;
 
     using Sem.GenericHelpers.Contracts;
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.RuleExecuters;
     using Sem.GenericHelpers.Contracts.Rules;
 
