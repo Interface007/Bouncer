@@ -87,17 +87,17 @@ namespace Sem.Sample.Contracts
                         PhoneNumber = "00000000000"
                     }));
 
-            Util.TryCall(
-                "Also we have the opportunity to implement a custom executor. This one will \n" +
-                "log each validation result to the console window. To have a consistant \n" +
-                "interface we use an extension method 'LogResult' for 'DeferredExecution<TData>'.",
-                () => new MyBusinessComponentSave().WriteCustomerCustomExecutor(new MyCustomer
-                    {
-                        InternalId = new CustomerId(),
-                        FullName = "Sven", 
-                        EMailAddress = Resources.ValidEmailAddress,
-                        PhoneNumber = "00000000000"
-                    }));
+            ////Util.TryCall(
+            ////    "Also we have the opportunity to implement a custom executor. This one will \n" +
+            ////    "log each validation result to the console window. To have a consistant \n" +
+            ////    "interface we use an extension method 'LogResult' for 'DeferredExecution<TData>'.",
+            ////    () => new MyBusinessComponentSave().WriteCustomerCustomExecutor(new MyCustomer
+            ////        {
+            ////            InternalId = new CustomerId(),
+            ////            FullName = "Sven", 
+            ////            EMailAddress = Resources.ValidEmailAddress,
+            ////            PhoneNumber = "00000000000"
+            ////        }));
         }
 
         private static void AddLogging(string message)

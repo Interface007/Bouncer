@@ -114,7 +114,7 @@ namespace Sem.GenericHelpers.Contracts
             return new ConditionalExecution<TData>(name, data);
         }
 
-        public static DeferredExecution<TData> For<TData>(Expression<Func<TData>> data)
+        internal static DeferredExecution<TData> For<TData>(Expression<Func<TData>> data)
         {
             return new DeferredExecution<TData>(data);
         }

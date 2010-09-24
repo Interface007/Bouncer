@@ -29,8 +29,8 @@ namespace Sem.Sample.Contracts.Entities
         internal new void WriteCustomerProperties(MyCustomer customer)
         {
             Bouncer
-                .For(() => customer)
-                .Enforce();
+                .ForCheckData(() => customer)
+                .Assert();
 
             Console.WriteLine(
                 Resources.CallingCustomerInfo,
@@ -46,8 +46,9 @@ namespace Sem.Sample.Contracts.Entities
         internal void CheckCustomerProperties(MyCustomer customer)
         {
             var results = Bouncer
-                .For(() => customer)
-                .Preview();
+                .ForMessages(() => customer)
+                .Assert()
+                .Results;
 
             Util.PrintEntries(results);
         }
@@ -89,10 +90,11 @@ namespace Sem.Sample.Contracts.Entities
         internal void CheckCustomerWithWithMethodAttributes(string customerId, int amount, MyCustomer theCustomer)
         {
             var results = Bouncer
-                .For(() => customerId)
-                .For(() => amount)
-                .For(() => theCustomer)
-                .Preview();
+                .ForMessages(() => customerId)
+                .ForMessages(() => amount)
+                .ForMessages(() => theCustomer)
+                .Assert()
+                .Results;
 
             Util.PrintEntries(results);
         }
@@ -112,8 +114,9 @@ namespace Sem.Sample.Contracts.Entities
         internal void InsertCustomer(MyCustomer customer)
         {
             var results = Bouncer
-                .For(() => customer)
-                .Preview();
+                .ForMessages(() => customer)
+                .Assert()
+                .Results;
 
             Util.PrintEntries(results);
         }
@@ -127,8 +130,8 @@ namespace Sem.Sample.Contracts.Entities
         internal void WriteCustomerConfiguration(MyCustomer customer)
         {
             Bouncer
-                .For(() => customer)
-                .Enforce();
+                .ForCheckData(() => customer)
+                .Assert();
 
             Console.WriteLine(
                 Resources.CallingCustomerInfo,
@@ -136,16 +139,16 @@ namespace Sem.Sample.Contracts.Entities
                 FormatTheId(customer));
         }
 
-        internal void WriteCustomerCustomExecutor(MyCustomer customer)
-        {
-            Bouncer
-                .For(() => customer)
-                .LogResult();
+        ////internal void WriteCustomerCustomExecutor(MyCustomer customer)
+        ////{
+        ////    Bouncer
+        ////        .ForLogResult(() => customer)
+        ////        .LogResult();
 
-            Console.WriteLine(
-                Resources.CallingCustomerInfo,
-                GetTheName(customer),
-                FormatTheId(customer));
-        }
+        ////    Console.WriteLine(
+        ////        Resources.CallingCustomerInfo,
+        ////        GetTheName(customer),
+        ////        FormatTheId(customer));
+        ////}
     }
 }
