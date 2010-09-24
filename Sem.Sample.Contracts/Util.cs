@@ -10,17 +10,19 @@
 namespace Sem.Sample.Contracts
 {
     using System;
+    using System.Collections.Generic;
 
+    using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.RuleExecuters;
     using Sem.Sample.Contracts.Entities;
 
     internal static class Util
     {
-        internal static void PrintEntries(MessageCollector<MyCustomer> results)
+        internal static void PrintEntries(IEnumerable<RuleValidationResult> results)
         {
             Console.ForegroundColor = ConsoleColor.White;
             
-            foreach (var result in results.Results)
+            foreach (var result in results)
             {
                 Console.WriteLine(@"----------");
                 Console.WriteLine(result);
