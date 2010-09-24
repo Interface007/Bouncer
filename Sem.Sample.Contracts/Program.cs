@@ -10,7 +10,6 @@ namespace Sem.Sample.Contracts
 {
     using System;
 
-    using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.Configuration;
     using Sem.Sample.Contracts.Entities;
 
