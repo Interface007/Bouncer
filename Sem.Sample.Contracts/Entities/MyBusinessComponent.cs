@@ -25,7 +25,7 @@ namespace Sem.Sample.Contracts.Entities
         internal void WriteCustomerProperties(MyCustomer customer)
         {
             Console.WriteLine(
-                "calling customer {0} with Id {1}", 
+                @"calling customer {0} with Id {1}", 
                 GetTheName(customer), 
                 FormatTheId(customer));
         }
