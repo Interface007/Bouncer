@@ -30,8 +30,8 @@ namespace Sem.Sample.Contracts.Entities
         internal new void WriteCustomerProperties(MyCustomer customer)
         {
             Bouncer
-                .ForCheckData(() => customer)
-                .Assert();
+                .For(() => customer)
+                .Enforce();
 
             Console.WriteLine(
                 Resources.CallingCustomerInfo,
@@ -89,12 +89,6 @@ namespace Sem.Sample.Contracts.Entities
         [ContractMethodRule(typeof(StringNotNullOrEmptyRule), "customerId")]
         internal void CheckCustomerWithWithMethodAttributes(string customerId, int amount, MyCustomer theCustomer)
         {
-            Bouncer
-                .ForCheckData(() => customerId)
-                .ForCheckData(() => amount)
-                .ForCheckData(() => theCustomer)
-                .Assert();
-
             var results = Bouncer
                 .ForMessages(() => customerId)
                 .ForMessages(() => amount)
