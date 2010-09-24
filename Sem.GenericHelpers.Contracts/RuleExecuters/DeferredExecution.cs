@@ -38,6 +38,16 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         {
         }
 
+        public DeferredExecution<TDataNew> For<TDataNew>(Expression<Func<TDataNew>> data)
+        {
+            var newExecuter = new DeferredExecution<TDataNew>(data, this.MethodRuleAttributes)
+            {
+                PreviousExecuter = new MessageCollector<TData>(this.ValueName, this.Value, this.MethodRuleAttributes) { PreviousExecuter = this.PreviousExecuter },
+            };
+
+            return newExecuter;
+        }
+
         public CheckData<TData> Enforce()
         {
             return new CheckData<TData>(this.ValueName, this.Value, this.MethodRuleAttributes).Assert();
@@ -45,7 +55,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
         public IEnumerable<RuleValidationResult> Preview()
         {
-            return new MessageCollector<TData>(this.ValueName, this.Value, this.MethodRuleAttributes).Assert().Results;
+            var messageCollector = new MessageCollector<TData>(this.ValueName, this.Value, this.MethodRuleAttributes) { PreviousExecuter = this.PreviousExecuter };
+            return messageCollector.Assert().Results;
         }
 
         protected override bool BeforeInvoke<TParameter>(RuleBase<TData, TParameter> rule, object ruleParameter, string valueName)

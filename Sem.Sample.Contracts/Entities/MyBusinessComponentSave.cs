@@ -10,7 +10,6 @@
 namespace Sem.Sample.Contracts.Entities
 {
     using System;
-    using System.Threading;
 
     using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.Attributes;
@@ -47,8 +46,8 @@ namespace Sem.Sample.Contracts.Entities
         internal void CheckCustomerProperties(MyCustomer customer)
         {
             var results = Bouncer
-                .ForMessages(() => customer)
-                .Assert();
+                .For(() => customer)
+                .Preview();
 
             Util.PrintEntries(results);
         }
@@ -72,7 +71,7 @@ namespace Sem.Sample.Contracts.Entities
                         CheckExpression = (x, y) => x.FullName != "Sven"
                     });
 
-            Util.PrintEntries(results);
+            Util.PrintEntries(results.Results);
             Console.WriteLine(@"---> ForMessages did return the validation results, but  <---");
             Console.WriteLine(@"--->   did not cause any exception. So 'customer Sven'   <---");
             Console.WriteLine(@"--->   did enter the method  and did execute all code.   <---");
@@ -90,10 +89,10 @@ namespace Sem.Sample.Contracts.Entities
         internal void CheckCustomerWithWithMethodAttributes(string customerId, int amount, MyCustomer theCustomer)
         {
             var results = Bouncer
-                .ForMessages(() => customerId)
-                .ForMessages(() => amount)
-                .ForMessages(() => theCustomer)
-                .Assert();
+                .For(() => customerId)
+                .For(() => amount)
+                .For(() => theCustomer)
+                .Preview();
 
             Util.PrintEntries(results);
         }
@@ -113,8 +112,8 @@ namespace Sem.Sample.Contracts.Entities
         internal void InsertCustomer(MyCustomer customer)
         {
             var results = Bouncer
-                .ForMessages(() => customer)
-                .Assert();
+                .For(() => customer)
+                .Preview();
 
             Util.PrintEntries(results);
         }
@@ -125,7 +124,7 @@ namespace Sem.Sample.Contracts.Entities
         /// </summary>
         /// <param name="customer">this customer type does have rule-attributes attached to its properties</param>
         [ContractContext("Config")]
-        internal new void WriteCustomerConfiguration(MyCustomer customer)
+        internal void WriteCustomerConfiguration(MyCustomer customer)
         {
             Bouncer
                 .For(() => customer)
@@ -137,7 +136,7 @@ namespace Sem.Sample.Contracts.Entities
                 FormatTheId(customer));
         }
 
-        public void WriteCustomerCustomExecutor(MyCustomer customer)
+        internal void WriteCustomerCustomExecutor(MyCustomer customer)
         {
             Bouncer
                 .For(() => customer)

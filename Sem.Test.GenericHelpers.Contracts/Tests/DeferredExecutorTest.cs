@@ -50,6 +50,22 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
         }
 
         [TestMethod]
+        public void PreviewTestMultiple()
+        {
+            var messageOne = new AttributedSampleClass("sometext");
+            var messageTwo = new AttributedSampleClass("sometext");
+            var messageThree = new AttributedSampleClass("sometext");
+
+            var result = Bouncer
+                .For(() => messageOne)
+                .For(() => messageTwo)
+                .For(() => messageThree)
+                .Preview();
+
+            Assert.AreEqual(18, result.Count());
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
         public void AssertTest()
         {
