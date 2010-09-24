@@ -210,7 +210,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             this.AssertForProperties();
             this.AssertForMethodAttributes();
             this.AssertForType();
-            
+
             return (TResultClass)this;
         }
 
@@ -432,12 +432,12 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                         var ruleCollection = (IEnumerable)methodRuleAttribute.RuleType.GetConstructor(new Type[] { }).Invoke(null);
                         var attribute = methodRuleAttribute;
                         newRules.AddRange(
-                            from object rule in ruleCollection 
+                            from object rule in ruleCollection
                             select new ContractMethodRuleAttribute(rule.GetType(), attribute.MethodArgumentName)
                                 {
-                                    Namespace = attribute.Namespace, 
-                                    IncludeInContext = attribute.IncludeInContext, 
-                                    Message = attribute.Message, 
+                                    Namespace = attribute.Namespace,
+                                    IncludeInContext = attribute.IncludeInContext,
+                                    Message = attribute.Message,
                                     Parameter = attribute.Parameter
                                 });
                     }
@@ -462,6 +462,17 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         {
             try
             {
+                var exprBody = data.Body as MemberExpression;
+                if (exprBody != null)
+                {
+                    var exprConst = exprBody.Expression as ConstantExpression;
+                    if (exprConst != null)
+                    {
+                        return (TData)((FieldInfo)exprBody.Member).GetValue(exprConst.Value);
+                    }
+                }
+
+                Debug.Print("Compilation needed!");
                 return data.Compile().Invoke();
             }
             catch (NullReferenceException)
@@ -605,7 +616,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
                 var propertyName = this.ValueName + "." + propertyInfo.Name;
                 var propertyValue = !this.targetType.IsValueType && Equals(this.Value, null) ? null : propertyInfo.GetValue(this.Value, null);
-                
+
                 // first we need to construct a new rule executer type, unfortunately this is a generic type, 
                 // so we need to do it via reflection (we don't have the type of the property at design time)
                 var ruleExecuter = this.CreateRuleExecuter(propertyInfo.PropertyType, propertyName, propertyValue);
