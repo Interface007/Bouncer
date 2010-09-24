@@ -51,12 +51,14 @@
     </Compile>
     <Compile Include="Attributes\ContractContextAttribute.cs" />
     <Compile Include="Attributes\ContractRuleBaseAttribute.cs" />
-    <Compile Include="Attributes\MethodRuleAttribute.cs" />
+    <Compile Include="Attributes\ContractMethodRuleAttribute.cs" />
     <Compile Include="Bouncer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration\BouncerConfiguration.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
+    <Compile Include="RuleExecuters\IConditionalExecution.cs" />
+    <Compile Include="RuleExecuters\IMessageCollector.cs" />
     <Compile Include="Rules\ConfiguredRuleInformation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -75,15 +77,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleExecuters\DeferredExecution.cs" />
     <Compile Include="Rules\IsNullRule.cs" />
-    <Compile Include="Rules\RuleBase.cs" />
-    <Compile Include="Rules\RuleBaseInformation.cs">
+    <Compile Include="Rule\RuleBase.cs" />
+    <Compile Include="Rule\RuleBaseInformation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RuleExecuters\RuleExecuter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Rules\RuleCollection.cs" />
-    <Compile Include="Rules\RegisteredRules.cs" />
+    <Compile Include="Rule\RuleCollection.cs" />
+    <Compile Include="Rule\RegisteredRules.cs" />
     <Compile Include="RuleValidationResult.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -111,6 +113,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NamespaceDependencies.dgml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

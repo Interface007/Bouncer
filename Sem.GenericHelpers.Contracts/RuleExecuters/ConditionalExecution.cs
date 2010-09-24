@@ -16,11 +16,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.Properties;
 
-    public interface IConditionalExecution
-    {
-        bool ConditionIsTrue { get; }
-    }
-
     /// <summary>
     /// Check class including the data to perform rule checking. After asserting, the methods <see cref="ExecuteOnFailure"/>
     /// and <see cref="ExecuteOnSuccess"/> can be used to execute code is the assert did fail (at least one rule has been 
@@ -43,12 +38,12 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         {
         }
 
-        public ConditionalExecution(string valueName, TData value, IEnumerable<MethodRuleAttribute> methodAttributes)
+        public ConditionalExecution(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(valueName, value, methodAttributes)
         {
         }
         
-        public ConditionalExecution(Expression<Func<TData>> data, IEnumerable<MethodRuleAttribute> methodAttributes)
+        public ConditionalExecution(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(data, methodAttributes)
         {
         }

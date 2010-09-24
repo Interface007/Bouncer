@@ -66,7 +66,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
                 .Enforce();
         }
 
-        [MethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
+        [ContractMethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
         private static void TestMethod1(MessageOne messageOne)
         {
             Bouncer
@@ -74,7 +74,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
                 .Enforce();
         }
 
-        [MethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
+        [ContractMethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
         private static IEnumerable<RuleValidationResult> TestMethod2(MessageOne messageOne)
         {
             return Bouncer
@@ -82,7 +82,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
                 .Preview();
         }
 
-        [MethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
+        [ContractMethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
         private static void TestMethod3(MessageOne messageOne)
         {
             Bouncer

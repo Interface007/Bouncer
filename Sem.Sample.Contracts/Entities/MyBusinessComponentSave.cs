@@ -84,8 +84,8 @@ namespace Sem.Sample.Contracts.Entities
         /// <param name="customerId">the attribute for customer id declares this to be not null</param>
         /// <param name="amount">the amounte must not be > 99</param>
         /// <param name="theCustomer">This object is decorated with attributes.</param>
-        [MethodRule(typeof(IntegerLowerThanRule), "amount", Parameter = 100)]
-        [MethodRule(typeof(StringNotNullOrEmptyRule), "customerId")]
+        [ContractMethodRule(typeof(IntegerLowerThanRule), "amount", Parameter = 100)]
+        [ContractMethodRule(typeof(StringNotNullOrEmptyRule), "customerId")]
         internal void CheckCustomerWithWithMethodAttributes(string customerId, int amount, MyCustomer theCustomer)
         {
             Bouncer
@@ -114,7 +114,7 @@ namespace Sem.Sample.Contracts.Entities
         /// <param name="customer">The customer to be created (does not have an internal id)</param>
         [ContractContext("Create")]
         [ContractContext("Read", false)]
-        [MethodRule(typeof(StrictCustomerCheckRuleSet), "customer")]
+        [ContractMethodRule(typeof(StrictCustomerCheckRuleSet), "customer")]
         internal void InsertCustomer(MyCustomer customer)
         {
             var results = Bouncer

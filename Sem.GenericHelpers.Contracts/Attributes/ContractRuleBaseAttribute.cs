@@ -11,11 +11,12 @@ namespace Sem.GenericHelpers.Contracts.Attributes
 {
     using System;
 
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.Rules;
 
     /// <summary>
     /// Attribute to attach rules to classes and properties of classes. To attach rules to method parameters, 
-    /// use the <see cref="MethodRuleAttribute"/>.
+    /// use the <see cref="ContractMethodRuleAttribute"/>.
     /// </summary>
     public abstract class ContractRuleBaseAttribute : Attribute
     {

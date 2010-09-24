@@ -12,6 +12,7 @@ namespace Sem.GenericHelpers.Contracts
     using System;
     using System.Linq;
 
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.Rules;
 
     /// <summary>
@@ -39,7 +40,7 @@ namespace Sem.GenericHelpers.Contracts
         /// <param name="ruleType">The type of rule to be created.</param>
         /// <param name="valueType">The type of the value that should be checked with the rule.</param>
         /// <returns>A new rule instance of the specified type.</returns>
-        public static RuleBaseInformation CreateRule(this Type ruleType, Type valueType)
+        internal static RuleBaseInformation CreateRule(this Type ruleType, Type valueType)
         {
             var constructorInfo = ruleType.GetConstructor(Type.EmptyTypes);
             

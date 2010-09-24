@@ -10,8 +10,6 @@
 namespace Sem.GenericHelpers.Contracts
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Linq.Expressions;
 
     using Sem.GenericHelpers.Contracts.RuleExecuters;
@@ -23,32 +21,6 @@ namespace Sem.GenericHelpers.Contracts
     /// </summary>
     public static class Bouncer
     {
-        private static readonly IList<Action<RuleValidationResult>> AfterInvokeAction = new List<Action<RuleValidationResult>>();
-        private static readonly object AfterInvokeActionSync = new object();
-
-        public static void AddAfterInvokeAction(Action<RuleValidationResult> action)
-        {
-            lock (AfterInvokeActionSync)
-            {
-                AfterInvokeAction.Add(action);
-            }
-        }
-
-        /// <summary>
-        /// Creates an list of currently registered <see cref="Action{RuleValidationResult}"/> to be 
-        /// invoked after a rule has veen validated.
-        /// </summary>
-        /// <returns>A copy of the current list of elements.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This does not return a reference to the internal list of actions, but makes a copy of the current representation of that list. This is definitely not what a property is appropiate for.")]
-        public static IEnumerable<Action<RuleValidationResult>> GetAfterInvokeActions()
-        {
-            lock (AfterInvokeActionSync)
-            {
-                // this does make a copy of the list
-                return AfterInvokeAction.ToList();
-            }
-        }
-
         /// <summary>
         /// Creates a <see cref="CheckData{TData}"/> for executing rules by specifying a lambda expression:
         /// <para>Bouncer.ForCheckData(() => MessageOneOk).Assert();</para>

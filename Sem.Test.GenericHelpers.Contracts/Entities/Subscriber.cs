@@ -17,7 +17,7 @@
         /// This method rule attribute does contain an invalid rule (the type is not a rule at all)
         /// </summary>
         /// <param name="message"></param>
-        [MethodRule(typeof(SubscriberOne), "message")]
+        [ContractMethodRule(typeof(SubscriberOne), "message")]
         public void Handle(MessageOne message)
         {
             var result = Bouncer.ForMessages(() => message).Assert().Results;
@@ -26,7 +26,7 @@
             this.CountOfEvents++;
         }
 
-        [MethodRule(typeof(IsNotNullRule<>), "message")]
+        [ContractMethodRule(typeof(IsNotNullRule<>), "message")]
         public void Handle2(MessageOne message)
         {
             var result = Bouncer.ForMessages(() => message).Assert().Results;
@@ -35,7 +35,7 @@
             this.CountOfEvents++;
         }
 
-        [MethodRule(typeof(IsNotNullRule<MessageOne>), "message")]
+        [ContractMethodRule(typeof(IsNotNullRule<MessageOne>), "message")]
         public void Handle3(MessageOne message)
         {
             var result = Bouncer.ForMessages(() => message).Assert().Results;

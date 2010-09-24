@@ -34,12 +34,12 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         {
         }
 
-        public CheckData(string valueName, TData value, IEnumerable<MethodRuleAttribute> methodAttributes)
+        public CheckData(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(valueName, value, methodAttributes)
         {
         }
 
-        public CheckData(Expression<Func<TData>> data, IEnumerable<MethodRuleAttribute> methodAttributes)
+        public CheckData(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(data, methodAttributes)
         {
         }

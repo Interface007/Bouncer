@@ -13,6 +13,7 @@ namespace Sem.GenericHelpers.Contracts.Exceptions
     using System.Runtime.Serialization;
     using System.Security.Permissions;
 
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.RuleExecuters;
     using Sem.GenericHelpers.Contracts.Rules;
 
