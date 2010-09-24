@@ -7,6 +7,7 @@
 
     using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.Exceptions;
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.Rules;
     using Sem.Test.GenericHelpers.Contracts.Entities;
     using Sem.Test.GenericHelpers.Contracts.Rules;

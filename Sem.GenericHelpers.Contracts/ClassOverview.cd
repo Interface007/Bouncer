@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Sem.GenericHelpers.Contracts.Attributes.ContractContextAttribute" Collapsed="true">
+    <Position X="4.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Attributes\ContractContextAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Attributes.ContractMethodRuleAttribute" Collapsed="true">
+    <Position X="1" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Attributes\ContractMethodRuleAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Attributes.ContractRuleAttribute" Collapsed="true">
+    <Position X="3.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Attributes\ContractRuleAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Attributes.ContractRuleBaseAttribute" Collapsed="true">
+    <Position X="2.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAAQIAAAgAAAIAAAAAA=</HashCode>
+      <FileName>Attributes\ContractRuleBaseAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Bouncer" Collapsed="true">
+    <Position X="14.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAACAAAAQAAA=</HashCode>
+      <FileName>Bouncer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.RuleValidationResult" Collapsed="true">
+    <Position X="3.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAgAAAoAgAAAA=</HashCode>
+      <FileName>RuleValidationResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.TypeUtils" Collapsed="true">
+    <Position X="17" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAAAAAA=</HashCode>
+      <FileName>TypeUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Configuration.BouncerConfiguration" Collapsed="true">
+    <Position X="17" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwAAgAAEAAAAAAAAAAiAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Configuration\BouncerConfiguration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Configuration.ConfigReader" Collapsed="true">
+    <Position X="17" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACIAAAABAAAgAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Configuration\ConfigReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Exceptions.RuleValidationException" Collapsed="true">
+    <Position X="5.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\RuleValidationException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Properties.Resources" Collapsed="true">
+    <Position X="17" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAEAAQAACQAAAAAAMoBEAQEwwAAAAAAAAAAAAAEgIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rule.RegisteredRules" Collapsed="true">
+    <Position X="12.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACQAAAABAACAAAAAAAAAABAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Rule\RegisteredRules.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rule.RuleBase&lt;TData, TParameter&gt;" Collapsed="true">
+    <Position X="7.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rule\RuleBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rule.RuleBaseInformation" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Rule\RuleBaseInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rule.RuleCollection&lt;TData, TParameter&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAEAAAAAgAAAAA=</HashCode>
+      <FileName>Rule\RuleCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.RuleExecuters.CheckData&lt;TData&gt;" Collapsed="true">
+    <Position X="12.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAABACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RuleExecuters\CheckData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.RuleExecuters.ConditionalExecution&lt;TData&gt;" Collapsed="true">
+    <Position X="14.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQQAAAAAAAAAhAAAAQABAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>RuleExecuters\ConditionalExecution.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.RuleExecuters.DeferredExecution&lt;TData&gt;" Collapsed="true">
+    <Position X="16.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAgAAAABAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>RuleExecuters\DeferredExecution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.RuleExecuters.MessageCollector&lt;TData&gt;" Collapsed="true">
+    <Position X="10" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAABACAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>RuleExecuters\MessageCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.RuleExecuters.RuleExecuter&lt;TData, TResultClass&gt;" Collapsed="true">
+    <Position X="13.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAgMC4AAAJAUAgAJAQLIgAAIBAAAACAgQAwgIBA=</HashCode>
+      <FileName>RuleExecuters\RuleExecuter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.ConfigurationValidatorBaseRule&lt;TData&gt;" Collapsed="true">
+    <Position X="12.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAAA=</HashCode>
+      <FileName>Rules\ConfigurationValidatorBaseRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.ConfiguredRuleInformation" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAkAAAAAAAAAAAAACAABQIAIAAAAAgAAACAA=</HashCode>
+      <FileName>Rules\ConfiguredRuleInformation.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.ImplementsInterfaceRule&lt;TData&gt;" Collapsed="true">
+    <Position X="3.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\ImplementsInterfaceRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.IntegerGreaterThanRule" Collapsed="true">
+    <Position X="7.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\IntegerGreaterThanRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.IntegerLowerThanRule" Collapsed="true">
+    <Position X="12.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\IntegerLowerThanRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.IsNotNullRule&lt;TData&gt;" Collapsed="true">
+    <Position X="1" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\IsNotNullRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.IsNotOneOfRule&lt;TData&gt;" Collapsed="true">
+    <Position X="5.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\IsNotOneOfRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.IsNullRule&lt;TData&gt;" Collapsed="true">
+    <Position X="14.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\IsNullRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.IsOneOfRule&lt;TData&gt;" Collapsed="true">
+    <Position X="1" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\IsOneOfRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.ObjectNotNullRule" Collapsed="true">
+    <Position X="5.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\ObjectNotNullRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.StringMaxLengthRule" Collapsed="true">
+    <Position X="10" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\StringMaxLengthRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.StringMinLengthRule" Collapsed="true">
+    <Position X="14.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\StringMinLengthRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.StringNotNullOrEmptyRule" Collapsed="true">
+    <Position X="3.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\StringNotNullOrEmptyRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sem.GenericHelpers.Contracts.Rules.StringRegexMatchRule" Collapsed="true">
+    <Position X="10" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rules\StringRegexMatchRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Sem.GenericHelpers.Contracts.RuleExecuters.IConditionalExecution" Collapsed="true">
+    <Position X="8.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RuleExecuters\IConditionalExecution.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Sem.GenericHelpers.Contracts.RuleExecuters.IMessageCollector" Collapsed="true">
+    <Position X="10.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RuleExecuters\IMessageCollector.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Sem.GenericHelpers.Contracts.RuleExecuters.IRuleExecuter" Collapsed="true">
+    <Position X="12.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAQAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>RuleExecuters\IRuleExecuter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

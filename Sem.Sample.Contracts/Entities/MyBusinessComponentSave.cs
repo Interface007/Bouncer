@@ -14,6 +14,7 @@ namespace Sem.Sample.Contracts.Entities
 
     using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.Attributes;
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.Rules;
     using Sem.Sample.Contracts.Executers;
     using Sem.Sample.Contracts.Rules;

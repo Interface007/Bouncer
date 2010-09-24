@@ -12,8 +12,6 @@ namespace Sem.GenericHelpers.Contracts.Rule
     using System;
     using System.Xml.Serialization;
 
-    using Sem.GenericHelpers.Contracts.Rules;
-
     [Serializable]
     public class RuleBase<TData, TParameter> : RuleBaseInformation
     {

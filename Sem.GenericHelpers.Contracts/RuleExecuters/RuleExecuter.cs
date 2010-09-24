@@ -462,6 +462,11 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         {
             try
             {
+                if (data.Body.NodeType == ExpressionType.Assign)
+                {
+                    
+                }
+
                 return data.Compile().Invoke();
             }
             catch (NullReferenceException)

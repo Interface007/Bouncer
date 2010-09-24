@@ -1,5 +1,6 @@
 ﻿namespace Sem.Test.GenericHelpers.Contracts.Rules
 {
+    using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.Rules;
     using Sem.Test.GenericHelpers.Contracts.Entities;
 
