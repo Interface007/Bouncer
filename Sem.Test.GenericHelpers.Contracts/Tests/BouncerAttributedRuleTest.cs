@@ -17,6 +17,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Sem.GenericHelpers.Contracts;
+    using Sem.GenericHelpers.Contracts.Configuration;
     using Sem.GenericHelpers.Contracts.Exceptions;
     using Sem.GenericHelpers.Contracts.Rules;
     using Sem.Test.GenericHelpers.Contracts.Entities;
@@ -166,7 +167,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
         public void AddRuleForTypeMustFailRegExCollect()
         {
             var counter = 0;
-            Bouncer.AddAfterInvokeAction((v) => { counter++; });
+            BouncerConfiguration.AddAfterInvokeAction((v) => { counter++; });
 
             var message = Bouncer
                 .ForMessages(() => MessageOneFailRegEx)
@@ -201,7 +202,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
         public void CheckRuleForCheckMultipleSuccess()
         {
             var counter = 0;
-            Bouncer.AddAfterInvokeAction((v) => { counter++; });
+            BouncerConfiguration.AddAfterInvokeAction((v) => { counter++; });
 
             var x = Bouncer
                 .ForCheckData(() => MessageOneOk)
@@ -234,7 +235,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
         public void CheckRuleForCheckMultipleFail1Count()
         {
             var counter = 0;
-            Bouncer.AddAfterInvokeAction(v => counter++);
+            BouncerConfiguration.AddAfterInvokeAction(v => counter++);
 
             try
             {
@@ -273,7 +274,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
         public void CheckRuleForCheckMultipleFailSecondViolatedCount()
         {
             var counter = 0;
-            Bouncer.AddAfterInvokeAction(v => counter++);
+            BouncerConfiguration.AddAfterInvokeAction(v => counter++);
 
             try
             {
