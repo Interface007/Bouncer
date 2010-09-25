@@ -59,32 +59,5 @@
             var executor = new MessageCollector<string>(() => "Hello");
             var result = executor.Assert(x => bool.Parse(x.Length.ToString())).Results;
         }
-
-        [TestMethod]
-        public void CheckRuleWithExceptionHandled()
-        {
-            var executor = new ExceptionHandlerExecutor<string>(() => "just me");
-            var result = executor.ExecuteRuleExpression(new StringRegexMatchRule(), "{[(", "handle");
-            Assert.IsTrue(executor.ExceptionHandled);
-        }
-
-        [TestMethod]
-        public void CheckRuleWithExceptionHandledV2()
-        {
-            Bouncer
-                .For(() => "just me")
-                .Execute();
-            var executor = new ExceptionHandlerExecutor<string>(() => "just me");
-            var result = executor.ExecuteRuleExpression(new StringRegexMatchRule(), "{[(", "handle");
-            Assert.IsTrue(executor.ExceptionHandled);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void CheckRuleWithExceptionNotHandled()
-        {
-            var executor = new ExceptionHandlerExecutor<string>(() => "just me");
-            var result = executor.ExecuteRuleExpression(new StringRegexMatchRule(), "{[(", "donthandle");
-        }
     }
 }

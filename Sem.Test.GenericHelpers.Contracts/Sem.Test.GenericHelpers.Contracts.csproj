@@ -58,10 +58,8 @@
     <Compile Include="Entities\CustomerId.cs" />
     <Compile Include="Entities\MyBusinessComponentSave.cs" />
     <Compile Include="Entities\MyCustomer.cs" />
-    <Compile Include="Executors\ExceptionHandlerExecutorUtil.cs" />
     <Compile Include="Rules\CanNotEnterRule.cs" />
     <Compile Include="Rules\CustomRuleSet.cs" />
-    <Compile Include="Executors\ExceptionHandlerExecutor.cs" />
     <Compile Include="Rules\MaxAmountRule.cs" />
     <Compile Include="Rules\SampleRuleSet.cs" />
     <Compile Include="Tests\BouncerAfterInvokeActionTest.cs" />

@@ -57,52 +57,52 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
             var messageThree = new AttributedSampleClass("sometext");
 
             var result = Bouncer
-                .For(() => messageOne)
-                .For(() => messageTwo)
-                .For(() => messageThree)
-                .Preview();
+                .ForMessages(() => messageOne)
+                .ForMessages(() => messageTwo)
+                .ForMessages(() => messageThree)
+                .Assert().Results;
 
             Assert.AreEqual(18, result.Count());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void AssertTest()
-        {
-            var messageOne = new MessageOne("sometext");
-            TestMethod3(messageOne);
-        }
+        ////[TestMethod]
+        ////[ExpectedException(typeof(NotImplementedException))]
+        ////public void AssertTest()
+        ////{
+        ////    var messageOne = new MessageOne("sometext");
+        ////    TestMethod3(messageOne);
+        ////}
 
         [TestMethod]
         public void AssertTestValidData()
         {
             var messageOne = new MessageOne("hello");
             Bouncer
-                .For(() => messageOne)
-                .Enforce();
+                .ForCheckData(() => messageOne)
+                .Assert();
         }
 
         [ContractMethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
         private static void TestMethod1(MessageOne messageOne)
         {
             Bouncer
-                .For(() => messageOne)
-                .Enforce();
+                .ForCheckData(() => messageOne)
+                .Assert();
         }
 
         [ContractMethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
         private static IEnumerable<RuleValidationResult> TestMethod2(MessageOne messageOne)
         {
             return Bouncer
-                .For(() => messageOne)
-                .Preview();
+                .ForMessages(() => messageOne)
+                .Assert().Results;
         }
 
         [ContractMethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
         private static void TestMethod3(MessageOne messageOne)
         {
             Bouncer
-                .For(() => messageOne)
+                .ForCheckData(() => messageOne)
                 .Assert();
         }
     }
