@@ -1,6 +1,7 @@
 ﻿namespace Sem.Test.GenericHelpers.Contracts.Tests
 {
     using System;
+    using System.Linq;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -102,6 +103,39 @@
         public void CheckIntInvalidWithParameter2()
         {
             Bouncer.ForCheckData(0, "var0").Assert((x, y) => y == 8, 7);
+        }
+
+        [TestMethod]
+        public void CheckGenericBuilderForMessages()
+        {
+            var var1 = new MyCustomer();
+            var var2 = new AttributedSampleClass("c");
+            var var3 = new AttributedSampleClass("c");
+            var var4 = new AttributedSampleClass(){MustBeLengthMin = string.Empty};
+            
+            var mgs = Bouncer
+                .For(() => var1)
+                .For(() => var2)
+                .For(() => var3)
+                .For(() => var4)
+                .Messages();
+
+            Assert.AreEqual(15, mgs.Count());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(RuleValidationException))]
+        public void CheckGenericBuilderForEnsure()
+        {
+            var var1 = new AttributedSampleClass();
+            var var2 = new AttributedSampleClass {MustBeLengthMin = string.Empty};
+            var var3 = new AttributedSampleClass();
+            
+            Bouncer
+                .For(() => var1)
+                .For(() => var2)
+                .For(() => var3)
+                .Ensure();
         }
     }
 }
