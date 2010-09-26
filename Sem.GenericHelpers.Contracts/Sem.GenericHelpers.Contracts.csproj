@@ -57,6 +57,8 @@
     </Compile>
     <Compile Include="Configuration\BouncerConfiguration.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
+    <Compile Include="RuleExecuters\GenericBuilder.cs" />
+    <Compile Include="RuleExecuters\IGenericBuilder.cs" />
     <Compile Include="RuleExecuters\IConditionalExecution.cs" />
     <Compile Include="RuleExecuters\IMessageCollector.cs" />
     <Compile Include="Rules\ConfiguredRuleInformation.cs" />
@@ -71,7 +73,7 @@
     <Compile Include="Attributes\ContractRuleAttribute.cs" />
     <Compile Include="Exceptions\RuleValidationException.cs" />
     <Compile Include="RuleExecuters\IRuleExecuter.cs" />
-    <Compile Include="RuleExecuters\MessageCollection.cs">
+    <Compile Include="RuleExecuters\MessageCollector.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -113,5 +113,10 @@ namespace Sem.GenericHelpers.Contracts
         {
             return new ConditionalExecution<TData>(name, data);
         }
+
+        public static GenericBuilder<TData> For<TData>(Expression<Func<TData>> data)
+        {
+            return new GenericBuilder<TData>(data);
+        }
     }
 }
