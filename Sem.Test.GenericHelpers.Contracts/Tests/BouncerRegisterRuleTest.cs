@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -63,6 +64,13 @@
         public void AddRuleForType1()
         {
             Bouncer.ForCheckData(() => "2").Assert();
+        }
+
+        [TestMethod]
+        public void AddNullRule()
+        {
+            RegisteredRules.RegisterCollection((IEnumerable<RuleBase<string, string>>)null);
+            Assert.AreEqual(0, RegisteredRules.GetRulesForType<string, string>().Count());
         }
 
         [TestMethod]

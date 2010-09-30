@@ -15,7 +15,6 @@ namespace Sem.Sample.Contracts.Entities
     using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.Rule;
     using Sem.GenericHelpers.Contracts.Rules;
-    using Sem.Sample.Contracts.Executers;
     using Sem.Sample.Contracts.Rules;
 
     [ContractContext("Read")]
@@ -29,8 +28,8 @@ namespace Sem.Sample.Contracts.Entities
         internal new void WriteCustomerProperties(MyCustomer customer)
         {
             Bouncer
-                .ForCheckData(() => customer)
-                .Assert();
+                .For(() => customer)
+                .Ensure();
 
             Console.WriteLine(
                 Resources.CallingCustomerInfo,
@@ -46,9 +45,8 @@ namespace Sem.Sample.Contracts.Entities
         internal void CheckCustomerProperties(MyCustomer customer)
         {
             var results = Bouncer
-                .ForMessages(() => customer)
-                .Assert()
-                .Results;
+                .For(() => customer)
+                .Messages();
 
             Util.PrintEntries(results);
         }
@@ -90,11 +88,31 @@ namespace Sem.Sample.Contracts.Entities
         internal void CheckCustomerWithWithMethodAttributes(string customerId, int amount, MyCustomer theCustomer)
         {
             var results = Bouncer
-                .ForMessages(() => customerId)
-                .ForMessages(() => amount)
-                .ForMessages(() => theCustomer)
-                .Assert()
-                .Results;
+                .For(() => customerId)
+                .For(() => amount)
+                .For(() => theCustomer)
+                .Messages();
+
+            Util.PrintEntries(results);
+        }
+
+        /// <summary>
+        /// This is a little bit more complex:
+        /// 1) we add the context "Create", which enforces the Internal ID to be NULL
+        /// 2) we remove the context "Read", which would have enforces the Internal ID to NOT be NULL
+        /// 3) we add a set of rules from the custom class StrictCustomerCheckRuleSet, which contains a 
+        ///    set of two rules (might be much more) that can be changed at a single point for all 
+        ///    methods decorated with the attribute [MethodRule(typeof(StrictCustomerCheckRuleSet), "customer")]
+        /// </summary>
+        /// <param name="customer">The customer to be created (does not have an internal id)</param>
+        [ContractContext("Create")]
+        [ContractContext("Read", false)]
+        [ContractMethodRule(typeof(StrictCustomerCheckRuleSet), "customer")]
+        internal void TryInsertCustomer(MyCustomer customer)
+        {
+            var results = Bouncer
+                .For(() => customer)
+                .Messages();
 
             Util.PrintEntries(results);
         }
@@ -113,12 +131,9 @@ namespace Sem.Sample.Contracts.Entities
         [ContractMethodRule(typeof(StrictCustomerCheckRuleSet), "customer")]
         internal void InsertCustomer(MyCustomer customer)
         {
-            var results = Bouncer
-                .ForMessages(() => customer)
-                .Assert()
-                .Results;
-
-            Util.PrintEntries(results);
+            Bouncer
+                .For(() => customer)
+                .Ensure();
         }
 
         /// <summary>
@@ -130,8 +145,8 @@ namespace Sem.Sample.Contracts.Entities
         internal void WriteCustomerConfiguration(MyCustomer customer)
         {
             Bouncer
-                .ForCheckData(() => customer)
-                .Assert();
+                .For(() => customer)
+                .Ensure();
 
             Console.WriteLine(
                 Resources.CallingCustomerInfo,
@@ -139,16 +154,18 @@ namespace Sem.Sample.Contracts.Entities
                 FormatTheId(customer));
         }
 
-        ////internal void WriteCustomerCustomExecutor(MyCustomer customer)
-        ////{
-        ////    Bouncer
-        ////        .ForLogResult(() => customer)
-        ////        .LogResult();
-
-        ////    Console.WriteLine(
-        ////        Resources.CallingCustomerInfo,
-        ////        GetTheName(customer),
-        ////        FormatTheId(customer));
-        ////}
+        [ContractMethodRule(typeof(StringRegexMatchRule), "someconnectionstring", Parameter = "some.*")]
+        [ContractMethodRule(typeof(IntegerGreaterThanRule), "i", Parameter = 7)]
+        [ContractMethodRule(typeof(IsNotNullRule<CustomerId>), "customerId")]
+        [ContractMethodRule(typeof(StrictCustomerCheckRuleSet), "myCustomer")]
+        public void InsertCustomer2(MyCustomer myCustomer, string someconnectionstring, int i, CustomerId customerId)
+        {
+            Bouncer
+                .For(() => myCustomer)
+                .For(() => someconnectionstring)
+                .For(() => i)
+                .For(() => customerId)
+                .Ensure();
+        }
     }
 }

@@ -95,7 +95,7 @@
     <Node Id="@177" Category="CodeSchema_Method" CodeSchemaProperty_IsCompilerGenerated="True" CodeSchemaProperty_IsPrivate="True" Label="&lt;.ctor&gt;b__0" />
     <Node Id="@178" Category="CodeSchema_Method" CodeSchemaProperty_IsCompilerGenerated="True" CodeSchemaProperty_IsPrivate="True" Label="&lt;.ctor&gt;b__0" />
     <Node Id="@179" Category="CodeSchema_Method" CodeSchemaProperty_IsCompilerGenerated="True" CodeSchemaProperty_IsPrivate="True" Label="&lt;.ctor&gt;b__0" />
-    <Node Id="@18" Category="CodeSchema_Namespace" Group="Collapsed" Label="Sem.GenericHelpers.Contracts.RuleExecuters" />
+    <Node Id="@18" Category="CodeSchema_Namespace" Group="Expanded" Label="Sem.GenericHelpers.Contracts.RuleExecuters" />
     <Node Id="@180" Category="CodeSchema_Method" CodeSchemaProperty_IsCompilerGenerated="True" CodeSchemaProperty_IsPrivate="True" Label="&lt;.ctor&gt;b__0" />
     <Node Id="@181" Category="CodeSchema_Method" CodeSchemaProperty_IsCompilerGenerated="True" CodeSchemaProperty_IsPrivate="True" Label="&lt;.ctor&gt;b__0" />
     <Node Id="@182" Category="CodeSchema_Method" CodeSchemaProperty_IsPublic="True" Label="&lt;Assert&gt;b__1" />
@@ -1251,8 +1251,8 @@
     <Alias n="307" Id="(@7 @52 @81 Member=ToString)" />
   </IdentifierAliases>
   <Paths>
-    <Path Id="634063b0-5e2a-41ec-bf35-3414d9024882.OutputPath" Value="C:\CodePlex15\bouncer\Sem.GenericHelpers.Contracts\bin\Release\Sem.GenericHelpers.Contracts.dll" />
-    <Path Id="634063b0-5e2a-41ec-bf35-3414d9024882.OutputPathUri" Value="file:///C:/CodePlex15/bouncer/Sem.GenericHelpers.Contracts/bin/Release/Sem.GenericHelpers.Contracts.dll" />
+    <Path Id="634063b0-5e2a-41ec-bf35-3414d9024882.OutputPath" Value="C:\CodePlex15\bouncer\Sem.GenericHelpers.Contracts\bin\Debug\Sem.GenericHelpers.Contracts.dll" />
+    <Path Id="634063b0-5e2a-41ec-bf35-3414d9024882.OutputPathUri" Value="file:///C:/CodePlex15/bouncer/Sem.GenericHelpers.Contracts/bin/Debug/Sem.GenericHelpers.Contracts.dll" />
     <Path Id="FxReferenceAssemblies" Value="C:\Program Files\Reference Assemblies\Microsoft\Framework" />
     <Path Id="FxReferenceAssembliesUri" Value="file:///C:/Program Files/Reference Assemblies/Microsoft/Framework" />
   </Paths>

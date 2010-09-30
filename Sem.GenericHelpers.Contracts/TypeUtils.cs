@@ -13,7 +13,6 @@ namespace Sem.GenericHelpers.Contracts
     using System.Linq;
 
     using Sem.GenericHelpers.Contracts.Rule;
-    using Sem.GenericHelpers.Contracts.Rules;
 
     /// <summary>
     /// Extension methods for System.Type

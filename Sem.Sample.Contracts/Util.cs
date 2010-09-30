@@ -11,10 +11,9 @@ namespace Sem.Sample.Contracts
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     using Sem.GenericHelpers.Contracts;
-    using Sem.GenericHelpers.Contracts.RuleExecuters;
-    using Sem.Sample.Contracts.Entities;
 
     internal static class Util
     {
@@ -32,8 +31,12 @@ namespace Sem.Sample.Contracts
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
-        public static void TryCall(string description, Action y)
+        public static void TryCall(string description, Action y, int count = 1, Action postExecution = null)
         {
+            var stopwatch = new Stopwatch();
+            var firstCall = 0;
+            var additionalCalls = 0;
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Clear();
             Console.WriteLine(description);
@@ -41,7 +44,28 @@ namespace Sem.Sample.Contracts
 
             try
             {
+                stopwatch.Reset();
+                stopwatch.Start();
                 y.Invoke();
+                stopwatch.Stop();
+                firstCall = (int)stopwatch.Elapsed.TotalMilliseconds;
+
+                stopwatch.Reset();
+                stopwatch.Start();
+                for (var i = 1; i < count; i++)
+                {
+                    y.Invoke();
+                }
+                stopwatch.Stop();
+                if (count > 1)
+                {
+                    additionalCalls = (int)stopwatch.Elapsed.TotalMilliseconds / (count - 1);
+                }
+
+                if (postExecution != null)
+                {
+                    postExecution();
+                }
             }
             catch (Exception ex)
             {
@@ -52,11 +76,33 @@ namespace Sem.Sample.Contracts
                 Console.ForegroundColor = ConsoleColor.White;
 
                 Console.WriteLine(@"Stacktrace:");
-                Console.WriteLine(ex.StackTrace.Substring(0, 300));
+                var stackTrace = ex.StackTrace;
+                var indexOfStart = stackTrace.IndexOf("(");
+                var indexOfEnd = stackTrace.IndexOf(")");
+                while (stackTrace.Contains("(") && indexOfEnd > indexOfStart)
+                {
+                    stackTrace = stackTrace.Substring(0, indexOfStart) + stackTrace.Substring(indexOfEnd + 1);
+                    
+                    indexOfStart = stackTrace.IndexOf("(");
+                    indexOfEnd = stackTrace.IndexOf(")");
+                }
+
+                stackTrace = stackTrace
+                    .Replace(@"Sem.Sample.Contracts.", string.Empty)
+                    .Replace(@"Sem.GenericHelpers.Contracts.", string.Empty)
+                    .Replace(@"C:\CodePlex15\bouncer\", string.Empty)
+                    .Replace(@" in ", "\n    in ");
+
+                Console.WriteLine(stackTrace.Substring(0, stackTrace.Length > 300 ? 300 : stackTrace.Length));
             }
 
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine();
+            if (count > 1)
+            {
+                Console.WriteLine(@"first call: {0}ms, additional calls: {1}ms per call", firstCall, additionalCalls);
+            }
+
             Console.WriteLine(@"press enter to execute next sample...");
             Console.ReadLine();
         }

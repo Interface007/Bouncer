@@ -9,6 +9,7 @@
 
 namespace Sem.Test.GenericHelpers.Contracts.Tests
 {
+    using System;
     using System.Linq;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,6 +37,16 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
             var result = business.Handle4(entity);
 
             Assert.AreEqual(1, result.Count());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void TestMethod2()
+        {
+            var entity = new MessageOne("Hello!");
+            var business = new SubscriberOne();
+
+            business.Handle5(entity);
         }
     }
 }

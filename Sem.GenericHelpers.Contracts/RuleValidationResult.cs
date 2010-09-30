@@ -35,6 +35,11 @@ namespace Sem.GenericHelpers.Contracts
         public string Message { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the message about the rule violation.
+        /// </summary>
+        public Exception Exception { get; set; }
+
+        /// <summary>
         /// Gets or sets the type of the rule that has been validated.
         /// </summary>
         public Type RuleType { get; protected set; }

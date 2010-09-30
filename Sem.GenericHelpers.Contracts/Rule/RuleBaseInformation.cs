@@ -9,11 +9,15 @@
 
 namespace Sem.GenericHelpers.Contracts.Rule
 {
+    using System;
+
     using Sem.GenericHelpers.Contracts.Properties;
 
     public abstract class RuleBaseInformation
     {
         public string Message { get; set; }
+
+        public Type Exception { get; set; }
 
         protected RuleBaseInformation()
         {

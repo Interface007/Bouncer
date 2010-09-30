@@ -111,8 +111,8 @@
             var var1 = new MyCustomer();
             var var2 = new AttributedSampleClass("c");
             var var3 = new AttributedSampleClass("c");
-            var var4 = new AttributedSampleClass(){MustBeLengthMin = string.Empty};
-            
+            var var4 = new AttributedSampleClass { MustBeLengthMin = string.Empty };
+
             var mgs = Bouncer
                 .For(() => var1)
                 .For(() => var2)
@@ -128,9 +128,9 @@
         public void CheckGenericBuilderForEnsure()
         {
             var var1 = new AttributedSampleClass();
-            var var2 = new AttributedSampleClass {MustBeLengthMin = string.Empty};
+            var var2 = new AttributedSampleClass { MustBeLengthMin = string.Empty };
             var var3 = new AttributedSampleClass();
-            
+
             Bouncer
                 .For(() => var1)
                 .For(() => var2)

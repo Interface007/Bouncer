@@ -3,6 +3,7 @@
 namespace Sem.Test.GenericHelpers.Contracts.Tests
 {
     using System.IO;
+    using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Text;
 
@@ -41,6 +42,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
 
             Assert.IsTrue(result.ToString().EndsWith("Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionClassNameMessageDataInnerExceptionHelpURLStackTraceStringRemoteStackTraceStringRemoteStackIndexExceptionMethodHResultSourceWatsonBucketsParamNameSystem.Collections.IDictionarySystem.Exception?Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionhelloWcustomer"));
         }
+
         [TestMethod]
         public void TestMethod2()
         {

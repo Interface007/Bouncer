@@ -53,6 +53,7 @@ namespace Sem.GenericHelpers.Contracts.Configuration
                            IncludeInContext = ruleEntry.Context,
                            Namespace = ruleEntry.Namespace,
                            Parameter = ruleEntry.Parameter,
+                           ExceptionType = ruleEntry.ExceptionType,
                        };
         }
 

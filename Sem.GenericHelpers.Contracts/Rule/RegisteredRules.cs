@@ -14,7 +14,6 @@ namespace Sem.GenericHelpers.Contracts.Rule
     using System.Linq;
 
     using Sem.GenericHelpers.Contracts.Attributes;
-    using Sem.GenericHelpers.Contracts.Rules;
 
     public static class RegisteredRules
     {
@@ -53,7 +52,9 @@ namespace Sem.GenericHelpers.Contracts.Rule
             lock (TypeRegisteredRulesSync)
             {
                 rulesForType = (from x in TypeRegisteredRules
-                                where x.Key == valueType
+                                where 
+                                x.Key == valueType
+                                && x.Value as RuleBase<TData, TParameter> != null
                                 select x.Value as RuleBase<TData, TParameter>).ToList();
             }
 

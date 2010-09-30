@@ -11,7 +11,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Linq.Expressions;
 
     using Sem.GenericHelpers.Contracts.Attributes;
@@ -19,34 +18,13 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
     /// <summary>
     /// Check class including the data to perform rule checking. Each rule violation
-    /// adds a new entry to the <see cref="Results"/> list (this is a <see cref="List{T}"/>
+    /// adds a new entry to the <see cref="RuleExecuter{TData,TResultClass}.Results"/> list (this is a <see cref="List{T}"/>
     /// of <see cref="RuleValidationResult"/>).
     /// </summary>
     /// <typeparam name="TData">The data type to be checked.</typeparam>
-    public class MessageCollector<TData> : RuleExecuter<TData, MessageCollector<TData>>, IMessageCollector
+    public class MessageCollector<TData> 
+        : RuleExecuter<TData, MessageCollector<TData>>
     {
-        /// <summary>
-        /// The result list of <see cref="RuleValidationResult"/>. Each violated rule while
-        /// asserting adds a new entry to this list.
-        /// </summary>
-        private readonly List<RuleValidationResult> myResults = new List<RuleValidationResult>();
-
-        public IEnumerable<RuleValidationResult> Results
-        {
-            get
-            {
-                var results = this.myResults;
-
-                var previousExecuter = this.PreviousExecuter as IMessageCollector;
-                if (previousExecuter != null)
-                {
-                    return results.Concat(previousExecuter.Results);
-                }
-
-                return results;
-            }
-        }
-
         public MessageCollector(string valueName, TData value)
             : this(valueName, value, null)
         {
@@ -89,7 +67,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         }
 
         /// <summary>
-        /// Adds the entry to the <see cref="Results"/>, if the validadtion did fail.
+        /// Adds the entry to the <see cref="RuleExecuter{TData,TResultClass}.Results"/>, if the validadtion did fail.
         /// </summary>
         /// <param name="validationResult">The rule validation result structure with information about the rule validation process.</param>
         protected override void AfterInvoke(RuleValidationResult validationResult)
@@ -101,7 +79,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
             if (!validationResult.Result)
             {
-                this.myResults.Add(validationResult);
+                this.ExecutionResults.Add(validationResult);
             }
         }
     }

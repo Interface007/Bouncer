@@ -40,5 +40,14 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(new MessageOne().Content, result.Content);
         }
+
+        [TestMethod]
+        public void ReadNonExistingConfig2()
+        {
+            ConfigReader.GetConfig<MessageOne>();
+            var result = ConfigReader.GetConfig<MessageOne>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(new MessageOne().Content, result.Content);
+        }
     }
 }

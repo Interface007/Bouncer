@@ -6,6 +6,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Sem.GenericHelpers.Contracts;
+    using Sem.GenericHelpers.Contracts.Configuration;
     using Sem.GenericHelpers.Contracts.RuleExecuters;
     using Sem.GenericHelpers.Contracts.Rules;
     using Sem.Test.GenericHelpers.Contracts.Entities;
@@ -50,6 +51,50 @@
             var executor = new VetoExecutor<string>(() => nonveto);
             var result = executor.ExecuteRuleExpression(new StringMaxLengthRule(), 1, "veto");
             Assert.IsTrue(executor.LastValidation);
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void CheckRuleWithExecutorVetoViaBouncer()
+        {
+            var attributedSampleClass = new AttributedSampleClass { MustBeLengthMin = string.Empty };
+            var veto = attributedSampleClass;
+
+            // in this case the name of the variable is attributedSampleClass, so the execution 
+            // should be done and the resulting "LastValidation" should be "false"
+            var exec = Bouncer
+                .For(() => attributedSampleClass)
+                .Use(typeof(VetoExecutor<>)) as VetoExecutor<AttributedSampleClass>;
+            
+            Assert.IsNotNull(exec);
+            Assert.IsFalse(exec.LastValidation);
+
+            // in this case the name of the variable is attributedSampleClass, so the execution 
+            // should be done and the resulting "LastValidation" should be "false"
+            exec = Bouncer
+                .For(() => attributedSampleClass)
+                .Use<VetoExecutor<AttributedSampleClass>>();
+
+            Assert.IsNotNull(exec);
+            Assert.IsFalse(exec.LastValidation);
+
+            // in this case the name of the variable is veto, so the execution should NOT be done 
+            // and the resulting "LastValidation" should stay "true"
+            exec = Bouncer
+                .For(() => veto)
+                .Use<VetoExecutor<AttributedSampleClass>>();
+
+            Assert.IsNotNull(exec);
+            Assert.IsTrue(exec.LastValidation);
+
+            // in this case the name of the variable is veto, so the execution should NOT be done 
+            // and the resulting "LastValidation" should stay "true"
+            exec = Bouncer
+                .For(() => veto)
+                .UseVeto();
+
+            Assert.IsNotNull(exec);
+            Assert.IsTrue(exec.LastValidation);
         }
 
         [TestMethod]
