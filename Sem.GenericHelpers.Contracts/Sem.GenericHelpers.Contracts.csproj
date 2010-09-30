@@ -60,7 +60,6 @@
     <Compile Include="RuleExecuters\GenericBuilder.cs" />
     <Compile Include="RuleExecuters\IGenericBuilder.cs" />
     <Compile Include="RuleExecuters\IConditionalExecution.cs" />
-    <Compile Include="RuleExecuters\IMessageCollector.cs" />
     <Compile Include="Rules\ConfiguredRuleInformation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

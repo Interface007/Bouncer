@@ -29,9 +29,13 @@ namespace Sem.GenericHelpers.Contracts.Configuration
                 if (!current.ContainsKey(currentType))
                 {
                     ConfigurationManager.GetSection(currentType.Name);
+                    if (!current.ContainsKey(currentType))
+                    {
+                        current.Add(currentType, new TResult());
+                    }
                 }
 
-                return current.ContainsKey(currentType) ? (((TResult)current[currentType]) ?? new TResult()) : new TResult();
+                return (TResult)current[currentType];
             }
         }
      

@@ -55,6 +55,16 @@
             return result;
         }
 
+        [ContractContext("config2")]
+        public void Handle5(MessageOne message)
+        {
+            Bouncer
+                .For(() => message)
+                .Ensure();
+
+            this.CountOfEvents++;
+        }
+
         [ContractContext("Read")]
         public void ContractContextRead(AttributedSampleClass sample)
         {

@@ -31,6 +31,11 @@ namespace Sem.GenericHelpers.Contracts.Attributes
         public Type RuleType { get; private set; }
 
         /// <summary>
+        /// Gets the type of the exception, this rule might throw.
+        /// </summary>
+        public Type ExceptionType { get; set; }
+
+        /// <summary>
         /// Gets or sets the parameter value of the rule. Many rules do have parameters like the <see cref="StringRegexMatchRule"/>,
         /// which expects a regular expression as the parameter.
         /// </summary>

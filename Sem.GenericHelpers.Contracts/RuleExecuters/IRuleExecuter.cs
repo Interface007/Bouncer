@@ -10,6 +10,7 @@
 namespace Sem.GenericHelpers.Contracts.RuleExecuters
 {
     using System;
+    using System.Collections.Generic;
 
     using Sem.GenericHelpers.Contracts.Attributes;
 
@@ -27,6 +28,10 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         RuleValidationResult InvokeRuleExecutionForAttribute(IRuleExecuter ruleExecuter, ContractRuleBaseAttribute ruleAttribute, string propertyName);
 
         IRuleExecuter AssertAll();
+
+        IEnumerable<RuleValidationResult> Results { get; }
+
+        void AddRange(IEnumerable<RuleValidationResult> results);
         
         Type GetValueType();
     }

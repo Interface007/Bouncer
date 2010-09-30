@@ -17,12 +17,14 @@ namespace Sem.GenericHelpers.Contracts.Rules
 
     using Sem.GenericHelpers.Contracts.Rule;
 
-    public class ConfiguredRuleInformation : IXmlSerializable
+    public sealed class ConfiguredRuleInformation : IXmlSerializable
     {
         public RuleBaseInformation Rule { get; set; }
 
         public Type TargetType { get; set; }
-
+        
+        public Type ExceptionType { get; set; }
+        
         public string TargetProperty { get; set; }
 
         public string Context { get; set; }
@@ -36,16 +38,12 @@ namespace Sem.GenericHelpers.Contracts.Rules
             return null;
         }
 
-        public void ReadXml(XmlReader reader)
+        void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            if (reader == null)
-            {
-                return;
-            }
-
             var element = XElement.Parse(reader.ReadOuterXml());
             
             this.TargetType = Type.GetType(GetAttribute(element, "TargetType"));
+            this.ExceptionType = Type.GetType(GetAttribute(element, "ExceptionType"));
             this.TargetProperty = GetAttribute(element, "TargetProperty");
             
             this.Rule = Type.GetType(GetAttribute(element, "Rule")).CreateRule(this.TargetType);
@@ -55,17 +53,18 @@ namespace Sem.GenericHelpers.Contracts.Rules
             this.Namespace = GetAttribute(element, "Namespace");
         }
 
-        public void WriteXml(XmlWriter writer)
+        void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            if (writer == null)
-            {
-                return;
-            }
-
             var targetType = this.TargetType;
             if (targetType != null)
             {
                 writer.WriteAttributeString("TargetType", targetType.FullName + ", " + targetType.Assembly.GetName().Name);
+            }
+
+            var exceptionType = this.ExceptionType;
+            if (exceptionType != null)
+            {
+                writer.WriteAttributeString("ExceptionType", exceptionType.FullName + ", " + exceptionType.Assembly.GetName().Name);
             }
 
             writer.WriteAttributeString("TargetProperty", this.TargetProperty);

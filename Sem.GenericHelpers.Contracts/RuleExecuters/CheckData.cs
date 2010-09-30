@@ -82,7 +82,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 return;
             }
 
-            throw new RuleValidationException(validationResult.RuleType, validationResult.Message, validationResult.ValueName);
+            throw validationResult.Exception;
         }
     }
 }

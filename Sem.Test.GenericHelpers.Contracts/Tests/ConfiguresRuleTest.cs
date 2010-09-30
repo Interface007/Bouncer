@@ -1,5 +1,6 @@
 ﻿namespace Sem.Test.GenericHelpers.Contracts.Tests
 {
+    using System;
     using System.IO;
     using System.Xml.Serialization;
 
@@ -14,6 +15,8 @@
     public class ConfiguresRuleTest
     {
         private const string expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ConfiguredRuleInformation TargetType=\"Sem.Test.GenericHelpers.Contracts.Tests.ConfiguresRuleTest, Sem.Test.GenericHelpers.Contracts\" TargetProperty=\"propname\" Rule=\"Sem.GenericHelpers.Contracts.Rules.StringNotNullOrEmptyRule, Sem.GenericHelpers.Contracts\" Context=\"context\" Parameter=\"param\" Namespace=\"namespace\" />";
+
+        private const string expected2 = "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ConfiguredRuleInformation TargetType=\"Sem.Test.GenericHelpers.Contracts.Tests.ConfiguresRuleTest, Sem.Test.GenericHelpers.Contracts\" ExceptionType=\"System.NullReferenceException, mscorlib\" TargetProperty=\"propname\" Rule=\"Sem.GenericHelpers.Contracts.Rules.StringNotNullOrEmptyRule, Sem.GenericHelpers.Contracts\" Context=\"context\" Parameter=\"param\" Namespace=\"namespace\" />";
 
         /// <summary>
         /// Gets or sets the test context which provides
@@ -47,6 +50,28 @@
             var result = writer.GetStringBuilder().ToString();
 
             Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void TestIXmlSerializableWriteXml2()
+        {
+            var rule = new ConfiguredRuleInformation
+                {
+                    Context = "context",
+                    Namespace = "namespace",
+                    Parameter = "param",
+                    Rule = new StringNotNullOrEmptyRule(),
+                    TargetType = this.GetType(),
+                    TargetProperty = "propname",
+                    ExceptionType = typeof(NullReferenceException)
+                };
+
+            var serializer = new XmlSerializer(typeof(ConfiguredRuleInformation));
+            var writer = new StringWriter();
+            serializer.Serialize(writer, rule);
+            var result = writer.GetStringBuilder().ToString();
+
+            Assert.AreEqual(expected2, result);
         }
 
         [TestMethod]
