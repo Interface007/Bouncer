@@ -52,8 +52,8 @@
             // MyCustomer does contain rule StringRegexMatchRule for property EMailAddress          => violation!
             var results = new MyBusinessComponentSave().InsertCustomer(new MyCustomer { FullName = "Sven", EMailAddress = "don't@spam.me" }).ToList();
             Assert.AreEqual(2, results.Count);
-            Assert.AreEqual(typeof(StringRegexMatchRule), results[0].RuleType);
-            Assert.AreEqual(typeof(Rules.CanNotEnterRule), results[1].RuleType);
+            Assert.IsTrue(results.Exists(x => x.RuleType == typeof(StringRegexMatchRule)));
+            Assert.IsTrue(results.Exists(x => x.RuleType == typeof(Rules.CanNotEnterRule)));
         }
 
         [TestMethod]

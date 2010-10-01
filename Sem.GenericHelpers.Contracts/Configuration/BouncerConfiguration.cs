@@ -45,7 +45,13 @@ namespace Sem.GenericHelpers.Contracts.Configuration
 
         public static IEnumerable<ContractRuleAttribute> GetConfiguredRules(PropertyInfo info, Type targetType)
         {
-            return from ruleEntry in ConfigReader.GetConfig<BouncerConfiguration>().Rules
+            var configuredRuleInformations = ConfigReader.GetConfig<BouncerConfiguration>().Rules;
+            if (configuredRuleInformations == null)
+            {
+                return new List<ContractRuleAttribute>();
+            }
+
+            return from ruleEntry in configuredRuleInformations
                    where ruleEntry.TargetType == targetType && ruleEntry.TargetProperty == info.Name
                    select
                        new ContractRuleAttribute(ruleEntry.Rule.GetType())

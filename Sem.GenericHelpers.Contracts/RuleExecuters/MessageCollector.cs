@@ -79,7 +79,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
             if (!validationResult.Result)
             {
-                this.ExecutionResults.Add(validationResult);
+                this.AddExecutionResult(validationResult);
             }
         }
     }

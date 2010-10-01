@@ -137,5 +137,17 @@
                 .For(() => var3)
                 .Ensure();
         }
+
+        [TestMethod]
+        public void ForCheckDataThrowsNullReferenceException266()
+        {
+            Bouncer.ForCheckData<int>(null);
+        }
+
+        [TestMethod]
+        public void ForCheckDataThrowsNullReferenceException281()
+        {
+            Bouncer.ForCheckData<int>(0, null);
+        }
     }
 }
