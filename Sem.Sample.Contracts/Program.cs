@@ -100,7 +100,7 @@ namespace Sem.Sample.Contracts
                             FullName = "Karl Klammer",
                             EMailAddress = Resources.ValidEmailAddress
                         }),
-                    100,
+                    300,
                     () => Console.WriteLine(@"In this example we had {0} rule checks per call.", checkCount / 100));
 
             checkCount = 0;
@@ -117,8 +117,8 @@ namespace Sem.Sample.Contracts
                         "someConnectionString",
                         1564,
                         new CustomerId()),
-                    100,
-                    () => Console.WriteLine(@"In this time we had {0} rule checks per call.", checkCount / 100));
+                    300,
+                    () => Console.WriteLine(@"In this time we had {0} rule checks per call.", checkCount / 300));
         }
 
         private static void AddLogging(string message)

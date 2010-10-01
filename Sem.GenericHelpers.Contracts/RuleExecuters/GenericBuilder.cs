@@ -16,11 +16,11 @@
     {
         private readonly List<IGenericBuilder> dataExpressions = new List<IGenericBuilder>();
 
-        internal readonly Expression<Func<TData>> myData;
+        internal readonly Expression<Func<TData>> MyData;
 
         public GenericBuilder(Expression<Func<TData>> data)
         {
-            this.myData = data;
+            this.MyData = data;
             this.dataExpressions.Add(this);
         }
 
@@ -56,7 +56,7 @@
         /// <returns>The rule executer (the <see cref="CheckData{TData}"/> instance) for this call.</returns>
         IRuleExecuter IGenericBuilder.GetExecutedCheckData()
         {
-            return new CheckData<TData>(this.myData).Assert();
+            return new CheckData<TData>(this.MyData).Assert();
         }
 
         /// <summary>
@@ -83,7 +83,7 @@
         /// <returns>The rule executer (the <see cref="MessageCollector{TData}"/> instance) for this call.</returns>
         IRuleExecuter IGenericBuilder.GetExecutedMessageCollector()
         {
-            return new MessageCollector<TData>(myData).Assert();
+            return new MessageCollector<TData>(this.MyData).Assert();
         }
 
         public IRuleExecuter Use(Type executorType)
@@ -114,7 +114,7 @@
             var makeGenericType = genericTypeDefinition.MakeGenericType(typeof(TData));
             var constructorInfo = makeGenericType.GetConstructor(new[] { typeof(Expression<Func<TData>>) });
 
-            return constructorInfo.Invoke(new[] { this.myData }) as IRuleExecuter;
+            return constructorInfo.Invoke(new[] { this.MyData }) as IRuleExecuter;
         }
 
         public TExecutor Use<TExecutor>()

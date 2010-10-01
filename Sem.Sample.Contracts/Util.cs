@@ -36,6 +36,7 @@ namespace Sem.Sample.Contracts
             var stopwatch = new Stopwatch();
             var firstCall = 0;
             var additionalCalls = 0;
+            var additionalCallsTotal = 0;
 
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Clear();
@@ -59,7 +60,8 @@ namespace Sem.Sample.Contracts
                 stopwatch.Stop();
                 if (count > 1)
                 {
-                    additionalCalls = (int)stopwatch.Elapsed.TotalMilliseconds / (count - 1);
+                    additionalCallsTotal = (int)stopwatch.Elapsed.TotalMilliseconds;
+                    additionalCalls = additionalCallsTotal / (count - 1);
                 }
 
                 if (postExecution != null)
@@ -100,7 +102,7 @@ namespace Sem.Sample.Contracts
             Console.WriteLine();
             if (count > 1)
             {
-                Console.WriteLine(@"first call: {0}ms, additional calls: {1}ms per call", firstCall, additionalCalls);
+                Console.WriteLine(@"first call: {0}ms, additional calls: {1}ms per call ({2}ms total)", firstCall, additionalCalls, additionalCallsTotal);
             }
 
             Console.WriteLine(@"press enter to execute next sample...");

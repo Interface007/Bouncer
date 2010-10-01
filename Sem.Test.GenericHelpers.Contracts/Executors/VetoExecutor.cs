@@ -64,7 +64,7 @@
     {
         public static VetoExecutor<TData> UseVeto<TData>(this GenericBuilder<TData> builder)
         {
-            return new VetoExecutor<TData>(builder.myData);
+            return new VetoExecutor<TData>(builder.MyData);
         }
     }
 }

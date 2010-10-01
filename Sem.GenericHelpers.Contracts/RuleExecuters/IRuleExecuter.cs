@@ -32,7 +32,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         IEnumerable<RuleValidationResult> Results { get; }
 
         void AddRange(IEnumerable<RuleValidationResult> results);
-        
-        Type GetValueType();
+
+        Type ValueType { get; }
     }
 }

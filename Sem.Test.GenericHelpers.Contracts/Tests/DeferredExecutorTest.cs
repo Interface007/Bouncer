@@ -9,7 +9,6 @@
 
 namespace Sem.Test.GenericHelpers.Contracts.Tests
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -98,6 +97,7 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
                 .Assert().Results;
         }
 
+/*
         [ContractMethodRule(typeof(IsNullRule<MessageOne>), "messageOne")]
         private static void TestMethod3(MessageOne messageOne)
         {
@@ -105,5 +105,6 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
                 .ForCheckData(() => messageOne)
                 .Assert();
         }
+*/
     }
 }
