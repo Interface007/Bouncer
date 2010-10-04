@@ -2,11 +2,13 @@
 {
     using System;
     using System.Linq;
+    using System.Linq.Expressions;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.Exceptions;
+    using Sem.GenericHelpers.Contracts.RuleExecuters;
     using Sem.GenericHelpers.Contracts.Rules;
     using Sem.Test.GenericHelpers.Contracts.Entities;
     using Sem.Test.GenericHelpers.Contracts.Rules;
