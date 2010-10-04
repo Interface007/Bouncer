@@ -17,6 +17,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using System.Threading.Tasks;
 
     using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.Configuration;
@@ -701,6 +702,10 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// </summary>
         private IEnumerable<Action> AssertForProperties()
         {
+            // preallocate the calling namespace - this would  not be accessible from the worker 
+            // threads of the parallel foreach.
+            this.GetCallingNamespace();
+
             return from propertyInfo in this.targetType.GetProperties()
                    select new Action(
                                () =>
