@@ -18,6 +18,10 @@ namespace Sem.GenericHelpers.Contracts.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
     public sealed class ContractRuleAttribute : ContractRuleBaseAttribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContractRuleAttribute"/> class. 
+        /// </summary>
+        /// <param name="ruleType">Type of the rule to be executed. </param>
         public ContractRuleAttribute(Type ruleType)
             : base(ruleType)
         {

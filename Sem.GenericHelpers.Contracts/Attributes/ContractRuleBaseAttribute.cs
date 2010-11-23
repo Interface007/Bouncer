@@ -20,6 +20,10 @@ namespace Sem.GenericHelpers.Contracts.Attributes
     /// </summary>
     public abstract class ContractRuleBaseAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContractRuleBaseAttribute"/> class.
+        /// </summary>
+        /// <param name="ruleType"> The rule type. </param>
         protected ContractRuleBaseAttribute(Type ruleType)
         {
             this.RuleType = ruleType;
@@ -31,7 +35,7 @@ namespace Sem.GenericHelpers.Contracts.Attributes
         public Type RuleType { get; private set; }
 
         /// <summary>
-        /// Gets the type of the exception, this rule might throw.
+        /// Gets or sets the type of the exception, this rule might throw.
         /// </summary>
         public Type ExceptionType { get; set; }
 
