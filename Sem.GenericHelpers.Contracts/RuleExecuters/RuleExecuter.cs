@@ -37,9 +37,141 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     public abstract class RuleExecuter<TData, TResultClass> : IRuleExecuter
         where TResultClass : RuleExecuter<TData, TResultClass>
     {
+        /// <summary>
+        /// <see cref="BindingFlags"/> to search for the ExecuteRuleExpression method of the ruleExecuter.
+        /// </summary>
         private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
-        #region data
+        #region private data
+
+        /// <summary>
+        /// A cache for the attributes of methods.
+        /// </summary>
+        private static readonly Dictionary<MethodBase, List<ContractMethodRuleAttribute>> RuleAttributeCache = new Dictionary<MethodBase, List<ContractMethodRuleAttribute>>();
+
+        /// <summary>
+        /// Locking object for the rule attribute cache.
+        /// </summary>
+        private static readonly object RuleAttributeCacheSync = new object();
+
+        /// <summary>
+        /// Application wide suppression flag. If this flag has been set, all processing will be aborted.
+        /// </summary>
+        private static readonly bool SuppressAll = ConfigReader.GetConfig<BouncerConfiguration>().SuppressAll;
+
+        /// <summary>
+        /// Type of the target object for the rule.
+        /// </summary>
+        private readonly Type targetType;
+
+        /// <summary>
+        /// Locking object for the namespace.
+        /// </summary>
+        private readonly object callingNamespaceLock = new object();
+
+        /// <summary>
+        /// The result list of <see cref="RuleValidationResult"/>. Each violated rule while
+        /// asserting adds a new entry to this list.
+        /// </summary>
+        private readonly List<RuleValidationResult> executionResults = new List<RuleValidationResult>();
+
+        /// <summary>
+        /// Provides a lock object for the list of executionResults.
+        /// </summary>
+        private readonly object executionResultsLock = new object();
+
+        /// <summary>
+        /// The namespace this inherited type has been declared
+        /// </summary>
+        private readonly string declarationNamespace = typeof(TResultClass).Namespace;
+
+        /// <summary>
+        /// The root namespace of the classes of this assembly is equal to the name of the assembly.
+        /// </summary>
+        private static readonly string BouncerNameSpace = Assembly.GetExecutingAssembly().GetName().Name;
+
+        /// <summary>
+        /// A cache for the attributes of properties.
+        /// </summary>
+        private static readonly Dictionary<PropertyInfo, IEnumerable<ContractRuleAttribute>> PropertyAttributeCache = new Dictionary<PropertyInfo, IEnumerable<ContractRuleAttribute>>();
+
+        /// <summary>
+        /// Locking property for the property attribute cache.
+        /// </summary>
+        private static readonly object PropertyAttributeCacheSync = new object();
+
+        /// <summary>
+        /// Holds the namespace name of the calling method.
+        /// </summary>
+        private string callingNamespace;
+
+#endregion
+
+        #region ctors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleExecuter{TData,TResultClass}"/> class.
+        /// </summary>
+        /// <param name="data"> The data to be checked. </param>
+        /// <param name="methodRuleAttributes"> The method rule attributes. </param>
+        protected RuleExecuter(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
+            : this(GetMemberName(data), GetMemberValue(data), methodRuleAttributes)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleExecuter{TData,TResultClass}"/> class.
+        /// </summary>
+        /// <param name="valueName"> The name of the value that will be checked. </param>
+        /// <param name="value"> The value to be checked. </param>
+        /// <param name="methodRuleAttributes"> The method rule attributes. </param>
+        protected RuleExecuter(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
+        {
+            if (SuppressAll)
+            {
+                return;
+            }
+
+            var currentMethodInfo = GetCurrentMethodInfo(2);
+
+            this.MethodRuleAttributes = methodRuleAttributes ?? GetRuleAttributesFromCurrentMethod(currentMethodInfo);
+            this.Context = GetContext(currentMethodInfo);
+            this.Value = value;
+            this.ValueName = valueName;
+            this.targetType = typeof(TData);
+        }
+
+        #endregion
+
+        #region properties
+
+        /// <summary>
+        /// Gets the results of the rule execution.
+        /// </summary>
+        public virtual IEnumerable<RuleValidationResult> Results
+        {
+            get
+            {
+                var results = this.executionResults;
+
+                var previousExecuter = this.PreviousExecuter;
+                return
+                    previousExecuter != null
+                    ? results.Concat(previousExecuter.Results)
+                    : results;
+            }
+        }
+
+        /// <summary>
+        /// Gets the ValueType.
+        /// </summary>
+        Type IRuleExecuter.ValueType
+        {
+            get
+            {
+                return this.ValueType;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a pointer to the Assert()-method of the previously built <see cref="RuleExecuter{TData,TResultClass}"/>.
@@ -49,35 +181,21 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         internal IRuleExecuter PreviousExecuter { get; set; }
 
         /// <summary>
+        /// Gets the ValueType.
+        /// </summary>
+        protected Type ValueType
+        {
+            get
+            {
+                return this.targetType;
+            }
+        }
+
+        /// <summary>
         /// Gets a list of <see cref="ContractMethodRuleAttribute"/> for the current method (the one that did create the 
         /// instance of the <see cref="RuleExecuter{TData,TResultClass}"/>).
         /// </summary>
         protected IEnumerable<ContractMethodRuleAttribute> MethodRuleAttributes { get; private set; }
-
-        private string callingNamespace;
-
-        /// <summary>
-        /// The result list of <see cref="RuleValidationResult"/>. Each violated rule while
-        /// asserting adds a new entry to this list.
-        /// </summary>
-        private readonly List<RuleValidationResult> executionResults = new List<RuleValidationResult>();
-        private readonly object executionResultsLock = new object();
-
-        protected void AddExecutionResult(RuleValidationResult result)
-        {
-            lock (this.executionResultsLock)
-            {
-                executionResults.Add(result);
-            }
-        }
-
-        protected void AddExecutionResults(IEnumerable<RuleValidationResult> results)
-        {
-            lock (this.executionResultsLock)
-            {
-                executionResults.AddRange(results);
-            }
-        }
 
         /// <summary>
         /// Gets or sets the "name" of the value - normally this is the name of a method parameter.
@@ -94,61 +212,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// instance of the <see cref="RuleExecuter{TData,TResultClass}"/>).
         /// </summary>
         private IEnumerable<string> Context { get; set; }
-
-        /// <summary>
-        /// The name of the namespace this INSTANCE (the inherited class) is declared in - this may differ is it is a "custom" executor.
-        /// </summary>
-        private readonly string myNamespace = typeof(TResultClass).Namespace;
-
-        /// <summary>
-        /// The root namespace of the classes of this assembly is equal to the name of the assembly.
-        /// </summary>
-        private static readonly string BouncerNameSpace = Assembly.GetExecutingAssembly().GetName().Name;
-
-        /// <summary>
-        /// A cache for the attributes of properties.
-        /// </summary>
-        private static readonly Dictionary<PropertyInfo, IEnumerable<ContractRuleAttribute>> PropertyAttributeCache = new Dictionary<PropertyInfo, IEnumerable<ContractRuleAttribute>>();
-
-        private static readonly object PropertyAttributeCacheSync = new object();
-
-        /// <summary>
-        /// A cache for the attributes of methods.
-        /// </summary>
-        private static readonly Dictionary<MethodBase, List<ContractMethodRuleAttribute>> RuleAttributeCache = new Dictionary<MethodBase, List<ContractMethodRuleAttribute>>();
-
-        private static readonly object RuleAttributeCacheSync = new object();
-
-        private static readonly bool SuppressAll = ConfigReader.GetConfig<BouncerConfiguration>().SuppressAll;
-
-        private readonly Type targetType;
-
-        private readonly object callingNamespaceLock = new object();
-
-        #endregion
-
-        #region ctors
-
-        protected RuleExecuter(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
-            : this(GetMemberName(data), GetMemberValue(data), methodRuleAttributes)
-        {
-        }
-
-        protected RuleExecuter(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
-        {
-            if (SuppressAll)
-            {
-                return;
-            }
-
-            var currentMethodInfo = GetCurrentMethodInfo(2);
-
-            this.MethodRuleAttributes = methodRuleAttributes ?? GetRuleAttributesFromCurrentMethod(currentMethodInfo);
-            this.Context = GetContext(currentMethodInfo);
-            this.Value = value;
-            this.ValueName = valueName;
-            this.targetType = typeof(TData);
-        }
 
         #endregion
 
@@ -189,7 +252,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// Checks an anonymous rule (build on the fly from an expression) with a parameter.
         /// </summary>
         /// <typeparam name="TParameter">The type of the parameter for the check.</typeparam>
-        /// <param name="rule">The method that returns true or false and accepts the data (of type <see cref="TData"/>) and a check parameter <paramref name="ruleParameter"/>.</param>
+        /// <param name="rule">The method that returns true or false and accepts the data (of type TData) and a check parameter <paramref name="ruleParameter"/>.</param>
         /// <param name="ruleParameter">The parameter for rule checking (the second parameter of the <paramref name="rule"/>).</param>
         /// <returns>The class instance this method belongs to. This way you can invoke multiple methods of this class in one line of code.</returns>
         public TResultClass Assert<TParameter>(Func<TData, TParameter, bool> rule, TParameter ruleParameter)
@@ -243,7 +306,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 return (TResultClass)this;
             }
 
-
             var actions = new List<Action>();
             actions.AddRange(this.AssertForProperties());
             actions.AddRange(this.AssertForMethodAttributes());
@@ -259,6 +321,10 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             return (TResultClass)this;
         }
 
+        /// <summary>
+        /// Performs an assert for all attached rules
+        /// </summary>
+        /// <returns>simply this</returns>
         public virtual IRuleExecuter AssertAll()
         {
             return this.Assert();
@@ -266,20 +332,10 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
         #endregion
 
-        public virtual IEnumerable<RuleValidationResult> Results
-        {
-            get
-            {
-                var results = this.executionResults;
-
-                var previousExecuter = this.PreviousExecuter;
-                return
-                    previousExecuter != null
-                    ? results.Concat(previousExecuter.Results)
-                    : results;
-            }
-        }
-
+        /// <summary>
+        /// Adds a range of results to the internal list.
+        /// </summary>
+        /// <param name="results"> The results to be added. </param>
         public virtual void AddRange(IEnumerable<RuleValidationResult> results)
         {
             this.AddExecutionResults(results);
@@ -297,72 +353,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         RuleValidationResult IRuleExecuter.InvokeRuleExecutionForAttribute(IRuleExecuter ruleExecuter, ContractRuleBaseAttribute ruleAttribute, string propertyName)
         {
             return this.InvokeRuleExecutionForAttribute(ruleExecuter, ruleAttribute, propertyName);
-        }
-
-        protected RuleValidationResult InvokeRuleExecutionForAttribute(IRuleExecuter ruleExecuter, ContractRuleBaseAttribute ruleAttribute, string propertyName)
-        {
-            if (ruleAttribute == null || ruleExecuter == null)
-            {
-                return null;
-            }
-
-            var typeAttributeRuleType = ruleAttribute.RuleType;
-            if (typeAttributeRuleType.Implements(typeof(IEnumerable)))
-            {
-                return null;
-            }
-
-            // the following line would be more specific - but seems to be hard to be implemented
-            ////if (!ruleAttribute.Type.Implements(typeof(RuleBase<,>)))
-            if (!typeAttributeRuleType.IsSubclassOf(typeof(RuleBaseInformation)))
-            {
-                throw new ArgumentException("The attribute does not contain a valid rule.");
-            }
-
-            var assertMethod = ruleExecuter.GetType().GetMethod("ExecuteRuleExpression", DefaultBindingFlags);
-
-            var parameter = ruleAttribute.Parameter;
-
-            assertMethod = assertMethod.MakeGenericMethod(parameter != null ? parameter.GetType() : typeof(object));
-
-            try
-            {
-                // create an instance of the rule and invoke the Assert statement
-                var rule = typeAttributeRuleType.CreateRule(ruleExecuter.ValueType);
-                rule.Exception = ruleAttribute.ExceptionType;
-
-                if (!string.IsNullOrEmpty(ruleAttribute.Message))
-                {
-                    rule.Message = ruleAttribute.Message;
-                }
-
-                var invokeResult = (bool)assertMethod.Invoke(ruleExecuter, new[] { rule, parameter, propertyName });
-
-                var ruleType = rule.GetType();
-                var result = new RuleValidationResult(ruleType, string.Format(CultureInfo.CurrentCulture, Resources.RuleValidationResultStandardMessage, ruleType.Namespace + "." + ruleType.Name, propertyName, string.Format(CultureInfo.CurrentCulture, rule.Message, parameter, propertyName)), propertyName, invokeResult);
-
-                return result;
-            }
-            catch (TargetInvocationException ex)
-            {
-                throw ex.InnerException;
-            }
-        }
-
-        Type IRuleExecuter.ValueType
-        {
-            get
-            {
-                return this.ValueType;
-            }
-        }
-
-        protected Type ValueType
-        {
-            get
-            {
-                return targetType;
-            }
         }
 
         /// <summary>
@@ -432,6 +422,89 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             }
 
             return validationResult;
+        }
+
+        /// <summary>
+        /// Adds a validation result to the list of validation results.
+        /// </summary>
+        /// <param name="result"> The result to be added. </param>
+        protected void AddExecutionResult(RuleValidationResult result)
+        {
+            lock (this.executionResultsLock)
+            {
+                this.executionResults.Add(result);
+            }
+        }
+
+        /// <summary>
+        /// Adds multiple execution results to the list of execution results. This method does use the lock one once.
+        /// </summary>
+        /// <param name="results"> The results to be added. </param>
+        protected void AddExecutionResults(IEnumerable<RuleValidationResult> results)
+        {
+            lock (this.executionResultsLock)
+            {
+                this.executionResults.AddRange(results);
+            }
+        }
+
+        /// <summary>
+        /// Performs the rule evaluation for rules that are defined by attributes.
+        /// </summary>
+        /// <param name="ruleExecuter"> The rule executer that should execute the rules. </param>
+        /// <param name="ruleAttribute"> The rule attribute defining the rule. </param>
+        /// <param name="propertyName"> The property name. </param>
+        /// <returns>A rule validation result.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
+        protected RuleValidationResult InvokeRuleExecutionForAttribute(IRuleExecuter ruleExecuter, ContractRuleBaseAttribute ruleAttribute, string propertyName)
+        {
+            if (ruleAttribute == null || ruleExecuter == null)
+            {
+                return null;
+            }
+
+            var typeAttributeRuleType = ruleAttribute.RuleType;
+            if (typeAttributeRuleType.Implements(typeof(IEnumerable)))
+            {
+                return null;
+            }
+
+            // the following line would be more specific - but seems to be hard to be implemented
+            ////if (!ruleAttribute.Type.Implements(typeof(RuleBase<,>)))
+            if (!typeAttributeRuleType.IsSubclassOf(typeof(RuleBaseInformation)))
+            {
+                throw new ArgumentException("The attribute does not contain a valid rule.");
+            }
+
+            var assertMethod = ruleExecuter.GetType().GetMethod("ExecuteRuleExpression", DefaultBindingFlags);
+
+            var parameter = ruleAttribute.Parameter;
+
+            assertMethod = assertMethod.MakeGenericMethod(parameter != null ? parameter.GetType() : typeof(object));
+
+            try
+            {
+                // create an instance of the rule and invoke the Assert statement
+                var rule = typeAttributeRuleType.CreateRule(ruleExecuter.ValueType);
+                rule.Exception = ruleAttribute.ExceptionType;
+
+                if (!string.IsNullOrEmpty(ruleAttribute.Message))
+                {
+                    rule.Message = ruleAttribute.Message;
+                }
+
+                var invokeResult = (bool)assertMethod.Invoke(ruleExecuter, new[] { rule, parameter, propertyName });
+
+                var ruleType = rule.GetType();
+                var result = new RuleValidationResult(ruleType, string.Format(CultureInfo.CurrentCulture, Resources.RuleValidationResultStandardMessage, ruleType.Namespace + "." + ruleType.Name, propertyName, string.Format(CultureInfo.CurrentCulture, rule.Message, parameter, propertyName)), propertyName, invokeResult);
+
+                return result;
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         #region overridables
@@ -513,6 +586,11 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             }
         }
 
+        /// <summary>
+        /// Gets the name of the member described by the expression.
+        /// </summary>
+        /// <param name="data"> The expression that describes the data. </param>
+        /// <returns> The name of the member. </returns>
         private static string GetMemberName(Expression<Func<TData>> data)
         {
             if (data == null)
@@ -524,6 +602,11 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             return member != null ? member.Member.Name : "anonymous value";
         }
 
+        /// <summary>
+        /// Gets the value of the member described by the expression.
+        /// </summary>
+        /// <param name="data"> The expression that describes the data. </param>
+        /// <returns> The value of the expression. </returns>
         private static TData GetMemberValue(Expression<Func<TData>> data)
         {
             try
@@ -555,6 +638,11 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             }
         }
 
+        /// <summary>
+        /// Gets the method info of the first method upstream of the call stack that is outside the bouncer namespace and outside a type that implements IRuleExecuter.
+        /// </summary>
+        /// <param name="skipFrames"> The number of call stack frames to be skipped (mostly a number of stack frames is known that can be savely skipped). </param>
+        /// <returns> The method info of the method found.</returns>
         private static MethodBase GetCurrentMethodInfo(int skipFrames)
         {
             var stack = new StackTrace(skipFrames, false);
@@ -574,6 +662,11 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             return methodInfo;
         }
 
+        /// <summary>
+        /// Gets the context attribute of the method passed as <paramref name="currentMethodInfo"/>.
+        /// </summary>
+        /// <param name="currentMethodInfo"> The method info to be analyzed. </param>
+        /// <returns> A list of context names.</returns>
         private static IEnumerable<string> GetContext(MethodBase currentMethodInfo)
         {
             var attributes = new List<string>();
@@ -584,6 +677,11 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             return attributes;
         }
 
+        /// <summary>
+        /// Helper method for <see cref="GetContext"/>
+        /// </summary>
+        /// <param name="typeAttribs"> The type attribs. </param>
+        /// <param name="attributes"> The attributes. </param>
         private static void AddContextInfo(object[] typeAttribs, List<string> attributes)
         {
             foreach (ContractContextAttribute typeAttrib in typeAttribs)
@@ -603,6 +701,12 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             }
         }
 
+        /// <summary>
+        /// Gets the rule attributes for a given property info.
+        /// </summary>
+        /// <param name="targetType"> The target type. </param>
+        /// <param name="info"> The property info. </param>
+        /// <returns> A list of rule attributes.</returns>
         private static IEnumerable<ContractRuleAttribute> GetPropertyRuleAttributes(Type targetType, PropertyInfo info)
         {
             IEnumerable<ContractRuleAttribute> ruleAttributes;
@@ -643,7 +747,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                                 var name = stackFrame.GetMethod().DeclaringType.Namespace;
 
                                 if (name == null
-                                    || name.StartsWith(this.myNamespace, StringComparison.Ordinal)
+                                    || name.StartsWith(this.declarationNamespace, StringComparison.Ordinal)
                                     || name.StartsWith("System."))
                                 {
                                     continue;
@@ -677,8 +781,9 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         }
 
         /// <summary>
-        /// Checks the rules attached to the type of <see cref="TData"/>.
+        /// Checks the rules attached to the type of TData.
         /// </summary>
+        /// <returns> The list of actions for the asserts of all type based rules. </returns>
         private IEnumerable<Action> AssertForType()
         {
             return new Action[] { () => this.Assert(RegisteredRules.GetRulesForType<TData, object>()) };
@@ -687,6 +792,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <summary>
         /// Checks the rules of the current method that do match to the <see cref="ValueName"/>.
         /// </summary>
+        /// <returns> The list of actions for the asserts of all method based rules. </returns>
         private IEnumerable<Action> AssertForMethodAttributes()
         {
             var ruleAttributes = from methodAttribute in this.MethodRuleAttributes where methodAttribute.MethodArgumentName == this.ValueName select methodAttribute;
@@ -698,8 +804,9 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         }
 
         /// <summary>
-        /// Checks the rules attached to the properties of the <see cref="TData"/>.
+        /// Checks the rules attached to the properties of the TData.
         /// </summary>
+        /// <returns> The list of actions for the asserts of all property based rules. </returns>
         private IEnumerable<Action> AssertForProperties()
         {
             // preallocate the calling namespace - this would  not be accessible from the worker 
@@ -729,6 +836,13 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                                });
         }
 
+        /// <summary>
+        /// Assembles a list of actions that does execute the rule attributes.
+        /// </summary>
+        /// <param name="ruleExecuter"> The rule executer that will execute the rules. </param>
+        /// <param name="ruleAttributes"> The rule attributes that contain the rules. </param>
+        /// <param name="propertyName"> The property name that does contain the value. </param>
+        /// <returns>A list of <see cref="Action"/> </returns>
         private IEnumerable<Action> InvokeForAllAttributes(IRuleExecuter ruleExecuter, IEnumerable<ContractRuleBaseAttribute> ruleAttributes, string propertyName)
         {
             return from ruleAttribute in ruleAttributes

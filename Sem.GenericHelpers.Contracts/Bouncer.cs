@@ -114,6 +114,12 @@ namespace Sem.GenericHelpers.Contracts
             return new ConditionalExecution<TData>(name, data);
         }
 
+        /// <summary>
+        /// Accepts data to be validated with all attached rules.
+        /// </summary>
+        /// <param name="data">The data to be validated.</param>
+        /// <typeparam name="TData">The type of data to be validated.</typeparam>
+        /// <returns>A <see cref="GenericBuilder{TData}"/> to add more data via <see cref="GenericBuilder{TData}.For{TDataNew}"/> or execute the check via <see cref="GenericBuilder{TData}.Ensure"/>.</returns>
         public static GenericBuilder<TData> For<TData>(Expression<Func<TData>> data)
         {
             return new GenericBuilder<TData>(data);
