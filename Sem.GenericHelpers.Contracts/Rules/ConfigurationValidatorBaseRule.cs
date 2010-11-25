@@ -13,9 +13,9 @@ namespace Sem.GenericHelpers.Contracts.Rules
     using System.Configuration;
     using System.Globalization;
 
-    using Sem.GenericHelpers.Contracts.Properties;
-    using Sem.GenericHelpers.Contracts.Rule;
-    using Sem.GenericHelpers.Contracts.RuleExecuters;
+    using Properties;
+    using Rule;
+    using RuleExecuters;
 
     /// <summary>
     /// Implements a rule for a given <see cref="ConfigurationValidatorBase"/>. Using this rule. you can reuse the 
@@ -27,7 +27,26 @@ namespace Sem.GenericHelpers.Contracts.Rules
     /// <typeparam name="TData">The type of data to be validated.</typeparam>
     public class ConfigurationValidatorBaseRule<TData> : RuleBase<TData, object>
     {
+        /// <summary>
+        /// The instance of the configuratioon validator to use for the validation.
+        /// </summary>
         private ConfigurationValidatorBase configurationValidator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationValidatorBaseRule{TData}"/> class. 
+        /// </summary>
+        /// <param name="validator">Sets the configuration validator to be used in this rule.</param>
+        public ConfigurationValidatorBaseRule(ConfigurationValidatorBase validator)
+        {
+            this.ConfigurationValidator = validator;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationValidatorBaseRule{TData}"/> class.
+        /// </summary>
+        public ConfigurationValidatorBaseRule()
+        {
+        }
 
         /// <summary>
         /// Gets or sets the <see cref="ConfigurationValidatorBase"/> instance for this rule instance.
@@ -59,15 +78,6 @@ namespace Sem.GenericHelpers.Contracts.Rules
                 var type = this.ConfigurationValidator.GetType();
                 this.Message = string.Format(CultureInfo.CurrentCulture, Resources.ConfigurationValidatorBaseRuleStandardMessage, type.Namespace + "." + type.Name); 
             }
-        }
-
-        public ConfigurationValidatorBaseRule(ConfigurationValidatorBase validator)
-        {
-            this.ConfigurationValidator = validator;
-        }
-
-        public ConfigurationValidatorBaseRule()
-        {
         }
     }
 }

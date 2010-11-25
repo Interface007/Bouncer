@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="Configuration\BouncerConfiguration.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
+    <Compile Include="NamespaceDoc.cs" />
     <Compile Include="RuleExecuters\GenericBuilder.cs" />
     <Compile Include="RuleExecuters\IGenericBuilder.cs" />
     <Compile Include="RuleExecuters\IConditionalExecution.cs" />

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageCollection.cs" company="Sven Erik Matzen">
+// <copyright file="MessageCollector.cs" company="Sven Erik Matzen">
 //   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
 // </copyright>
 // <summary>
@@ -13,8 +13,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
-    using Sem.GenericHelpers.Contracts.Attributes;
-    using Sem.GenericHelpers.Contracts.Properties;
+    using Attributes;
+    using Properties;
 
     /// <summary>
     /// Check class including the data to perform rule checking. Each rule violation
@@ -25,21 +25,41 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     public class MessageCollector<TData> 
         : RuleExecuter<TData, MessageCollector<TData>>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageCollector{TData}"/> class. 
+        /// </summary>
+        /// <param name="valueName"> The name of the value that will be checked. </param>
+        /// <param name="value"> The value to be checked. </param>
         public MessageCollector(string valueName, TData value)
             : this(valueName, value, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageCollector{TData}"/> class.
+        /// </summary>
+        /// <param name="data"> The data to be checked. </param>
         public MessageCollector(Expression<Func<TData>> data)
             : this(data, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageCollector{TData}"/> class.
+        /// </summary>
+        /// <param name="valueName"> The name of the value that will be checked.  </param>
+        /// <param name="value"> The value to be checked.  </param>
+        /// <param name="methodAttributes"> The method rule attributes. </param>
         public MessageCollector(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(valueName, value, methodAttributes)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageCollector{TData}"/> class.
+        /// </summary>
+        /// <param name="data"> The data to be checked. </param>
+        /// <param name="methodAttributes"> The method rule attributes. </param>
         public MessageCollector(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(data, methodAttributes)
         {

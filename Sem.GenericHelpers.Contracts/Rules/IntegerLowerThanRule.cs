@@ -12,8 +12,14 @@ namespace Sem.GenericHelpers.Contracts.Rules
     using Sem.GenericHelpers.Contracts.Properties;
     using Sem.GenericHelpers.Contracts.Rule;
 
+    /// <summary>
+    /// Rule that checks whether an integer is lower than the parameter.
+    /// </summary>
     public class IntegerLowerThanRule : RuleBase<int, int>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntegerLowerThanRule"/> class.
+        /// </summary>
         public IntegerLowerThanRule()
         {
             this.CheckExpression = (target, parameter) => target < parameter;
