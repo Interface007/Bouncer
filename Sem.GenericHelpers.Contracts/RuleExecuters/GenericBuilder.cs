@@ -1,4 +1,16 @@
-﻿namespace Sem.GenericHelpers.Contracts.RuleExecuters
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GenericBuilder.cs" company="Sven Erik Matzen">
+//   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
+// </copyright>
+// <summary>
+//   The GenericBuilder class provides an inverted interface for the Bouncer functionality. Instead of
+//   first collecting a set of classes that will execute the rules, this one will collect all data
+//   and decide the classes for rule execution when the <see cref="Ensure" /> or <see cref="Messages" />
+//   method is being called.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Sem.GenericHelpers.Contracts.RuleExecuters
 {
     using System;
     using System.Collections.Generic;
@@ -14,10 +26,20 @@
     /// <typeparam name="TData">The type of data to be added to the list of data expressions.</typeparam>
     public class GenericBuilder<TData> : IGenericBuilder
     {
-        private readonly List<IGenericBuilder> dataExpressions = new List<IGenericBuilder>();
-
+        /// <summary>
+        /// The expression that returns the data to be validated.
+        /// </summary>
         internal readonly Expression<Func<TData>> MyData;
 
+        /// <summary>
+        /// The data expressions that should be validated as a list of builder
+        /// </summary>
+        private readonly List<IGenericBuilder> dataExpressions = new List<IGenericBuilder>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericBuilder{TData}"/> class.
+        /// </summary>
+        /// <param name="data"> The data to be checked. </param>
         public GenericBuilder(Expression<Func<TData>> data)
         {
             this.MyData = data;
@@ -43,7 +65,7 @@
         public void Ensure()
         {
             ((IGenericBuilder)this).GetExecutedCheckData().AssertAll();
-            foreach (var dataExpression in dataExpressions)
+            foreach (var dataExpression in this.dataExpressions)
             {
                 dataExpression.GetExecutedCheckData();
             }
@@ -86,6 +108,12 @@
             return new MessageCollector<TData>(this.MyData).Assert();
         }
 
+        /// <summary>
+        /// This method provides a way to use a rule executor that is not part of this library.
+        /// <see cref="Use{TExecutor}"/> for an example
+        /// </summary>
+        /// <param name="executorType"> The executor type. </param>
+        /// <returns>The executor of the desired type.</returns>
         public IRuleExecuter Use(Type executorType)
         {
             var resultExecutor = ((IGenericBuilder)this).GetResultExecutor(executorType);
@@ -93,7 +121,7 @@
             if (resultExecutor != null)
             {
                 resultExecutor.AssertAll();
-                foreach (var dataExpression in dataExpressions)
+                foreach (var dataExpression in this.dataExpressions)
                 {
                     var executer = dataExpression.GetResultExecutor(executorType).AssertAll();
                     resultExecutor.AddRange(executer.Results);
@@ -106,8 +134,8 @@
         /// <summary>
         /// This method is more generic, but needs reflection to resolve the generic parameters and build a new type.
         /// </summary>
-        /// <param name="executorType"></param>
-        /// <returns></returns>
+        /// <param name="executorType">The type of the executor to be created.</param>
+        /// <returns>The new created executor.</returns>
         IRuleExecuter IGenericBuilder.GetResultExecutor(Type executorType)
         {
             var genericTypeDefinition = executorType.GetGenericTypeDefinition();
@@ -117,6 +145,19 @@
             return constructorInfo.Invoke(new[] { this.MyData }) as IRuleExecuter;
         }
 
+        /// <summary>
+        /// Creates a constructor that is not part of the library.
+        /// </summary>
+        /// <example>
+        /// <code>
+        ///     var result = Bouncer
+        ///                .For(() => attributedSampleClass)
+        ///                .Use&lt;VetoExecutor&lt;AttributedSampleClass>>()
+        ///                .LastValidation;
+        /// </code>
+        /// </example>
+        /// <typeparam name="TExecutor">The executor to use.</typeparam>
+        /// <returns>The newly constructes executor </returns>
         public TExecutor Use<TExecutor>()
              where TExecutor : class, IRuleExecuter
         {

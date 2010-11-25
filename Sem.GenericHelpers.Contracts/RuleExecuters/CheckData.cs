@@ -13,9 +13,9 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
-    using Sem.GenericHelpers.Contracts.Attributes;
-    using Sem.GenericHelpers.Contracts.Exceptions;
-    using Sem.GenericHelpers.Contracts.Properties;
+    using Attributes;
+    using Exceptions;
+    using Properties;
 
     /// <summary>
     /// Check class including the data to perform rule checking. A validation error will
@@ -24,21 +24,41 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     /// <typeparam name="TData">The data type to be checked.</typeparam>
     public class CheckData<TData> : RuleExecuter<TData, CheckData<TData>>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckData{TData}"/> class. 
+        /// </summary>
+        /// <param name="valueName">The name of the value.</param>
+        /// <param name="value">The value to be validated itself. </param>
         public CheckData(string valueName, TData value)
             : this(valueName, value, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckData{TData}"/> class.
+        /// </summary>
+        /// <param name="data"> The expression that determines the data to be validated. </param>
         public CheckData(Expression<Func<TData>> data)
             : this(data, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckData{TData}"/> class.
+        /// </summary>
+        /// <param name="valueName">The name of the value.</param>
+        /// <param name="value">The value to be validated itself. </param>
+        /// <param name="methodAttributes"> The method attributes. </param>
         public CheckData(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(valueName, value, methodAttributes)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckData{TData}"/> class.
+        /// </summary>
+        /// <param name="data"> The expression that determines the data to be validated. </param>
+        /// <param name="methodAttributes"> The method attributes. </param>
         public CheckData(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(data, methodAttributes)
         {

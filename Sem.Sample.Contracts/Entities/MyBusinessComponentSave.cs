@@ -11,11 +11,11 @@ namespace Sem.Sample.Contracts.Entities
 {
     using System;
 
-    using Sem.GenericHelpers.Contracts;
-    using Sem.GenericHelpers.Contracts.Attributes;
-    using Sem.GenericHelpers.Contracts.Rule;
-    using Sem.GenericHelpers.Contracts.Rules;
-    using Sem.Sample.Contracts.Rules;
+    using GenericHelpers.Contracts;
+    using GenericHelpers.Contracts.Attributes;
+    using GenericHelpers.Contracts.Rule;
+    using GenericHelpers.Contracts.Rules;
+    using Rules;
 
     [ContractContext("Read")]
     internal class MyBusinessComponentSave : MyBusinessComponent

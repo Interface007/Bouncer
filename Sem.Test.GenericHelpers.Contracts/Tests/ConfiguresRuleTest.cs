@@ -27,7 +27,7 @@
         [TestMethod]
         public void TestIXmlSerializableGetSchema()
         {
-            var rule = new ConfiguredRuleInformation();
+            var rule = new ConfiguredRuleInformation() as IXmlSerializable;
             Assert.IsNull(rule.GetSchema());
         }
 
