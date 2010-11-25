@@ -9,8 +9,15 @@
 
 namespace Sem.GenericHelpers.Contracts.RuleExecuters
 {
+    /// <summary>
+    /// Interface to access the basic information about the conditional execution rule executor 
+    /// (rule execution determines whether code will be executed or not.)
+    /// </summary>
     public interface IConditionalExecution
     {
+        /// <summary>
+        /// Gets a value indicating whether the result of the validation was true or false.
+        /// </summary>
         bool ConditionIsTrue { get; }
     }
 }

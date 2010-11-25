@@ -9,14 +9,22 @@
 
 namespace Sem.GenericHelpers.Contracts.Rules
 {
+    using System.Collections.Generic;
     using System.Linq;
 
-    using Sem.GenericHelpers.Contracts.Properties;
-    using Sem.GenericHelpers.Contracts.Rule;
+    using Properties;
+    using Rule;
 
-    public class IsNotOneOfRule<TData> : RuleBase<TData, TData[]>
+    /// <summary>
+    /// Rule that searches an IEnumerable whether it contains the data to be checked. Fails if the value is found.
+    /// </summary>
+    /// <typeparam name="TData">The type of data to be compared</typeparam>
+    public class IsNotOneOfRule<TData> : RuleBase<TData, IEnumerable<TData>>
         where TData : class
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IsNotOneOfRule{TData}"/> class.
+        /// </summary>
         public IsNotOneOfRule()
         {
             CheckExpression = (data, listOfStrings) => !listOfStrings.Contains(data);

@@ -12,7 +12,7 @@ namespace Sem.GenericHelpers.Contracts
     using System;
     using System.Linq.Expressions;
 
-    using Sem.GenericHelpers.Contracts.RuleExecuters;
+    using RuleExecuters;
 
     /// <summary>
     /// Bouncer http://en.wiktionary.org/wiki/bouncer : „A member of security personnel employed by bars, 

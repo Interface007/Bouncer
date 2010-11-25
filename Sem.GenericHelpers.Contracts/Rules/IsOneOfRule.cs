@@ -14,9 +14,16 @@ namespace Sem.GenericHelpers.Contracts.Rules
     using Sem.GenericHelpers.Contracts.Properties;
     using Sem.GenericHelpers.Contracts.Rule;
 
+    /// <summary>
+    /// Rule that searches an IEnumerable whether it contains the data to be checked. Fails if the value is NOT found.
+    /// </summary>
+    /// <typeparam name="TData">The type of data to be compared</typeparam>
     public class IsOneOfRule<TData> : RuleBase<TData, TData[]>
         where TData : class
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IsOneOfRule{TData}"/> class. 
+        /// </summary>
         public IsOneOfRule()
         {
             CheckExpression = (parameterValue, listOfStrings) => listOfStrings.Contains(parameterValue);
