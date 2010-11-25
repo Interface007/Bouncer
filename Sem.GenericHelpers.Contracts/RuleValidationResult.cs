@@ -16,6 +16,13 @@ namespace Sem.GenericHelpers.Contracts
     /// </summary>
     public class RuleValidationResult
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleValidationResult"/> class.
+        /// </summary>
+        /// <param name="ruleType"> The rule type. </param>
+        /// <param name="message"> The message to be reported if the rule has been violated. </param>
+        /// <param name="valueName"> The name of the value to be checked. </param>
+        /// <param name="result"> The result of the validation (validation succeeded = true, rule violated = false). </param>
         public RuleValidationResult(Type ruleType, string message, string valueName, bool result)
         {
             this.Result = result;

@@ -14,19 +14,26 @@ namespace Sem.GenericHelpers.Contracts.Configuration
     using System.Linq;
     using System.Reflection;
 
-    using Sem.GenericHelpers.Contracts.Attributes;
-    using Sem.GenericHelpers.Contracts.Rules;
+    using Attributes;
+    using Rules;
 
     /// <summary>
     /// Configuration section object for the things you can configure via the app.config
     /// </summary>
     public class BouncerConfiguration
     {
+        /// <summary>
+        /// List of actions to invoke after a rule validation.
+        /// </summary>
         private static readonly IList<Action<RuleValidationResult>> AfterInvokeAction = new List<Action<RuleValidationResult>>();
+
+        /// <summary>
+        /// Locking object for thread save access to the AfterInvokeAction list.
+        /// </summary>
         private static readonly object AfterInvokeActionSync = new object();
 
         /// <summary>
-        /// Gets or sets a value whether rules are being executed or not.
+        /// Gets or sets a value indicating whether rules are being executed or not.
         /// </summary>
         /// <remarks>
         /// You might decide to active rules from time to time and switch them off under certain conditions. While
@@ -43,8 +50,15 @@ namespace Sem.GenericHelpers.Contracts.Configuration
         /// </summary>
         public List<ConfiguredRuleInformation> Rules { get; set; }
 
-        public static IEnumerable<ContractRuleAttribute> GetConfiguredRules(PropertyInfo info, Type targetType)
+        /// <summary>
+        /// Gets the configured rules for a specific property from the configuration file (app.config or web.config)
+        /// </summary>
+        /// <param name="info">The property info to get the rules for.</param>
+        /// <returns>A list of configures rules for the provided property info.</returns>
+        public static IEnumerable<ContractRuleAttribute> GetConfiguredRules(PropertyInfo info)
         {
+            var targetType = info.DeclaringType;
+
             var configuredRuleInformations = ConfigReader.GetConfig<BouncerConfiguration>().Rules;
             if (configuredRuleInformations == null)
             {
@@ -63,6 +77,10 @@ namespace Sem.GenericHelpers.Contracts.Configuration
                        };
         }
 
+        /// <summary>
+        /// Adds an action to be invoked after rule execution that accepts the result of the rule validation.
+        /// </summary>
+        /// <param name="action">The action to be added.</param>
         public static void AddAfterInvokeAction(Action<RuleValidationResult> action)
         {
             lock (AfterInvokeActionSync)

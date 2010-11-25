@@ -13,8 +13,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
-    using Sem.GenericHelpers.Contracts.Attributes;
-    using Sem.GenericHelpers.Contracts.Properties;
+    using Attributes;
+    using Properties;
 
     /// <summary>
     /// Check class including the data to perform rule checking. After asserting, the methods <see cref="ExecuteOnFailure"/>
@@ -24,25 +24,51 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     /// <typeparam name="TData">The data type to be checked.</typeparam>
     public class ConditionalExecution<TData> : RuleExecuter<TData, ConditionalExecution<TData>>, IConditionalExecution
     {
+        /// <summary>
+        /// Value that indicates whether all rules have been validated successfully.
+        /// </summary>
         private bool conditionIsTrue = true;
-        
+
+        /// <summary>
+        /// Value that indicates whether the assert has already been executed and the value of conditionIsTrue corresponds to rule results.
+        /// </summary>
         private bool assertExecuted;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConditionalExecution{TData}"/> class.
+        /// </summary>
+        /// <param name="valueName"> The name of the value. </param>
+        /// <param name="value"> The value itself. </param>
         public ConditionalExecution(string valueName, TData value)
             : this(valueName, value, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConditionalExecution{TData}"/> class.
+        /// </summary>
+        /// <param name="data"> The expression that determines the data and the name of the value. </param>
         public ConditionalExecution(Expression<Func<TData>> data)
             : this(data, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConditionalExecution{TData}"/> class.
+        /// </summary>
+        /// <param name="valueName"> The name of the value. </param>
+        /// <param name="value"> The value itself. </param>
+        /// <param name="methodAttributes"> The method attributes. </param>
         public ConditionalExecution(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(valueName, value, methodAttributes)
         {
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConditionalExecution{TData}"/> class.
+        /// </summary>
+        /// <param name="data"> The expression that determines the data and the name of the value. </param>
+        /// <param name="methodAttributes"> The method attributes. </param>
         public ConditionalExecution(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
             : base(data, methodAttributes)
         {

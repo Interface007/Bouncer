@@ -715,7 +715,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 if (!PropertyAttributeCache.ContainsKey(info))
                 {
                     var customAttributes = from x in info.GetCustomAttributes(typeof(ContractRuleAttribute), true) select x as ContractRuleAttribute;
-                    var configuredRules = BouncerConfiguration.GetConfiguredRules(info, targetType);
+                    var configuredRules = BouncerConfiguration.GetConfiguredRules(info);
                     PropertyAttributeCache.Add(info, customAttributes.Concat(configuredRules));
                 }
 

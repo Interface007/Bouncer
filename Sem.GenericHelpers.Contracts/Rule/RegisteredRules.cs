@@ -13,14 +13,35 @@ namespace Sem.GenericHelpers.Contracts.Rule
     using System.Collections.Generic;
     using System.Linq;
 
-    using Sem.GenericHelpers.Contracts.Attributes;
+    using Attributes;
 
+    /// <summary>
+    /// This static container class does provide a list of dynamically registered rules.
+    /// The registration of rules may happen in code or via configuration.
+    /// </summary>
     public static class RegisteredRules
     {
+        /// <summary>
+        /// List of registered rules.
+        /// </summary>
         internal static readonly IList<KeyValuePair<Type, RuleBaseInformation>> TypeRegisteredRules = new List<KeyValuePair<Type, RuleBaseInformation>>();
 
+        /// <summary>
+        /// Locking object for thread save access to the list of registered rules.
+        /// </summary>
         private static readonly object TypeRegisteredRulesSync = new object();
 
+        /// <summary>
+        /// Registers a rule for execution. The execution will happen in the normal processing of the statement
+        ///     <code>
+        ///         Bouncer
+        ///             .For(() => customer)
+        ///             .Ensure();
+        ///     </code>
+        /// </summary>
+        /// <param name="rule"> The rule to be registered. </param>
+        /// <typeparam name="TData"> The type of data to be validated. </typeparam>
+        /// <typeparam name="TParameter"> The type of parameter for the validation. </typeparam>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Passing the base type RuleBaseInformation would result in mandatory specification of the data type - this way we can infer the type from usage.")]
         public static void Register<TData, TParameter>(RuleBase<TData, TParameter> rule)
         {
@@ -30,6 +51,12 @@ namespace Sem.GenericHelpers.Contracts.Rule
             }
         }
 
+        /// <summary>
+        /// Registers an <see cref="IEnumerable{T}"/> of rules.
+        /// </summary>
+        /// <param name="ruleCollection"> The rule collection. </param>
+        /// <typeparam name="TData"> The type of data to be validated. </typeparam>
+        /// <typeparam name="TParameter"> The type of parameter for the validation. </typeparam>
         public static void RegisterCollection<TData, TParameter>(IEnumerable<RuleBase<TData, TParameter>> ruleCollection)
         {
             if (ruleCollection == null)
@@ -43,6 +70,12 @@ namespace Sem.GenericHelpers.Contracts.Rule
             }
         }
 
+        /// <summary>
+        /// Gets the rules for a given type of data to be validated and a given type of parameter.
+        /// </summary>
+        /// <typeparam name="TData"> The type of data to be validated. </typeparam>
+        /// <typeparam name="TParameter"> The type of parameter for the validation. </typeparam>
+        /// <returns> A list of rules. </returns>
         public static IEnumerable<RuleBase<TData, TParameter>> GetRulesForType<TData, TParameter>()
         {
             var valueType = typeof(TData);
@@ -73,6 +106,9 @@ namespace Sem.GenericHelpers.Contracts.Rule
             return rulesForType;
         }
 
+        /// <summary>
+        /// Clears the list of registered rules.
+        /// </summary>
         internal static void Clear()
         {
             lock (TypeRegisteredRulesSync)

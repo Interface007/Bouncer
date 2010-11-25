@@ -19,11 +19,21 @@ namespace Sem.GenericHelpers.Contracts.Attributes
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
     public sealed class ContractContextAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContractContextAttribute"/> class.
+        /// </summary>
+        /// <param name="context"> The context in which the rule should be validated - use string.Empty to always validate. </param>
         public ContractContextAttribute(string context)
             : this(context, true)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContractContextAttribute"/> class. 
+        /// Using this ctor you might disable rules in a specific context.
+        /// </summary>
+        /// <param name="context"> The context in which the rule should be validated - use string.Empty to always validate.  </param>
+        /// <param name="active"> Specifies whether the rule should be active in this context. </param>
         public ContractContextAttribute(string context, bool active)
         {
             this.Context = context;

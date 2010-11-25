@@ -15,8 +15,8 @@ namespace Sem.GenericHelpers.Contracts.Exceptions
     using System.Security.Permissions;
     using System.Text;
 
-    using Sem.GenericHelpers.Contracts.Rule;
-    using Sem.GenericHelpers.Contracts.RuleExecuters;
+    using Rule;
+    using RuleExecuters;
 
     /// <summary>
     /// This exception is thrown in case of a violated <see cref="RuleBase{TData,TParameter}"/> while 
@@ -25,22 +25,49 @@ namespace Sem.GenericHelpers.Contracts.Exceptions
     [Serializable]
     public class RuleValidationException : ArgumentException
     {
-        public Type Rule { get; private set; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleValidationException"/> class.
+        /// </summary>
         public RuleValidationException()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleValidationException"/> class. 
+        /// </summary>
+        /// <param name="message">The message that describes the violation.</param>
         public RuleValidationException(string message)
             : base(message)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleValidationException"/> class.
+        /// </summary>
+        /// <param name="message">The message that describes the violation.</param>
+        /// <param name="innerException"> The inner exception that did cause the violation. </param>
         public RuleValidationException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleValidationException"/> class.
+        /// </summary>
+        /// <param name="ruleType"> The rule type that did detect the violation. </param>
+        /// <param name="message">The message that describes the violation.</param>
+        /// <param name="parameterName"> The parameter name. </param>
+        internal RuleValidationException(Type ruleType, string message, string parameterName)
+            : base(message, parameterName)
+        {
+            this.Rule = ruleType;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleValidationException"/> class.
+        /// </summary>
+        /// <param name="info"> The exception info. </param>
+        /// <param name="context"> The streaming context for the serialization. </param>
         protected RuleValidationException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
@@ -50,21 +77,10 @@ namespace Sem.GenericHelpers.Contracts.Exceptions
             }
         }
 
-        internal RuleValidationException(Type ruleType, string message, string parameterName)
-            : base(message, parameterName)
-        {
-            this.Rule = ruleType;
-        }
-
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        protected new virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info != null)
-            {
-                info.AddValue("Rule", this.Rule);
-                base.GetObjectData(info, context);
-            }
-        }
+        /// <summary>
+        /// Gets the Rule type that did detect the validation exception.
+        /// </summary>
+        public Type Rule { get; private set; }
 
         /// <summary>
         /// This exception does not include the methods of this library inside the stack trace,
@@ -85,6 +101,21 @@ namespace Sem.GenericHelpers.Contracts.Exceptions
                 }
 
                 return stackResult.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Serialization interface for the exception.
+        /// </summary>
+        /// <param name="info"> The exception info. </param>
+        /// <param name="context"> The streaming context for the serialization. </param>
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        protected new virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info != null)
+            {
+                info.AddValue("Rule", this.Rule);
+                base.GetObjectData(info, context);
             }
         }
     }
