@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace Sem.Test.GenericHelpers.Contracts.Entities
 {
     using System.Collections.Generic;
@@ -88,6 +90,20 @@ namespace Sem.Test.GenericHelpers.Contracts.Entities
         {
             var results = Bouncer.ForMessages(() => customer).Assert().Results;
             return results;
+        }
+
+        public static string GetStackTraceRuleValidationException()
+        {
+            try
+            {
+                MyCustomer.ThrowRuleValidationException();
+            }
+            catch (Exception ex)
+            {
+                return ex.StackTrace;
+            }
+
+            return string.Empty;
         }
     }
 }
