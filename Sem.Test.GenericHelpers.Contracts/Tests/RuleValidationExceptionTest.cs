@@ -36,11 +36,21 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
             {
                 if (character > 32 && character < 128)
                 {
-                    result.Append(Encoding.ASCII.GetString(new[]{character}));
+                    result.Append(Encoding.ASCII.GetString(new[] { character }));
                 }
             }
 
-            Assert.IsTrue(result.ToString().EndsWith("Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionClassNameMessageDataInnerExceptionHelpURLStackTraceStringRemoteStackTraceStringRemoteStackIndexExceptionMethodHResultSourceWatsonBucketsParamNameSystem.Collections.IDictionarySystem.Exception?Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionhelloWcustomer"));
+            var exceptionResult = result.ToString();
+
+            Assert.IsTrue(exceptionResult.EndsWith("Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionClassNameMessageDataInnerExceptionHelpURLStackTraceStringRemoteStackTraceStringRemoteStackIndexExceptionMethodHResultSourceWatsonBucketsParamNameSystem.Collections.IDictionarySystem.Exception?Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionhelloWcustomer"));
+        }
+
+        [TestMethod]
+        public void TestStackTrace()
+        {
+            var stacktrace = MyBusinessComponentSave.GetStackTraceRuleValidationException();
+            Assert.IsTrue(stacktrace.Contains("GetStackTraceRuleValidationExceptio"));
+            Assert.IsFalse(stacktrace.Contains("Sem.GenericHelpers.Contracts"));
         }
 
         [TestMethod]

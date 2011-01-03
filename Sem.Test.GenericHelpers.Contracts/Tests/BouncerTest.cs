@@ -141,6 +141,20 @@
         }
 
         [TestMethod]
+        public void CheckGenericBuilderForEnsure2()
+        {
+            var var1 = new AttributedSampleClass();
+            var var2 = new AttributedSampleClass();
+            var var3 = new AttributedSampleClass();
+
+            Bouncer
+                .For(() => var1)
+                .For(() => var2)
+                .For(() => var3)
+                .Ensure();
+        }
+
+        [TestMethod]
         public void ForCheckDataThrowsNullReferenceException266()
         {
             Bouncer.ForCheckData<int>(null);

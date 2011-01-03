@@ -1,4 +1,7 @@
-﻿namespace Sem.Test.GenericHelpers.Contracts.Entities
+﻿using System;
+using Sem.GenericHelpers.Contracts.Exceptions;
+
+namespace Sem.Test.GenericHelpers.Contracts.Entities
 {
     using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.Rules;
@@ -30,5 +33,10 @@
         /// </summary>
         [ContractRule(typeof(StringRegexMatchRule), Parameter = @"^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")]
         public string EMailAddress { get; set; }
+
+        public static void ThrowRuleValidationException()
+        {
+            throw new RuleValidationException();
+        }
     }
 }
