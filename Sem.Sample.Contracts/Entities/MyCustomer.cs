@@ -44,8 +44,8 @@ namespace Sem.Sample.Contracts.Entities
         public string EMailAddress { get; set; }
 
         /// <summary>
-        /// The rule for this property is configured inside the app.config. The regular expression 
-        /// configured there does accept for example +49(1234)5678912
+        /// Gets or sets the customers phone number. Rule for this property is configured inside the app.config.
+        /// The regular expression configured there does accept for example +49(1234)5678912
         /// </summary>
         public string PhoneNumber { get; set; }
     }

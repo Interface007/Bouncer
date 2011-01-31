@@ -690,10 +690,9 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <summary>
         /// Gets the rule attributes for a given property info.
         /// </summary>
-        /// <param name="targetType"> The target type. </param>
         /// <param name="info"> The property info. </param>
         /// <returns> A list of rule attributes.</returns>
-        private static IEnumerable<ContractRuleAttribute> GetPropertyRuleAttributes(Type targetType, PropertyInfo info)
+        private static IEnumerable<ContractRuleAttribute> GetPropertyRuleAttributes(PropertyInfo info)
         {
             IEnumerable<ContractRuleAttribute> ruleAttributes;
             lock (PropertyAttributeCacheSync)
@@ -734,7 +733,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
                                 if (name == null
                                     || name.StartsWith(this.declarationNamespace, StringComparison.Ordinal)
-                                    || name.StartsWith("System."))
+                                    || name.StartsWith("System.", StringComparison.Ordinal))
                                 {
                                     continue;
                                 }
@@ -803,7 +802,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                    select new Action(
                                () =>
                                {
-                                   var ruleAttributes = GetPropertyRuleAttributes(this.targetType, propertyInfo);
+                                   var ruleAttributes = GetPropertyRuleAttributes(propertyInfo);
                                    if (ruleAttributes.Count() == 0)
                                    {
                                        return;

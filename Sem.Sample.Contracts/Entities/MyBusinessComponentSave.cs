@@ -20,6 +20,20 @@ namespace Sem.Sample.Contracts.Entities
     [ContractContext("Read")]
     internal class MyBusinessComponentSave : MyBusinessComponent
     {
+        [ContractMethodRule(typeof(StringRegexMatchRule), "someconnectionstring", Parameter = "some.*")]
+        [ContractMethodRule(typeof(IntegerGreaterThanRule), "i", Parameter = 7)]
+        [ContractMethodRule(typeof(IsNotNullRule<CustomerId>), "customerId")]
+        [ContractMethodRule(typeof(StrictCustomerCheckRuleSet), "myCustomer")]
+        public void InsertCustomer2(MyCustomer myCustomer, string someconnectionstring, int i, CustomerId customerId)
+        {
+            Bouncer
+                .For(() => myCustomer)
+                .For(() => someconnectionstring)
+                .For(() => i)
+                .For(() => customerId)
+                .Ensure();
+        }
+
         /// <summary>
         /// We need to use the type MySaveCustomer in order to correctly resolve type inference for  
         /// Bouncer.ForCheckData(() => customer).Assert();
@@ -152,20 +166,6 @@ namespace Sem.Sample.Contracts.Entities
                 Resources.CallingCustomerInfo,
                 GetTheName(customer),
                 FormatTheId(customer));
-        }
-
-        [ContractMethodRule(typeof(StringRegexMatchRule), "someconnectionstring", Parameter = "some.*")]
-        [ContractMethodRule(typeof(IntegerGreaterThanRule), "i", Parameter = 7)]
-        [ContractMethodRule(typeof(IsNotNullRule<CustomerId>), "customerId")]
-        [ContractMethodRule(typeof(StrictCustomerCheckRuleSet), "myCustomer")]
-        public void InsertCustomer2(MyCustomer myCustomer, string someconnectionstring, int i, CustomerId customerId)
-        {
-            Bouncer
-                .For(() => myCustomer)
-                .For(() => someconnectionstring)
-                .For(() => i)
-                .For(() => customerId)
-                .Ensure();
         }
     }
 }

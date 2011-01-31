@@ -17,20 +17,6 @@ namespace Sem.Sample.Contracts
 
     internal static class Util
     {
-        internal static void PrintEntries(IEnumerable<RuleValidationResult> results)
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-            
-            foreach (var result in results)
-            {
-                Console.WriteLine(@"----------");
-                Console.WriteLine(result);
-            }
-
-            Console.WriteLine(@"----------");
-            Console.ForegroundColor = ConsoleColor.Gray;
-        }
-
         public static void TryCall(string description, Action y, int count = 1, Action postExecution = null)
         {
             var stopwatch = new Stopwatch();
@@ -57,6 +43,7 @@ namespace Sem.Sample.Contracts
                 {
                     y.Invoke();
                 }
+
                 stopwatch.Stop();
                 if (count > 1)
                 {
@@ -107,6 +94,20 @@ namespace Sem.Sample.Contracts
 
             Console.WriteLine(@"press enter to execute next sample...");
             Console.ReadLine();
+        }
+
+        internal static void PrintEntries(IEnumerable<RuleValidationResult> results)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+
+            foreach (var result in results)
+            {
+                Console.WriteLine(@"----------");
+                Console.WriteLine(result);
+            }
+
+            Console.WriteLine(@"----------");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }

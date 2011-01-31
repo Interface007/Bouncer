@@ -21,7 +21,7 @@ namespace Sem.Sample.Contracts.Entities
         /// This method does already know, that calling GetTheName will fail,
         /// but it does not check for customer to have a name set.
         /// </summary>
-        /// <param name="customer"></param>
+        /// <param name="customer">the customer to get the information from</param>
         internal void WriteCustomerProperties(MyCustomer customer)
         {
             Console.WriteLine(

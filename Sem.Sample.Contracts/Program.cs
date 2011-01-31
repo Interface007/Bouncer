@@ -108,12 +108,13 @@ namespace Sem.Sample.Contracts
                     "And another test with more parameters. This one will run much faster\n" +
                     "for the first call, because the configuration and some type information\n" +
                     "has already been cached.",
-                    () => businessComponentSave.InsertCustomer2(new MyCustomer
-                        {
-                            FullName = "Karl Klammer",
-                            EMailAddress = Resources.ValidEmailAddress,
-                            InternalId = new CustomerId()
-                        },
+                    () => businessComponentSave.InsertCustomer2(
+                        new MyCustomer
+                            {
+                                FullName = "Karl Klammer",
+                                EMailAddress = Resources.ValidEmailAddress,
+                                InternalId = new CustomerId()
+                            },
                         "someConnectionString",
                         1564,
                         new CustomerId()),

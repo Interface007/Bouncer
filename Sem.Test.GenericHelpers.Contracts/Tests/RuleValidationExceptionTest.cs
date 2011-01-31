@@ -18,9 +18,9 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
     public class RuleValidationExceptionTest
     {
         /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
+        /// Gets or sets the test context which provides
+        /// information about and functionality for the current test run.
+        /// </summary>
         public TestContext TestContext { get; set; }
 
         [TestMethod]
@@ -28,21 +28,24 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
         {
             var x = new RuleValidationException(typeof(IsNullRule<MyCustomer>), "hello", "customer");
             var z = new BinaryFormatter();
-            var buffer = new MemoryStream();
-            z.Serialize(buffer, x);
-            var result = new StringBuilder();
 
-            foreach (var character in buffer.ToArray())
+            using (var buffer = new MemoryStream())
             {
-                if (character > 32 && character < 128)
+                z.Serialize(buffer, x);
+                var result = new StringBuilder();
+
+                foreach (var character in buffer.ToArray())
                 {
-                    result.Append(Encoding.ASCII.GetString(new[] { character }));
+                    if (character > 32 && character < 128)
+                    {
+                        result.Append(Encoding.ASCII.GetString(new[] { character }));
+                    }
                 }
+
+                var exceptionResult = result.ToString();
+
+                Assert.IsTrue(exceptionResult.EndsWith("Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionClassNameMessageDataInnerExceptionHelpURLStackTraceStringRemoteStackTraceStringRemoteStackIndexExceptionMethodHResultSourceWatsonBucketsParamNameSystem.Collections.IDictionarySystem.Exception?Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionhelloWcustomer"));
             }
-
-            var exceptionResult = result.ToString();
-
-            Assert.IsTrue(exceptionResult.EndsWith("Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionClassNameMessageDataInnerExceptionHelpURLStackTraceStringRemoteStackTraceStringRemoteStackIndexExceptionMethodHResultSourceWatsonBucketsParamNameSystem.Collections.IDictionarySystem.Exception?Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionhelloWcustomer"));
         }
 
         [TestMethod]
@@ -58,19 +61,22 @@ namespace Sem.Test.GenericHelpers.Contracts.Tests
         {
             var x = new RuleValidationException(typeof(IsNullRule<MyCustomer>), "hello", "customer");
             var z = new BinaryFormatter();
-            var buffer = new MemoryStream();
-            z.Serialize(buffer, x);
-            var result = new StringBuilder();
 
-            foreach (var character in buffer.ToArray())
+            using (var buffer = new MemoryStream())
             {
-                if (character > 32 && character < 128)
-                {
-                    result.Append(Encoding.ASCII.GetString(new[]{character}));
-                }
-            }
+                z.Serialize(buffer, x);
+                var result = new StringBuilder();
 
-            Assert.IsTrue(result.ToString().EndsWith("Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionClassNameMessageDataInnerExceptionHelpURLStackTraceStringRemoteStackTraceStringRemoteStackIndexExceptionMethodHResultSourceWatsonBucketsParamNameSystem.Collections.IDictionarySystem.Exception?Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionhelloWcustomer"));
+                foreach (var character in buffer.ToArray())
+                {
+                    if (character > 32 && character < 128)
+                    {
+                        result.Append(Encoding.ASCII.GetString(new[] { character }));
+                    }
+                }
+
+                Assert.IsTrue(result.ToString().EndsWith("Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionClassNameMessageDataInnerExceptionHelpURLStackTraceStringRemoteStackTraceStringRemoteStackIndexExceptionMethodHResultSourceWatsonBucketsParamNameSystem.Collections.IDictionarySystem.Exception?Sem.GenericHelpers.Contracts.Exceptions.RuleValidationExceptionhelloWcustomer"));
+            }
         }
     }
 }

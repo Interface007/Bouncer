@@ -45,11 +45,13 @@
                 };
 
             var serializer = new XmlSerializer(typeof(ConfiguredRuleInformation));
-            var writer = new StringWriter();
-            serializer.Serialize(writer, rule);
-            var result = writer.GetStringBuilder().ToString();
+            using (var writer = new StringWriter())
+            {
+                serializer.Serialize(writer, rule);
+                var result = writer.GetStringBuilder().ToString();
 
-            Assert.AreEqual(expected, result);
+                Assert.AreEqual(expected, result);
+            }
         }
 
         [TestMethod]
@@ -67,26 +69,31 @@
                 };
 
             var serializer = new XmlSerializer(typeof(ConfiguredRuleInformation));
-            var writer = new StringWriter();
-            serializer.Serialize(writer, rule);
-            var result = writer.GetStringBuilder().ToString();
+            using (var writer = new StringWriter())
+            {
+                serializer.Serialize(writer, rule);
+                var result = writer.GetStringBuilder().ToString();
 
-            Assert.AreEqual(expected2, result);
+                Assert.AreEqual(expected2, result);
+            }
         }
 
         [TestMethod]
         public void TestIXmlSerializableReadXml()
         {
             var serializer = new XmlSerializer(typeof(ConfiguredRuleInformation));
-            var reader = new StringReader(expected);
-            var rule = (ConfiguredRuleInformation)serializer.Deserialize(reader);
 
-            Assert.AreEqual(rule.Context, "context");
-            Assert.AreEqual(rule.Namespace, "namespace");
-            Assert.AreEqual(rule.Parameter, "param");
-            Assert.AreEqual(rule.Rule.GetType(), new StringNotNullOrEmptyRule().GetType());
-            Assert.AreEqual(rule.TargetType.FullName, this.GetType().FullName);
-            Assert.AreEqual(rule.TargetProperty, "propname");
+            using (var reader = new StringReader(expected))
+            {
+                var rule = (ConfiguredRuleInformation)serializer.Deserialize(reader);
+
+                Assert.AreEqual(rule.Context, "context");
+                Assert.AreEqual(rule.Namespace, "namespace");
+                Assert.AreEqual(rule.Parameter, "param");
+                Assert.AreEqual(rule.Rule.GetType(), new StringNotNullOrEmptyRule().GetType());
+                Assert.AreEqual(rule.TargetType.FullName, this.GetType().FullName);
+                Assert.AreEqual(rule.TargetProperty, "propname");
+            }
         }
     }
 }

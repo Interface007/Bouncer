@@ -72,14 +72,19 @@ namespace Sem.GenericHelpers.Contracts.Rules
         /// <param name="reader"> The reader for the config section node. </param>
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
+            if (reader == null)
+            {
+                return;
+            }
+
             var element = XElement.Parse(reader.ReadOuterXml());
-            
+
             this.TargetType = Type.GetType(GetAttribute(element, "TargetType"));
             this.ExceptionType = Type.GetType(GetAttribute(element, "ExceptionType"));
             this.TargetProperty = GetAttribute(element, "TargetProperty");
-            
+
             this.Rule = Type.GetType(GetAttribute(element, "Rule")).CreateRule(this.TargetType);
-            
+
             this.Context = GetAttribute(element, "Context");
             this.Parameter = GetAttribute(element, "Parameter");
             this.Namespace = GetAttribute(element, "Namespace");
@@ -91,6 +96,11 @@ namespace Sem.GenericHelpers.Contracts.Rules
         /// <param name="writer"> The writer for the config section node. </param>
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
+            if (writer == null)
+            {
+                return;
+            }
+
             var targetType = this.TargetType;
             if (targetType != null)
             {
@@ -125,9 +135,9 @@ namespace Sem.GenericHelpers.Contracts.Rules
         private static string GetAttribute(XElement element, string attributeName)
         {
             var elementAttribute = element.Attribute(attributeName);
-            return 
-                elementAttribute != null 
-                ? elementAttribute.Value 
+            return
+                elementAttribute != null
+                ? elementAttribute.Value
                 : string.Empty;
         }
     }
