@@ -57,6 +57,11 @@ namespace Sem.GenericHelpers.Contracts.Configuration
         /// <returns>A list of configures rules for the provided property info.</returns>
         public static IEnumerable<ContractRuleAttribute> GetConfiguredRules(PropertyInfo info)
         {
+            if (info == null)
+            {
+                return new List<ContractRuleAttribute>();
+            }
+
             var targetType = info.DeclaringType;
 
             var configuredRuleInformations = ConfigReader.GetConfig<BouncerConfiguration>().Rules;

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogHugeDataExecutor.cs" company="Sven Erik Matzen">
+// <copyright file="LogValidationExecutor.cs" company="Sven Erik Matzen">
 //   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
 // </copyright>
 // <summary>
@@ -16,7 +16,6 @@ namespace Sem.Sample.Contracts.Executers
     using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.RuleExecuters;
-    using Sem.GenericHelpers.Contracts.Rules;
 
     /// <summary>
     /// Check class including the data to perform rule checking. Also handle some exceptions while
@@ -45,12 +44,12 @@ namespace Sem.Sample.Contracts.Executers
         {
         }
 
+        public bool ExceptionHandled { get; set; }
+
         protected override void AfterInvoke(RuleValidationResult validationResult)
         {
             Console.WriteLine(@"check " + validationResult.RuleType.Name + @": " + validationResult.Result);
             validationResult.SkipProcessing = true;
         }
-
-        public bool ExceptionHandled { get; set; }
     }
 }
