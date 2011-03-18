@@ -42,6 +42,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -76,6 +77,7 @@
     <Compile Include="Tests\ConfigurationTest.cs" />
     <Compile Include="Tests\ConfiguresRuleTest.cs" />
     <Compile Include="Tests\CustomExecutorInvocation.cs" />
+    <Compile Include="Tests\DataAnnotationsTest.cs" />
     <Compile Include="Tests\IsNotNullRuleTest.cs" />
     <Compile Include="Tests\BouncerIsNotOneOfTest.cs" />
     <Compile Include="Tests\BouncerIsOneOfTest.cs" />

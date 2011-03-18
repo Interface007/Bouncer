@@ -12,12 +12,12 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using System.Threading.Tasks;
 
     using Sem.GenericHelpers.Contracts.Attributes;
     using Sem.GenericHelpers.Contracts.Configuration;
@@ -308,6 +308,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
 
             var actions = new List<Action>();
             actions.AddRange(this.AssertForProperties());
+            actions.AddRange(this.AssertForProperties2());
             actions.AddRange(this.AssertForMethodAttributes());
             actions.AddRange(this.AssertForType());
 
@@ -817,7 +818,36 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                                    foreach (var action in this.InvokeForAllAttributes(ruleExecuter, ruleAttributes, propertyName))
                                    {
                                        action.Invoke();
-                                   } 
+                                   }
+                               });
+        }
+
+        private IEnumerable<Action> AssertForProperties2()
+        {
+            // preallocate the calling namespace - this would  not be accessible from the worker 
+            // threads of the parallel foreach.
+            this.GetCallingNamespace();
+
+            return from propertyInfo in this.targetType.GetProperties()
+                   select new Action(
+                               () =>
+                               {
+                                   var customAttributes = 
+                                       from x in propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), true) 
+                                       select new DataAnnotationValidatorBaseRule<TData>(x as ValidationAttribute);
+
+                                   if (customAttributes.Count() == 0)
+                                   {
+                                       return;
+                                   }
+
+                                   var propertyName = this.ValueName + "." + propertyInfo.Name;
+                                   var propertyValue = !this.targetType.IsValueType && Equals(this.Value, null) ? null : propertyInfo.GetValue(this.Value, null);
+
+                                   foreach (var rule in customAttributes)
+                                   {
+                                       this.ExecuteRuleExpression(rule, propertyValue, propertyName);
+                                   }
                                });
         }
 
