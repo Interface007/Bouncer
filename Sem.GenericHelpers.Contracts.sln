@@ -19,9 +19,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Sem.GenericHelpers.Contracts.Documentation\Sem.GenericHelpers.Contracts.Documentation.shfbproj = Sem.GenericHelpers.Contracts.Documentation\Sem.GenericHelpers.Contracts.Documentation.shfbproj
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.GenericHelpers.Contracts.Unity", "Sem.GenericHelpers.Contracts.Unity\Sem.GenericHelpers.Contracts.Unity.csproj", "{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Test.GenericHelpers.Contracts.Unity", "Sem.Test.GenericHelpers.Contracts.Unity\Sem.Test.GenericHelpers.Contracts.Unity.csproj", "{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
 		SccLocalPath0 = .
@@ -34,6 +38,12 @@ Global
 		SccProjectUniqueName3 = Sem.Test.GenericHelpers.Contracts\\Sem.Test.GenericHelpers.Contracts.csproj
 		SccProjectName3 = Sem.Test.GenericHelpers.Contracts
 		SccLocalPath3 = Sem.Test.GenericHelpers.Contracts
+		SccProjectUniqueName4 = Sem.GenericHelpers.Contracts.Unity\\Sem.GenericHelpers.Contracts.Unity.csproj
+		SccProjectName4 = Sem.GenericHelpers.Contracts.Unity
+		SccLocalPath4 = Sem.GenericHelpers.Contracts.Unity
+		SccProjectUniqueName5 = Sem.Test.GenericHelpers.Contracts.Unity\\Sem.Test.GenericHelpers.Contracts.Unity.csproj
+		SccProjectName5 = Sem.Test.GenericHelpers.Contracts.Unity
+		SccLocalPath5 = Sem.Test.GenericHelpers.Contracts.Unity
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Sem.GenericHelpers.Contracts.vsmdi
@@ -77,6 +87,26 @@ Global
 		{288EE41A-94F9-460C-90AD-D9CBBD6E95A4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{288EE41A-94F9-460C-90AD-D9CBBD6E95A4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{288EE41A-94F9-460C-90AD-D9CBBD6E95A4}.Release|x86.ActiveCfg = Release|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F1B3053F-CA67-429F-AD7A-C382F8E9E1AB}.Release|x86.ActiveCfg = Release|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

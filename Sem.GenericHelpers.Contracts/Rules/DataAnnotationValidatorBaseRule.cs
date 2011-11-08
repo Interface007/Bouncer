@@ -80,7 +80,9 @@ namespace Sem.GenericHelpers.Contracts.Rules
                     };
 
                 var type = this.ConfigurationValidator.GetType();
-                this.Message = string.Format(CultureInfo.CurrentCulture, Resources.ConfigurationValidatorBaseRuleStandardMessage, type.Namespace + "." + type.Name);
+                this.Message = 
+                    value.ErrorMessage ??
+                    string.Format(CultureInfo.CurrentCulture, Resources.ConfigurationValidatorBaseRuleStandardMessage, type.Namespace + "." + type.Name);
             }
         }
     }

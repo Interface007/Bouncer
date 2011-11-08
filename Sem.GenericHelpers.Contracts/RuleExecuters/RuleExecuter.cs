@@ -47,17 +47,23 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <summary>
         /// A cache for the attributes of methods.
         /// </summary>
+        // ReSharper disable StaticFieldInGenericType
         private static readonly Dictionary<MethodBase, List<ContractMethodRuleAttribute>> RuleAttributeCache = new Dictionary<MethodBase, List<ContractMethodRuleAttribute>>();
+        // ReSharper restore StaticFieldInGenericType
 
         /// <summary>
         /// Locking object for the rule attribute cache.
         /// </summary>
+        // ReSharper disable StaticFieldInGenericType
         private static readonly object RuleAttributeCacheSync = new object();
+        // ReSharper restore StaticFieldInGenericType
 
         /// <summary>
         /// Application wide suppression flag. If this flag has been set, all processing will be aborted.
         /// </summary>
+        // ReSharper disable StaticFieldInGenericType
         private static readonly bool SuppressAll = ConfigReader.GetConfig<BouncerConfiguration>().SuppressAll;
+        // ReSharper restore StaticFieldInGenericType
 
         /// <summary>
         /// Type of the target object for the rule.
@@ -86,26 +92,32 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         private readonly string declarationNamespace = typeof(TResultClass).Namespace;
 
         /// <summary>
-        /// The root namespace of the classes of this assembly is equal to the name of the assembly.
-        /// </summary>
-        private static readonly string BouncerNameSpace = Assembly.GetExecutingAssembly().GetName().Name;
-
-        /// <summary>
         /// A cache for the attributes of properties.
         /// </summary>
+        // ReSharper disable StaticFieldInGenericType
         private static readonly Dictionary<PropertyInfo, IEnumerable<ContractRuleAttribute>> PropertyAttributeCache = new Dictionary<PropertyInfo, IEnumerable<ContractRuleAttribute>>();
+        // ReSharper restore StaticFieldInGenericType
+
+        /// <summary>
+        /// The root namespace of the classes of this assembly is equal to the name of the assembly.
+        /// </summary>
+        // ReSharper disable StaticFieldInGenericType
+        private static readonly string BouncerNameSpace = Assembly.GetExecutingAssembly().GetName().Name;
+        // ReSharper restore StaticFieldInGenericType
 
         /// <summary>
         /// Locking property for the property attribute cache.
         /// </summary>
+        // ReSharper disable StaticFieldInGenericType
         private static readonly object PropertyAttributeCacheSync = new object();
+        // ReSharper restore StaticFieldInGenericType
 
         /// <summary>
         /// Holds the namespace name of the calling method.
         /// </summary>
         private string callingNamespace;
 
-#endregion
+        #endregion
 
         #region ctors
 
@@ -114,8 +126,9 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// </summary>
         /// <param name="data"> The data to be checked. </param>
         /// <param name="methodRuleAttributes"> The method rule attributes. </param>
-        protected RuleExecuter(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
-            : this(GetMemberName(data), GetMemberValue(data), methodRuleAttributes)
+        /// <param name="methodBase">method information to get method-attributes from</param>
+        protected RuleExecuter(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes, MethodBase methodBase)
+            : this(GetMemberName(data), GetMemberValue(data), methodRuleAttributes, methodBase)
         {
         }
 
@@ -125,20 +138,29 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <param name="valueName"> The name of the value that will be checked. </param>
         /// <param name="value"> The value to be checked. </param>
         /// <param name="methodRuleAttributes"> The method rule attributes. </param>
-        protected RuleExecuter(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
+        /// <param name="methodBase">method information to get method-attributes from</param>
+        protected RuleExecuter(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes, MethodBase methodBase)
         {
             if (SuppressAll)
             {
                 return;
             }
 
-            var currentMethodInfo = GetCurrentMethodInfo(2);
+            this.ExplicitMethodInfo = methodBase;
+            var currentMethodInfo = methodBase ?? GetCurrentMethodInfo(2);
 
             this.MethodRuleAttributes = methodRuleAttributes ?? GetRuleAttributesFromCurrentMethod(currentMethodInfo);
             this.Context = GetContext(currentMethodInfo);
             this.Value = value;
             this.ValueName = valueName;
             this.targetType = typeof(TData);
+
+            // ReSharper disable CompareNonConstrainedGenericWithNull
+            if (this.targetType == typeof(object) && value != null)
+            // ReSharper restore CompareNonConstrainedGenericWithNull
+            {
+                this.targetType = value.GetType();
+            }
         }
 
         #endregion
@@ -179,6 +201,11 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// which may differ from the current.
         /// </summary>
         internal IRuleExecuter PreviousExecuter { get; set; }
+
+        /// <summary>
+        /// Gets or sets explicit method information to use. This bypasses the built in method-resolving algorithm to enable callers that know already about themot information.
+        /// </summary>
+        protected MethodBase ExplicitMethodInfo { get; set; }
 
         /// <summary>
         /// Gets the ValueType.
@@ -396,10 +423,20 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                 }
             }
 
-            result.Exception =
-                rule.Exception != null
-                ? (Exception)rule.Exception.GetConstructor(Type.EmptyTypes).Invoke(new object[] { })
-                : new RuleValidationException(result.RuleType, result.Message, result.ValueName);
+            if (rule.Exception == null)
+            {
+                result.Exception = new RuleValidationException(result.RuleType, result.Message, result.ValueName);
+            }
+            else
+            {
+                var constructorInfo = rule.Exception.GetConstructor(Type.EmptyTypes);
+                if (constructorInfo == null)
+                {
+                    throw new InvalidOperationException(string.Format("The exception {0} cannot be used with the rule {1}, because the exception does not implement a parameterless ctor.", rule.Exception, rule.GetType()));
+                }
+
+                result.Exception = (Exception)constructorInfo.Invoke(new object[] { });
+            }
 
             this.AfterInvoke(result);
 
@@ -442,8 +479,6 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <param name="ruleAttribute"> The rule attribute defining the rule. </param>
         /// <param name="propertyName"> The property name. </param>
         /// <returns>A rule validation result.</returns>
-        /// <exception cref="ArgumentException"></exception>
-        /// <exception cref="Exception"></exception>
         protected RuleValidationResult InvokeRuleExecutionForAttribute(IRuleExecuter ruleExecuter, ContractRuleBaseAttribute ruleAttribute, string propertyName)
         {
             if (ruleAttribute == null || ruleExecuter == null)
@@ -549,24 +584,56 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             {
                 if (!RuleAttributeCache.ContainsKey(methodInfo))
                 {
-                    var customAttributes = methodInfo.GetCustomAttributes(typeof(ContractMethodRuleAttribute), true);
-                    var methodRuleAttributes = (from x in customAttributes select (ContractMethodRuleAttribute)x).ToList();
+                    var methodInfos = methodInfo.DeclaringType
+                                               .GetInterfaces()
+                                               .SelectMany(x => x.GetMethods())
+                                               .Where(x => x.Name == methodInfo.Name)
+                                               .ToArray();
+
+                    var customAttributes = methodInfo.GetCustomAttributes(typeof(ContractMethodRuleAttribute), true)
+                                            .Union(methodInfos.SelectMany(x => x.GetCustomAttributes(typeof(ContractMethodRuleAttribute), true)))
+                                            .OfType<ContractMethodRuleAttribute>()
+                                        .Concat(
+                                            methodInfo.GetParameters()
+                                            .Union(methodInfos.SelectMany(x => x.GetParameters()))
+                                            .SelectMany(para =>
+                                                para.GetCustomAttributes(typeof(ContractParameterRuleAttribute), true)
+                                                    .OfType<ContractParameterRuleAttribute>()
+                                                    .Select(a => new ContractMethodRuleAttribute(a.RuleType, para.Name)
+                                                                        {
+                                                                            Parameter = a.Parameter
+                                                                        })))
+                                            .ToList();
 
                     var newRules = new List<ContractMethodRuleAttribute>();
-                    foreach (var methodRuleAttribute in methodRuleAttributes)
+                    foreach (var methodRuleAttribute in customAttributes)
                     {
                         if (!methodRuleAttribute.RuleType.Implements(typeof(IEnumerable)))
                         {
                             continue;
                         }
 
-                        var ruleCollection = (IEnumerable)methodRuleAttribute.RuleType.GetConstructor(new Type[] { }).Invoke(null);
+                        var constructorInfo = methodRuleAttribute.RuleType.GetConstructor(new Type[] { });
+                        if (constructorInfo == null)
+                        {
+                            throw new InvalidOperationException(string.Format("The type {0} must implement a ctor with the signature {0}(Type type)", methodRuleAttribute.RuleType.Name));
+                        }
+
+                        var ruleCollection = (IEnumerable)constructorInfo.Invoke(null);
                         var attribute = methodRuleAttribute;
-                        newRules.AddRange(from object rule in ruleCollection select new ContractMethodRuleAttribute(rule.GetType(), attribute.MethodArgumentName) { Namespace = attribute.Namespace, IncludeInContext = attribute.IncludeInContext, Message = attribute.Message, Parameter = attribute.Parameter });
+                        newRules.AddRange(
+                            from object rule in ruleCollection
+                            select new ContractMethodRuleAttribute(rule.GetType(), attribute.MethodArgumentName)
+                                {
+                                    Namespace = attribute.Namespace,
+                                    IncludeInContext = attribute.IncludeInContext,
+                                    Message = attribute.Message,
+                                    Parameter = attribute.Parameter
+                                });
                     }
 
-                    methodRuleAttributes.AddRange(newRules);
-                    RuleAttributeCache.Add(methodInfo, methodRuleAttributes);
+                    customAttributes.AddRange(newRules);
+                    RuleAttributeCache.Add(methodInfo, customAttributes);
                 }
 
                 return RuleAttributeCache[methodInfo];
@@ -762,8 +829,13 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
             var type = this.GetType();
             var genericTypeDefinition = type.GetGenericTypeDefinition();
             var makeGenericType = genericTypeDefinition.MakeGenericType(valueType);
-            var constructorInfo = makeGenericType.GetConstructor(new[] { typeof(string), valueType, typeof(IEnumerable<ContractMethodRuleAttribute>) });
-            return constructorInfo.Invoke(new[] { name, value, this.MethodRuleAttributes }) as IRuleExecuter;
+            var constructorInfo = makeGenericType.GetConstructor(new[] { typeof(string), valueType, typeof(IEnumerable<ContractMethodRuleAttribute>), typeof(MethodBase) });
+            if (constructorInfo == null)
+            {
+                throw new InvalidOperationException(string.Format("The rule {0} must implement a ctor with the parameter types 'string, <TValue>, IEnumerable<ContractMethodRuleAttribute>, MethodBase' to be executed.", type));
+            }
+
+            return constructorInfo.Invoke(new[] { name, value, this.MethodRuleAttributes, this.ExplicitMethodInfo }) as IRuleExecuter;
         }
 
         /// <summary>
@@ -781,7 +853,9 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <returns> The list of actions for the asserts of all method based rules. </returns>
         private IEnumerable<Action> AssertForMethodAttributes()
         {
-            var ruleAttributes = from methodAttribute in this.MethodRuleAttributes where methodAttribute.MethodArgumentName == this.ValueName select methodAttribute;
+            var ruleAttributes = from methodAttribute in this.MethodRuleAttributes
+                                 where methodAttribute.MethodArgumentName == this.ValueName
+                                 select methodAttribute;
 
             // first we need to construct a new rule executer type, unfortunately this is a generic type, 
             // so we need to do it via reflection (we don't have the type of the property at design time)
@@ -832,8 +906,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
                    select new Action(
                                () =>
                                {
-                                   var customAttributes = 
-                                       from x in propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), true) 
+                                   var customAttributes =
+                                       from x in propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), true)
                                        select new DataAnnotationValidatorBaseRule<TData>(x as ValidationAttribute);
 
                                    if (customAttributes.Count() == 0)

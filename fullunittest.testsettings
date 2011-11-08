@@ -26,9 +26,12 @@
             <CodeCoverage xmlns="">
               <Regular>
                 <CodeCoverageItem binaryFile="Sem.GenericHelpers.Contracts\bin\Debug\Sem.GenericHelpers.Contracts.dll" pdbFile="Sem.GenericHelpers.Contracts\bin\Debug\Sem.GenericHelpers.Contracts.pdb" instrumentInPlace="true" />
+                <CodeCoverageItem binaryFile="Sem.GenericHelpers.Contracts.Unity\bin\Debug\Sem.GenericHelpers.Contracts.Unity.dll" pdbFile="Sem.GenericHelpers.Contracts.Unity\bin\Debug\Sem.GenericHelpers.Contracts.Unity.pdb" instrumentInPlace="true" />
               </Regular>
             </CodeCoverage>
           </Configuration>
+        </DataCollector>
+        <DataCollector uri="datacollector://Microsoft/TestImpact/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TraceCollector.TestImpactDataCollector, Microsoft.VisualStudio.TraceCollector, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
         </DataCollector>
       </DataCollectors>
     </AgentRule>

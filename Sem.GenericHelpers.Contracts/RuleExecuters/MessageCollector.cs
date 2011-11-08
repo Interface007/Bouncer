@@ -12,6 +12,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     using Attributes;
     using Properties;
@@ -31,7 +32,17 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <param name="valueName"> The name of the value that will be checked. </param>
         /// <param name="value"> The value to be checked. </param>
         public MessageCollector(string valueName, TData value)
-            : this(valueName, value, null)
+            : this(valueName, value, null, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageCollector{TData}"/> class. 
+        /// </summary>
+        /// <param name="valueName"> The name of the value that will be checked. </param>
+        /// <param name="value"> The value to be checked. </param>
+        public MessageCollector(string valueName, TData value, MethodBase methodBase)
+            : this(valueName, value, null, methodBase)
         {
         }
 
@@ -40,7 +51,16 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// </summary>
         /// <param name="data"> The data to be checked. </param>
         public MessageCollector(Expression<Func<TData>> data)
-            : this(data, null)
+            : this(data, null, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageCollector{TData}"/> class.
+        /// </summary>
+        /// <param name="data"> The data to be checked. </param>
+        public MessageCollector(Expression<Func<TData>> data, MethodBase methodBase)
+            : this(data, null, methodBase)
         {
         }
 
@@ -51,7 +71,18 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <param name="value"> The value to be checked.  </param>
         /// <param name="methodAttributes"> The method rule attributes. </param>
         public MessageCollector(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
-            : base(valueName, value, methodAttributes)
+            : base(valueName, value, methodAttributes, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageCollector{TData}"/> class.
+        /// </summary>
+        /// <param name="valueName"> The name of the value that will be checked.  </param>
+        /// <param name="value"> The value to be checked.  </param>
+        /// <param name="methodAttributes"> The method rule attributes. </param>
+        public MessageCollector(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes, MethodBase methodBase)
+            : base(valueName, value, methodAttributes, methodBase)
         {
         }
 
@@ -61,7 +92,17 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <param name="data"> The data to be checked. </param>
         /// <param name="methodAttributes"> The method rule attributes. </param>
         public MessageCollector(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
-            : base(data, methodAttributes)
+            : base(data, methodAttributes, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageCollector{TData}"/> class.
+        /// </summary>
+        /// <param name="data"> The data to be checked. </param>
+        /// <param name="methodAttributes"> The method rule attributes. </param>
+        public MessageCollector(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes, MethodBase methodBase)
+            : base(data, methodAttributes, methodBase)
         {
         }
 
@@ -78,7 +119,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <returns>A <see cref="MessageCollector{TDataNew}"/> to check the rules.</returns>
         public MessageCollector<TDataNew> ForMessages<TDataNew>(Expression<Func<TDataNew>> data)
         {
-            var newExecuter = new MessageCollector<TDataNew>(data, this.MethodRuleAttributes)
+            var newExecuter = new MessageCollector<TDataNew>(data, this.MethodRuleAttributes, this.ExplicitMethodInfo)
                 {
                     PreviousExecuter = this,
                 };

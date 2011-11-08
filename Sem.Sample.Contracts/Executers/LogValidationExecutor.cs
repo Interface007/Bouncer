@@ -25,22 +25,22 @@ namespace Sem.Sample.Contracts.Executers
     public class LogValidationExecutor<TData> : RuleExecuter<TData, LogValidationExecutor<TData>>
     {
         public LogValidationExecutor(string valueName, TData value)
-            : base(valueName, value, null)
+            : base(valueName, value, null, null)
         {
         }
 
         public LogValidationExecutor(Expression<Func<TData>> data)
-            : base(data, null)
+            : base(data, null, null)
         {
         }
 
         public LogValidationExecutor(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
-            : base(data, methodRuleAttributes)
+            : base(data, methodRuleAttributes, null)
         {
         }
 
         public LogValidationExecutor(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
-            : base(valueName, value, methodRuleAttributes)
+            : base(valueName, value, methodRuleAttributes, null)
         {
         }
 
