@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     using Sem.GenericHelpers.Contracts;
     using Sem.GenericHelpers.Contracts.Attributes;
@@ -20,22 +21,27 @@
         #region ctors
         
         public VetoExecutor(string valueName, TData value)
-            : base(valueName, value, null)
+            : base(valueName, value, null, null)
         {
         }
 
         public VetoExecutor(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
-            : base(valueName, value, methodRuleAttributes)
+            : base(valueName, value, methodRuleAttributes, null)
+        {
+        }
+
+        public VetoExecutor(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes, MethodBase explicitMethodBase)
+            : base(valueName, value, methodRuleAttributes, explicitMethodBase)
         {
         }
 
         public VetoExecutor(Expression<Func<TData>> data)
-            : base(data, null)
+            : base(data, null, null)
         {
         }
 
         public VetoExecutor(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodRuleAttributes)
-            : base(data, methodRuleAttributes)
+            : base(data, methodRuleAttributes, null)
         {
         }
         

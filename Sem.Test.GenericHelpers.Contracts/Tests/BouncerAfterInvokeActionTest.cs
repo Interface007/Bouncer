@@ -31,11 +31,13 @@
             var isNotNull = new IsNotNullRule<object>();
             
             // we will have one failing test, so "&= false" should set this variable to "false"
-            BouncerConfiguration.AddAfterInvokeAction(x => { ok &= x.Result; });
+            BouncerConfiguration
+                .AddAfterInvokeAction(x => { ok &= x.Result; });
 
             try
             {
-                new CheckData<object>(() => null).Assert(isNotNull);
+                new CheckData<object>(() => null)
+                    .Assert(isNotNull);
             }
             catch (Exception)
             {

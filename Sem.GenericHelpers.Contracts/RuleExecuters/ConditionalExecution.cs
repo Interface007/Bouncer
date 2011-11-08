@@ -12,6 +12,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     using Attributes;
     using Properties;
@@ -39,8 +40,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// </summary>
         /// <param name="valueName"> The name of the value. </param>
         /// <param name="value"> The value itself. </param>
-        public ConditionalExecution(string valueName, TData value)
-            : this(valueName, value, null)
+        public ConditionalExecution(string valueName, TData value, MethodBase methodBase)
+            : this(valueName, value, null, methodBase)
         {
         }
 
@@ -48,8 +49,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// Initializes a new instance of the <see cref="ConditionalExecution{TData}"/> class.
         /// </summary>
         /// <param name="data"> The expression that determines the data and the name of the value. </param>
-        public ConditionalExecution(Expression<Func<TData>> data)
-            : this(data, null)
+        public ConditionalExecution(Expression<Func<TData>> data, MethodBase methodBase)
+            : this(data, null, methodBase)
         {
         }
 
@@ -59,8 +60,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <param name="valueName"> The name of the value. </param>
         /// <param name="value"> The value itself. </param>
         /// <param name="methodAttributes"> The method attributes. </param>
-        public ConditionalExecution(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
-            : base(valueName, value, methodAttributes)
+        public ConditionalExecution(string valueName, TData value, IEnumerable<ContractMethodRuleAttribute> methodAttributes, MethodBase methodBase)
+            : base(valueName, value, methodAttributes, methodBase)
         {
         }
 
@@ -69,8 +70,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// </summary>
         /// <param name="data"> The expression that determines the data and the name of the value. </param>
         /// <param name="methodAttributes"> The method attributes. </param>
-        public ConditionalExecution(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes)
-            : base(data, methodAttributes)
+        public ConditionalExecution(Expression<Func<TData>> data, IEnumerable<ContractMethodRuleAttribute> methodAttributes, MethodBase methodBase)
+            : base(data, methodAttributes, methodBase)
         {
         }
 
@@ -147,7 +148,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <returns>A <see cref="ConditionalExecution{TDataNew}"/> to check the rules.</returns>
         public ConditionalExecution<TDataNew> ForExecution<TDataNew>(Expression<Func<TDataNew>> data)
         {
-            var newExecuter = new ConditionalExecution<TDataNew>(data, this.MethodRuleAttributes)
+            var newExecuter = new ConditionalExecution<TDataNew>(data, this.MethodRuleAttributes, this.ExplicitMethodInfo)
                 {
                     PreviousExecuter = this
                 };

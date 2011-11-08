@@ -16,6 +16,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     /// <summary>
     /// The GenericBuilder class provides an inverted interface for the Bouncer functionality. Instead of
@@ -35,6 +36,8 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// The data expressions that should be validated as a list of builder
         /// </summary>
         private readonly List<IGenericBuilder> dataExpressions = new List<IGenericBuilder>();
+
+        private MethodBase explicitMethodInfo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericBuilder{TData}"/> class.
@@ -78,7 +81,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <returns>The rule executer (the <see cref="CheckData{TData}"/> instance) for this call.</returns>
         IRuleExecuter IGenericBuilder.GetExecutedCheckData()
         {
-            return new CheckData<TData>(this.MyData).Assert();
+            return new CheckData<TData>(this.MyData, this.explicitMethodInfo).Assert();
         }
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace Sem.GenericHelpers.Contracts.RuleExecuters
         /// <returns>The rule executer (the <see cref="MessageCollector{TData}"/> instance) for this call.</returns>
         IRuleExecuter IGenericBuilder.GetExecutedMessageCollector()
         {
-            return new MessageCollector<TData>(this.MyData).Assert();
+            return new MessageCollector<TData>(this.MyData, this.explicitMethodInfo).Assert();
         }
 
         /// <summary>

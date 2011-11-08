@@ -78,6 +78,7 @@
     <Compile Include="Tests\ConfiguresRuleTest.cs" />
     <Compile Include="Tests\CustomExecutorInvocation.cs" />
     <Compile Include="Tests\DataAnnotationsTest.cs" />
+    <Compile Include="Tests\DataAnnotationTests.cs" />
     <Compile Include="Tests\IsNotNullRuleTest.cs" />
     <Compile Include="Tests\BouncerIsNotOneOfTest.cs" />
     <Compile Include="Tests\BouncerIsOneOfTest.cs" />

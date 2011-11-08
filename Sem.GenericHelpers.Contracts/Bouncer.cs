@@ -10,9 +10,14 @@
 namespace Sem.GenericHelpers.Contracts
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     using RuleExecuters;
+
+    using Sem.GenericHelpers.Contracts.Attributes;
 
     /// <summary>
     /// Bouncer http://en.wiktionary.org/wiki/bouncer : „A member of security personnel employed by bars, 
@@ -33,7 +38,7 @@ namespace Sem.GenericHelpers.Contracts
         /// <returns>A <see cref="CheckData{TData}"/> to execute the tests with.</returns>
         public static CheckData<TData> ForCheckData<TData>(Expression<Func<TData>> data)
         {
-            return new CheckData<TData>(data);
+            return new CheckData<TData>(data, null);
         }
 
         /// <summary>
@@ -48,7 +53,7 @@ namespace Sem.GenericHelpers.Contracts
         /// <returns>A <see cref="CheckData{TData}"/> to execute the tests with.</returns>
         public static CheckData<TData> ForCheckData<TData>(TData data, string name)
         {
-            return new CheckData<TData>(name, data);
+            return new CheckData<TData>(name, data, null);
         }
 
         /// <summary>
@@ -64,7 +69,7 @@ namespace Sem.GenericHelpers.Contracts
         /// <returns>A <see cref="MessageCollector{TData}"/> to check the rules.</returns>
         public static MessageCollector<TData> ForMessages<TData>(Expression<Func<TData>> data)
         {
-            return new MessageCollector<TData>(data);
+            return new MessageCollector<TData>(data, (IEnumerable<ContractMethodRuleAttribute>)null);
         }
 
         /// <summary>
@@ -80,7 +85,7 @@ namespace Sem.GenericHelpers.Contracts
         /// <returns>A <see cref="MessageCollector{TData}"/> to check the rules.</returns>
         public static MessageCollector<TData> ForMessages<TData>(TData data, string name)
         {
-            return new MessageCollector<TData>(name, data);
+            return new MessageCollector<TData>(name, data, (IEnumerable<ContractMethodRuleAttribute>)null);
         }
 
         /// <summary>
@@ -96,7 +101,7 @@ namespace Sem.GenericHelpers.Contracts
         /// <returns>A <see cref="ConditionalExecution{TData}"/> to check the rules.</returns>
         public static ConditionalExecution<TData> ForExecution<TData>(Expression<Func<TData>> data)
         {
-            return new ConditionalExecution<TData>(data);
+            return new ConditionalExecution<TData>(data, null);
         }
 
         /// <summary>
@@ -111,7 +116,7 @@ namespace Sem.GenericHelpers.Contracts
         /// <returns>A <see cref="ConditionalExecution{TData}"/> to check the rules.</returns>
         public static ConditionalExecution<TData> ForExecution<TData>(TData data, string name)
         {
-            return new ConditionalExecution<TData>(name, data);
+            return new ConditionalExecution<TData>(name, data, null);
         }
 
         /// <summary>
@@ -123,6 +128,28 @@ namespace Sem.GenericHelpers.Contracts
         public static GenericBuilder<TData> For<TData>(Expression<Func<TData>> data)
         {
             return new GenericBuilder<TData>(data);
+        }
+
+        public static IEnumerable<CheckData<object>> For(IList parameters, Func<int, string> parameterNameSelector, Func<string, object> parameterValueSelector, MethodBase methodBase)
+        {
+            var name = parameterNameSelector(0);
+            var current = new CheckData<object>(name, parameterValueSelector(name), methodBase);
+            yield return current;
+
+            for (var i = 1; i < parameters.Count; i++)
+            {
+                var name2 = parameterNameSelector(i);
+                current = current.ForCheckData(parameterValueSelector(name2), name2);
+                yield return current;
+            }
+        }
+
+        public static void Ensure(this IEnumerable<CheckData<object>> checks)
+        {
+            foreach (var checkData in checks)
+            {
+                checkData.AssertAll();
+            }
         }
     }
 }
