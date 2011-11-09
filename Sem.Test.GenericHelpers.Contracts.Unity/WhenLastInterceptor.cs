@@ -9,47 +9,32 @@
 
 namespace Sem.Test.GenericHelpers.Contracts.Unity
 {
-    using System;
-
     using Microsoft.Practices.Unity;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Sem.Test.GenericHelpers.Contracts.Unity.TestSample;
 
     [TestClass]
-    public class WhenLastInterceptor
+    public class WhenLastInterceptor: BaseTests
     {
-        private readonly ICalculator calculator = new UnityContainer()
-                                                    .AddNewExtension<ConfigIsLastInterceptor>()
-                                                    .Resolve<ICalculator>();
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException), AllowDerivedTypes = true)]
-        public void WithRuleAtInterfaceViolated()
+        public override ICalculator calculator
         {
-            this.calculator.Add(101, 0, 103);
+            get
+            {
+                return new UnityContainer().AddNewExtension<VirtualMethodIsLastInterceptor>().Resolve<ICalculator>();
+            }
         }
+    }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException), AllowDerivedTypes = true)]
-        public void WithRuleAtMethodViolated()
+    [TestClass]
+    public class WhenFirstInterfaceInterceptor: BaseTests
+    {
+        public override ICalculator calculator
         {
-            this.calculator.Add(0, 102, 103);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException), AllowDerivedTypes = true)]
-        public void WithRuleAtParameterViolated()
-        {
-            this.calculator.Add(101, 102, 0);
-        }
-
-        [TestMethod]
-        public void WithAllRulesOk()
-        {
-            var sum = this.calculator.Add(101, 102, 103);
-
-            Assert.AreEqual(306, sum);
+            get
+            {
+                return new UnityContainer().AddNewExtension<InterfaceIsFirstInterceptor>().Resolve<ICalculator>();
+            }
         }
     }
 }
