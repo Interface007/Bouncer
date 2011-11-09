@@ -11,6 +11,7 @@ namespace Sem.GenericHelpers.Contracts.Unity
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Microsoft.Practices.Unity.InterceptionExtension;
 
@@ -43,8 +44,17 @@ namespace Sem.GenericHelpers.Contracts.Unity
         /// <returns> The result of the method call. </returns>
         public IMethodReturn Invoke(IMethodInvocation input, GetNextInterceptionBehaviorDelegate getNext)
         {
+            var methodInfo = input.MethodBase;
+            if (methodInfo.DeclaringType.IsInterface)
+            {
+                methodInfo = input.Target.GetType()
+                                .GetMethod(
+                                    methodInfo.Name, 
+                                    methodInfo.GetParameters().Select(x => x.ParameterType).ToArray());
+            }
+
             Bouncer
-                .For(input.Inputs, i => input.Arguments.ParameterName(i), n => input.Arguments[n], input.MethodBase)
+                .For(input.Inputs, i => input.Arguments.ParameterName(i), n => input.Arguments[n], methodInfo)
                 .Ensure();
 
             return getNext().Invoke(input, getNext);

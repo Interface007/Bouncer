@@ -57,10 +57,12 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseTests.cs" />
+    <Compile Include="TestSample\InterfaceIsFirstInterceptor.cs" />
     <Compile Include="WhenFirstInterceptor.cs" />
     <Compile Include="TestSample\Calculator.cs" />
-    <Compile Include="TestSample\ConfigIsLastInterceptor.cs" />
-    <Compile Include="TestSample\ConfigIsFirstInterceptor.cs" />
+    <Compile Include="TestSample\VirtualMethodIsLastInterceptor.cs" />
+    <Compile Include="TestSample\VirtualMethodIsFirstInterceptor.cs" />
     <Compile Include="TestSample\ICalculator.cs" />
     <Compile Include="TestSample\LoggingBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
