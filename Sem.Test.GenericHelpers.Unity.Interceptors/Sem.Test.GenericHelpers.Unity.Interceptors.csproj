@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -82,7 +83,9 @@
     <Compile Include="WithMethodResultCaching\CachedMethodWithoutParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WithMethodResultCaching\InternalCacheStructures.cs" />
+    <Compile Include="WithMethodResultCaching\MethodResultCachingClass.cs" />
     <Compile Include="WithMethodResultCaching\NonCachedMethod.cs" />
+    <Compile Include="WithPerfCounter\UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -94,6 +97,10 @@
     <ProjectReference Include="..\Sem.GenericHelpers.Unity.Interceptors\Sem.GenericHelpers.Unity.Interceptors.csproj">
       <Project>{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}</Project>
       <Name>Sem.GenericHelpers.Unity.Interceptors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sem.GenericHelpers\Sem.GenericHelpers.csproj">
+      <Project>{02698DF9-903F-4870-A482-F2F5E00928F2}</Project>
+      <Name>Sem.GenericHelpers</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

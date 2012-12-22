@@ -5,6 +5,10 @@
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
+    using System.Runtime.Remoting.Messaging;
+    using System.Runtime.Remoting.Proxies;
+    using System.Security;
+    using System.Security.Permissions;
 
     /// <summary>
     /// This class has been incorporated from a private project of Sven Erik Matzen with 
@@ -77,7 +81,15 @@
                         throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "the member {0} does not have the required attribute PerformanceCounterCategoryNameAttribute", counterName));
                     }
 
-                    performanceCounter = new PerformanceCounter(this.categoryName, attrib.Name, false);
+                    try
+                    {
+                        performanceCounter = new PerformanceCounter(this.categoryName, attrib.Name, false);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        performanceCounter = new NullProxy<PerformanceCounter>().GetTransparentProxy();
+                    }
+
                     this.cache.Add(counterName, performanceCounter);
                 }
 
@@ -114,6 +126,10 @@
                     PerformanceCounterCategoryType.SingleInstance,
                     creationDataCollection);
             }
+            catch (SecurityException)
+            {
+                Debug.WriteLine("Issue with creating the performance counter. You should start the environment inside a previleged session (run as administartor) in order to create the perf-counters, after that start you can simply continue using a normal session.");
+            }
             catch (UnauthorizedAccessException)
             {
                 Debug.WriteLine("Issue with creating the performance counter. You should start the environment inside a previleged session (run as administartor) in order to create the perf-counters, after that start you can simply continue using a normal session.");
@@ -138,6 +154,25 @@
             {
                 Debug.WriteLine("Issue with deleting the performance counter. You should start the environment inside a previleged session (run as administartor) in order to delete the perf-counters, after that start you can simply continue using a normal session.");
             }
+        }
+    }
+
+    public class NullProxy<T> : RealProxy
+    {
+        [PermissionSet(SecurityAction.LinkDemand)]
+        public NullProxy()
+            : base(typeof(T))
+        {
+        }
+
+        public override IMessage Invoke(IMessage msg)
+        {
+            return msg;
+        }
+
+        public new T GetTransparentProxy()
+        {
+            return (T)base.GetTransparentProxy();
         }
     }
 }

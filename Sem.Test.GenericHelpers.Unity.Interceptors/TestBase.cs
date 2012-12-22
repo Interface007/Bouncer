@@ -1,3 +1,12 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TestBase.cs" company="Sven Erik Matzen">
+//   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
+// </copyright>
+// <summary>
+//   Defines the TestBase type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace Sem.Test.GenericHelpers.Unity.Interceptors
 {
     using Microsoft.Practices.Unity;
