@@ -1,4 +1,13 @@
-﻿namespace Sem.Test.GenericHelpers.Unity.Interceptors.WithMethodResultCaching
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="InternalCacheStructures.cs" company="Sven Erik Matzen">
+//   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
+// </copyright>
+// <summary>
+//   Defines the InternalCacheStructures type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Sem.Test.GenericHelpers.Unity.Interceptors.WithMethodResultCaching
 {
     using System.Threading;
 
