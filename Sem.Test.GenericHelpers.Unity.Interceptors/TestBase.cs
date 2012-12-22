@@ -4,6 +4,7 @@ namespace Sem.Test.GenericHelpers.Unity.Interceptors
     using Microsoft.Practices.Unity.InterceptionExtension;
 
     using Sem.GenericHelpers.Unity.Interceptors;
+    using Sem.Test.GenericHelpers.Unity.Interceptors.Probes;
 
     public class TestBase
     {
