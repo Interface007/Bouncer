@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Sem.GenericHelpers.Unity.Interceptors
+﻿namespace Sem.GenericHelpers.Unity.Interceptors
 {
+    using Microsoft.Practices.Unity;
+    using Microsoft.Practices.Unity.InterceptionExtension;
+
+    using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
@@ -11,9 +13,6 @@ namespace Sem.GenericHelpers.Unity.Interceptors
     using System.Reflection;
     using System.Text;
     using System.Threading;
-
-    using Microsoft.Practices.Unity;
-    using Microsoft.Practices.Unity.InterceptionExtension;
 
     public class MethodResultCaching : IInterceptionBehavior
     {
@@ -31,21 +30,6 @@ namespace Sem.GenericHelpers.Unity.Interceptors
         /// Cache instance for meta information.
         /// </summary>
         private static readonly ConcurrentDictionary<string, CacheMetaBase> MetaCache = new ConcurrentDictionary<string, CacheMetaBase>();
-
-        /// <summary>
-        /// "deflates" single entity name from CRM into multiple entity names - TODO: read this from configuration.
-        /// The entity notification for a single CRM entity may need to be affect multiple other entities.
-        /// The example deflates a notification for "test" to two invalidations - one for "test" and another one for "hello".
-        /// </summary>
-        private static readonly List<Tuple<string, string[]>> DependencyDeflation = new List<Tuple<string, string[]>>
-                                                                                        {
-                                                                                            new Tuple<string, string[]>("test", new[] { "hello", "test" }),
-                                                                                        };
-
-        /// <summary>
-        /// Maps CRM logical names to type names from generated client code.
-        /// </summary>
-        private static readonly ConcurrentDictionary<string, string> DependencyNameMapping = new ConcurrentDictionary<string, string>();
 
         /// <summary>
         /// Full name of a "IEnumerable of String" to detect the serialization strategy.
@@ -83,7 +67,7 @@ namespace Sem.GenericHelpers.Unity.Interceptors
         private readonly IUnityContainer resolver;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MethodResultCache"/> class.
+        /// Initializes a new instance of the <see cref="MethodResultCaching"/> class.
         /// </summary>
         /// <param name="resolverInstance"> The resolver instance (service locator). </param>
         public MethodResultCaching(IUnityContainer resolverInstance)
@@ -172,6 +156,7 @@ namespace Sem.GenericHelpers.Unity.Interceptors
         /// </summary>
         public static void Clear()
         {
+            callCounter = 0;
             MetaCache.Clear();
             ValueCache.Clear();
         }
@@ -335,7 +320,7 @@ namespace Sem.GenericHelpers.Unity.Interceptors
                 return;
             }
 
-            var key = this.BuildCacheKey(methodInfo, cacheAttrib, ParameterCollection);
+            var key = this.BuildCacheKey(methodInfo, ParameterCollection);
 
             // skip processing, if we don't have that value
             if (!MetaCache.TryGetValue(key + ".Meta", out meta))
@@ -551,7 +536,6 @@ namespace Sem.GenericHelpers.Unity.Interceptors
             // create a name for the entry
             var parameterInfos = methodInfo.GetParameters();
             var name = (string)input.Inputs[parameterInfos.First(x => x.GetCustomAttributes(typeof(CacheManagementIsNameAttribute), true).Any()).Position];
-            var isGlobal = (bool)input.Inputs[parameterInfos.First(x => x.GetCustomAttributes(typeof(CacheManagementIsGlobalAttribute), true).Any()).Position];
 
             var position = parameterInfos.First(x => x.GetCustomAttributes(typeof(CacheManagementIsDependencyHintAttribute), true).Any()).Position;
             var hint = input.Inputs[position];
@@ -580,7 +564,7 @@ namespace Sem.GenericHelpers.Unity.Interceptors
                                  Key = name,
                                  DependencyValues = customAttributes
                                      .OfType<CacheDependencyAttribute>()
-                                     .Select(dependency => dependency.EntityType.FullName ?? string.Empty)
+                                     .Select(dependency => dependency.EntityType.FullName)
                                      .Union(
                                          customAttributes
                                      .OfType<CacheDependencyProviderAttribute>()
@@ -613,7 +597,7 @@ namespace Sem.GenericHelpers.Unity.Interceptors
             ValidateInputParameters(input);
 
             // create a name for the entry
-            var name = this.BuildCacheKey(input.MethodBase, cachingAttribute, input.Arguments);
+            var name = this.BuildCacheKey(input.MethodBase, input.Arguments);
 
             // try to get from cache
             var result = GetFromCache(name);
@@ -665,13 +649,13 @@ namespace Sem.GenericHelpers.Unity.Interceptors
                     Key = key,
                     DependencyValues = customAttributes
                                         .OfType<CacheDependencyAttribute>()
-                                        .Select(dependency => dependency.EntityType.FullName ?? string.Empty)
+                                        .Select(dependency => dependency.EntityType.FullName)
                                     .Union(
                                        customAttributes
                                         .OfType<CacheDependencyProviderAttribute>()
                                         .SelectMany(this.GetDependenciesFromProviders))
                                     .ToList(),
-                    ValidUntil = DateTime.UtcNow.AddMinutes(cachingAttribute.Lifetime)
+                    ValidUntil = DateTime.UtcNow.AddSeconds(cachingAttribute.Lifetime)
                 };
 
             return metaValue;
@@ -681,10 +665,9 @@ namespace Sem.GenericHelpers.Unity.Interceptors
         /// Creates a cache-key for the method call by including the (...).ToString() of all parameters.
         /// </summary>
         /// <param name="methodInfo">The method info for to create a key for.</param>
-        /// <param name="cacheAttribute">The cache attribute to get some more information.</param>
         /// <param name="arguments">argument parameter collection</param>
         /// <returns>A unique cache key for the method call.</returns>
-        private string BuildCacheKey(MethodBase methodInfo, CacheAttribute cacheAttribute, IParameterCollection arguments)
+        private string BuildCacheKey(MethodBase methodInfo, IParameterCollection arguments)
         {
             var typeName = (methodInfo.DeclaringType == null) ? string.Empty : methodInfo.DeclaringType.FullName;
             var methodName = methodInfo.Name;
@@ -698,7 +681,7 @@ namespace Sem.GenericHelpers.Unity.Interceptors
             {
                 var info = arguments.GetParameterInfo(index);
                 var keyValue = arguments[index];
-                key.Append("<Arg");
+                key.Append("<");
                 key.Append(index);
                 key.Append(":");
                 key.Append(SerializeParameter(keyValue, info.ParameterType));

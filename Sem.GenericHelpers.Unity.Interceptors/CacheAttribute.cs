@@ -18,7 +18,7 @@
         public CacheAttribute(CachingAction cachingAction)
         {
             this.CachingAction = cachingAction;
-            this.Lifetime = 5;
+            this.Lifetime = 5 * 60;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@
         public CachingAction CachingAction { get; private set; }
 
         /// <summary>
-        /// Gets or sets the lifetime of the cached entry - defaults to 5 minutes.
+        /// Gets or sets the lifetime in seconds of the cached entry - defaults to 5 minutes.
         /// </summary>
         public int Lifetime { get; set; }
     }
