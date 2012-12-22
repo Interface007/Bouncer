@@ -1,8 +1,14 @@
-﻿namespace Sem.GenericHelpers.Unity.Interceptors
-{
-    using Microsoft.Practices.Unity;
-    using Microsoft.Practices.Unity.InterceptionExtension;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MethodResultCaching.cs" company="Sven Erik Matzen">
+//   Copyright (c) Sven Erik Matzen. GNU Library General Public License (LGPL) Version 2.1.
+// </copyright>
+// <summary>
+//   Defines the MethodResultCaching type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
+namespace Sem.GenericHelpers.Unity.Interceptors
+{
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
@@ -13,6 +19,9 @@
     using System.Reflection;
     using System.Text;
     using System.Threading;
+
+    using Microsoft.Practices.Unity;
+    using Microsoft.Practices.Unity.InterceptionExtension;
 
     public class MethodResultCaching : IInterceptionBehavior
     {
