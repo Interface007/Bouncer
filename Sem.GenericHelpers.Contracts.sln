@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.GenericHelpers.Contracts", "Sem.GenericHelpers.Contracts\Sem.GenericHelpers.Contracts.csproj", "{634063B0-5E2A-41EC-BF35-3414D9024882}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Sample.Contracts", "Sem.Sample.Contracts\Sem.Sample.Contracts.csproj", "{46DAA166-1C0A-40CB-859B-A736674B4342}"
@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FFDD1BC-8358-4AA0-BAA7-E9AE27FF50D3}"
 	ProjectSection(SolutionItems) = preProject
 		fullunittest.testsettings = fullunittest.testsettings
+		Interceptors.testsettings = Interceptors.testsettings
 		Sem.GenericHelpers.Contracts.vsmdi = Sem.GenericHelpers.Contracts.vsmdi
 		Settings.StyleCop = Settings.StyleCop
 	EndProjectSection
@@ -23,9 +24,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.GenericHelpers.Contract
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Test.GenericHelpers.Contracts.Unity", "Sem.Test.GenericHelpers.Contracts.Unity\Sem.Test.GenericHelpers.Contracts.Unity.csproj", "{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.GenericHelpers.Unity.Interceptors", "Sem.GenericHelpers.Unity.Interceptors\Sem.GenericHelpers.Unity.Interceptors.csproj", "{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Test.GenericHelpers.Unity.Interceptors", "Sem.Test.GenericHelpers.Unity.Interceptors\Sem.Test.GenericHelpers.Unity.Interceptors.csproj", "{9A202139-0494-4CB5-94CF-8136EC0084AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.GenericHelpers", "Sem.GenericHelpers\Sem.GenericHelpers.csproj", "{02698DF9-903F-4870-A482-F2F5E00928F2}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
 		SccLocalPath0 = .
@@ -44,6 +51,15 @@ Global
 		SccProjectUniqueName5 = Sem.Test.GenericHelpers.Contracts.Unity\\Sem.Test.GenericHelpers.Contracts.Unity.csproj
 		SccProjectName5 = Sem.Test.GenericHelpers.Contracts.Unity
 		SccLocalPath5 = Sem.Test.GenericHelpers.Contracts.Unity
+		SccProjectUniqueName6 = Sem.GenericHelpers.Unity.Interceptors\\Sem.GenericHelpers.Unity.Interceptors.csproj
+		SccProjectName6 = Sem.GenericHelpers.Unity.Interceptors
+		SccLocalPath6 = Sem.GenericHelpers.Unity.Interceptors
+		SccProjectUniqueName7 = Sem.Test.GenericHelpers.Unity.Interceptors\\Sem.Test.GenericHelpers.Unity.Interceptors.csproj
+		SccProjectName7 = Sem.Test.GenericHelpers.Unity.Interceptors
+		SccLocalPath7 = Sem.Test.GenericHelpers.Unity.Interceptors
+		SccProjectUniqueName8 = Sem.GenericHelpers\\Sem.GenericHelpers.csproj
+		SccProjectName8 = Sem.GenericHelpers
+		SccLocalPath8 = Sem.GenericHelpers
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Sem.GenericHelpers.Contracts.vsmdi
@@ -107,6 +123,36 @@ Global
 		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{76F89DD7-E1CB-413B-8BBD-AB12C0B7D1E0}.Release|x86.ActiveCfg = Release|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4BAAF82B-552C-4C83-A92A-3546E6A3E4CB}.Release|x86.ActiveCfg = Release|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9A202139-0494-4CB5-94CF-8136EC0084AB}.Release|x86.ActiveCfg = Release|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{02698DF9-903F-4870-A482-F2F5E00928F2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
